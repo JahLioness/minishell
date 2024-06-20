@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 10:44:59 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/06/20 13:04:41 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/06/20 16:03:28 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ typedef enum s_token_type
 {
 	T_CMD,
 	T_AND,
+	T_AND_E,
 	T_OR,
 	T_PIPE,
 	O_BRACKET,

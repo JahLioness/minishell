@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 17:46:46 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/06/20 16:00:18 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/06/20 16:06:49 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,8 @@ int	ft_check_operator(t_token *token)
 {
 	if (token->type == T_AND)
 		ft_putendl_fd("minishell: syntax error near unexpected token `&&'", 2);
+	else if (token->type == T_AND_E)
+		ft_putendl_fd("minishell: syntax error near unexpected token `&'", 2);
 	else if (token->type == T_OR)
 		ft_putendl_fd("minishell: syntax error near unexpected token `||'", 2);
 	else if (token->type == T_CMD)
@@ -63,10 +65,10 @@ static int	ft_is_double_op(t_token *token)
 {
 	if (!token || (token->type == T_CMD && !token->cmd))
 		return (0);
-	return ((token->type == T_AND || token->type == T_OR
+	return ((token->type == T_AND || token->type == T_AND_E || token->type == T_OR
 			|| (token->type == T_CMD && token->cmd->redir
 				&& !*token->cmd->redir->file) || token->type == T_PIPE)
-		&& token->next && (token->next->type == T_AND
+		&& token->next && (token->next->type == T_AND || token->next->type == T_AND_E
 			|| token->next->type == T_OR || (token->next->type == T_CMD
 				&& token->next->cmd->redir && !*token->next->cmd->redir->file)
 			|| token->next->type == T_PIPE));
