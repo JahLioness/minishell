@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/20 10:48:22 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/06/20 12:48:57 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/06/20 16:01:25 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,14 +19,14 @@ int	ft_verif_line(t_token *token)
 		return (ft_check_operator(token));
 	else if (token->type == O_BRACKET)
 	{
-		while (token->type == O_BRACKET)
+		while (token && token->type == O_BRACKET)
 			token = token->next;
 		if (!token)
 			return (ft_putendl_fd("minishell: syntax error near unexpected token `('",
 					2), 0);
 		else if (token->type == C_BRACKET)
 		{
-			while (token->type == C_BRACKET)
+			while (token && token->type == C_BRACKET)
 				token = token->next;
 			if (!token)
 				return (ft_putendl_fd("minishell: syntax error near unexpected token `)'",

@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 17:46:46 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/06/20 12:49:03 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/06/20 16:00:18 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ int	ft_verif_tokens(t_mini *mini)
 			bracket--;
 		else if (ft_is_double_op(tmp))
 			return (ft_check_operator(tmp));
-		else if (!ft_verif_line(tmp))
+		if (!ft_verif_line(tmp))
 			return (0);
 		tmp = tmp->next;
 	}
