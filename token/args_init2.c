@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 14:31:53 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/06/20 13:26:39 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/06/20 14:56:06 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ char	*ft_verif_arg(char **str, t_env **env, t_cmd *cmd, int j)
 		ret = ft_check_acc_expand(str[j], env, cmd, j);
 	else
 	{
-		printf("here\n");
 		ret = ft_check_expand(str[j], env, j);
 		tmp = ret;
 		while (ft_strchr(ret, '$'))

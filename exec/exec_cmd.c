@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 16:45:28 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/06/20 13:26:56 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/06/20 15:01:53 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,7 +128,7 @@ int	ft_exec_cmd(t_ast *root, t_mini **mini, char *prompt)
 	if (root->token->type == T_CMD && root->token->cmd)
 	{
 		int i = 0;
-		if (root->token->cmd->args)
+		if (root->token->cmd->cmd && root->token->cmd->args)
 		{
 			while (root->token->cmd->args[i])
 			{
