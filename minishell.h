@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 10:44:59 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/06/20 16:03:28 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/06/20 16:32:15 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,14 +151,14 @@ void				ft_init_token(t_mini *mini, char *line);
 t_token				*ft_tokenlast(t_token *token);
 void				ft_tokenadd_back(t_token **token, t_token *new);
 t_token				*ft_token_init(void);
-void				ft_init_token_cmd(t_token *new, char *cell, t_env **env,
-						int *i);
+void				ft_init_token_cmd(t_token *new, char *cell, int *i);
 void				ft_token_delone(t_token *token);
 void				ft_token_delone_utils(t_token *token);
+void				ft_token_clear_redir(t_redir *redir);
 
 /*			ARGS				*/
 int					ft_countwords_args(char *str);
-char				**ft_get_args(char *cell, t_env **env, int *i, t_cmd *cmd);
+char				**ft_get_args(char *cell, int *i);
 char				*ft_check_acc_expand(char *str, t_env **env, t_cmd *cmd,
 						int j);
 char				*ft_check_expand(char *str, t_env **env, int j);

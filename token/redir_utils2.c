@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 14:35:49 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/06/20 11:07:11 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/06/20 16:27:27 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ t_redir	*ft_redirlast(t_redir *redir)
 
 void	ft_redir_addback(t_redir **redir, t_redir *new)
 {
-	t_redir *last;
+	t_redir	*last;
 
 	if (!redir || !new)
 		return ;

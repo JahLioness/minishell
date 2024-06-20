@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 10:51:09 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/06/20 13:02:39 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/06/20 16:23:02 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 void	ft_clear_token(t_token **token)
 {
 	t_token	*tmp;
-	t_redir	*tmp_redir;
 
 	while (*token)
 	{
@@ -28,15 +27,7 @@ void	ft_clear_token(t_token **token)
 			if (tmp->cmd->args)
 				ft_free_tab(tmp->cmd->args);
 			if (tmp->cmd->redir)
-			{
-				while (tmp->cmd->redir)
-				{
-					tmp_redir = tmp->cmd->redir;
-					tmp->cmd->redir = tmp->cmd->redir->next;
-					free(tmp_redir->file);
-					free(tmp_redir);
-				}
-			}
+				ft_token_clear_redir(tmp->cmd->redir);
 			free(tmp->cmd);
 		}
 		free(tmp);

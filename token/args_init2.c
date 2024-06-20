@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 14:31:53 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/06/20 14:56:06 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/06/20 16:35:08 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,9 @@ char	*ft_verif_arg(char **str, t_env **env, t_cmd *cmd, int j)
 	char	*ret;
 	char	*tmp;
 
-	if (!ft_strchr(str[j], '$') || (ft_strchr(str[j], '$') && *(ft_strchr(str[j], '$')
-				+ 1) != '?' && !ft_isalnum(*(ft_strchr(str[j], '$') + 1))))
+	if (!ft_strchr(str[j], '$') || (ft_strchr(str[j], '$')
+			&& *(ft_strchr(str[j], '$') + 1) != '?'
+			&& !ft_isalnum(*(ft_strchr(str[j], '$') + 1))))
 		return (str[j]);
 	else if (str[j][0] == '\'')
 		return (str[j]);
@@ -40,14 +41,12 @@ char	*ft_verif_arg(char **str, t_env **env, t_cmd *cmd, int j)
 	return (ret);
 }
 
-char	**ft_get_args(char *cell, t_env **env, int *i, t_cmd *cmd)
+char	**ft_get_args(char *cell, int *i)
 {
 	char	**args;
 	int		j;
 	int		k;
 
-	(void)env;
-	(void)cmd;
 	args = ft_calloc(ft_countwords_args(cell + *i) + 1, sizeof(char *));
 	if (!args)
 		return (NULL);
@@ -59,11 +58,12 @@ char	**ft_get_args(char *cell, t_env **env, int *i, t_cmd *cmd)
 			k = ft_get_index_arg_utils(cell, i);
 			args[j] = ft_strndup(cell + k, (*i - k));
 			if (!args[j])
-				return(ft_free_split(j, args), NULL);
+				return (ft_free_split(j, args), NULL);
 			j++;
 		}
 		if (cell[*i] && ft_is_not_stop(cell[*i]) && cell[*i] != '$'
-			&& cell[*i] != 123 && cell[*i] != '"' && cell[*i] != '\'' && !ft_isalnum(cell[*i]))
+			&& cell[*i] != 123 && cell[*i] != '"' && cell[*i] != '\''
+			&& !ft_isalnum(cell[*i]))
 			(*i)++;
 	}
 	args[j] = NULL;

@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 14:31:02 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/06/17 14:33:14 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/06/20 16:18:46 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,5 +25,18 @@ void	ft_token_delone_utils(t_token *token)
 			free(token->cmd->redir);
 		}
 		free(token->cmd);
+	}
+}
+
+void	ft_token_clear_redir(t_redir *redir)
+{
+	t_redir	*tmp;
+
+	while (redir)
+	{
+		tmp = redir;
+		redir = redir->next;
+		free(tmp->file);
+		free(tmp);
 	}
 }
