@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_cmd.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 16:45:28 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/06/21 07:48:01 by andjenna         ###   ########.fr       */
+/*   Updated: 2024/06/21 13:27:56 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,11 +178,11 @@ int ft_exec_cmd(t_ast *root, t_mini **mini, char *prompt)
 	error = 0;
 	last = ft_minilast(*mini);
 	envp = ft_get_envp(&last->env);
-	//gestion des quotes
+	//gestion des quotes et expand
 	if (root->token->type == T_CMD && root->token->cmd)
 	{
 		int i = 0;
-		if (root->token->cmd->cmd && root->token->cmd->args)
+		if ((root->token->cmd->cmd && root->token->cmd->args) || (!root->token->cmd->cmd && *root->token->cmd->args))
 		{
 			while (root->token->cmd->args[i])
 			{
@@ -190,7 +190,8 @@ int ft_exec_cmd(t_ast *root, t_mini **mini, char *prompt)
 				i++;
 			}
 			root->token->cmd->args = ft_trim_quote_args(root->token->cmd->args);
-			free(root->token->cmd->cmd);
+			if (root->token->cmd->cmd)
+				free(root->token->cmd->cmd);
 			root->token->cmd->cmd = ft_strdup(root->token->cmd->args[0]);
 		}
 		//premier appel de la fonction pour verifier les file
@@ -220,6 +221,12 @@ int ft_exec_cmd(t_ast *root, t_mini **mini, char *prompt)
 				ft_free_tab(envp);
 				envp = NULL;
 			}
+			else if (!ft_strcmp(root->token->cmd->cmd, "exit"))
+			{
+				status = ft_exit(root, mini, prompt, envp);
+				ft_free_tab(envp);
+				envp = NULL;
+			}
 			else
 			{
 				redir_fd = -1;
@@ -236,12 +243,15 @@ int ft_exec_cmd(t_ast *root, t_mini **mini, char *prompt)
 							dup2(redir_fd, STDIN_FILENO);
 						else if (root->token->cmd->redir->type == REDIR_OUTPUT)
 							dup2(redir_fd, STDOUT_FILENO);
-						else if (root->token->cmd->redir->type == REDIR_HEREDOC)
-							dup2(redir_fd, STDIN_FILENO);
 						else if (root->token->cmd->redir->type == REDIR_APPEND)
 							dup2(redir_fd, STDOUT_FILENO);
+						else if (root->token->cmd->redir->type == REDIR_HEREDOC)
+						{
+							dup2(redir_fd, STDIN_FILENO);
+						}
+						if (redir_fd != -1 && redir_fd != STDOUT_FILENO)
+							close(redir_fd);
 						unlink(".txt");
-						close(redir_fd);
 					}
 					//cas de redirection pour "cat file" sans sympbole de redirection
 					else if (redir_fd == -1 && root->token->cmd->args[1])

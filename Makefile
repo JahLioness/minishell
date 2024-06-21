@@ -35,6 +35,8 @@ SRC = main.c \
 		builtin/export_utils.c \
 		builtin/pwd.c \
 		builtin/unset.c \
+		builtin/exit.c \
+		builtin/exit_utils.c \
 		exec/exec_cmd.c \
 		exec/exec_cmd2.c \
 		exec/exec_cmd_utils.c \

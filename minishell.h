@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 10:44:59 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/06/20 16:32:15 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/06/21 13:41:45 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ typedef struct s_mini
 	t_env			*env;
 	t_token			*tokens;
 	int				error;
+	int				is_heredoc;
 	struct s_mini	*prev;
 	struct s_mini	*next;
 }					t_mini;
@@ -145,6 +146,7 @@ int					ft_verif_tokens(t_mini *mini);
 char				**ft_trim_quote_args(char **args);
 t_mini				*ft_mini_init(void);
 t_mini				*ft_new_mini_part(t_mini **mini, t_mini *new);
+void				ft_is_heredoc(t_mini *mini);
 
 /*			TOKEN			*/
 void				ft_init_token(t_mini *mini, char *line);
@@ -194,6 +196,12 @@ int					ft_export(t_export_utils *utils, t_env **env, int fd);
 void				ft_unset(char *key, t_env **env);
 int					ft_cd(char *path, t_env **env);
 int					ft_pwd(int fd, t_env **env);
+int					ft_exit(t_ast *root, t_mini **mini, char *prompt,
+						char **envp);
+int					ft_is_num(char *str);
+void				ft_free_exit(t_ast *root, t_mini **mini, char **envp,
+						char *prompt);
+void				ft_print_exit(char *str);
 
 /*			EXEC			*/
 int					ft_exec_builtin(t_token *token, t_env **env, int fd);

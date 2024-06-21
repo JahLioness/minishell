@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 17:46:46 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/06/20 16:27:42 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/06/21 10:51:27 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,5 +129,6 @@ t_mini	*ft_new_mini_part(t_mini **mini, t_mini *new)
 		ft_free_tab(redir->cmd->args);
 		redir->cmd->args = args;
 	}
+	ft_is_heredoc(new);
 	return (new);
 }

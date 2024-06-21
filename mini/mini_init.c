@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 12:06:46 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/06/20 13:20:24 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/06/21 10:43:28 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ t_mini	*ft_mini_init(void)
 	mini->cell = NULL;
 	mini->env = NULL;
 	mini->error = 0;
+	mini->is_heredoc = 0;
 	mini->tokens = NULL;
 	mini->prev = NULL;
 	mini->next = NULL;

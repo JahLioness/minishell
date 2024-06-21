@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 15:33:02 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/05/09 12:46:45 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/06/21 13:09:46 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include <string.h>
 # include <unistd.h>
 # include <fcntl.h>
+# include <limits.h>
 
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 1
@@ -70,6 +71,7 @@ char	*ft_strlchr(const char *s, int c, int i);
 
 /*              Int manipulation           */
 int		ft_atoi(const char *nptr);
+long	ft_atol(char *str);
 size_t	ft_nbr_length(int n);
 
 /*              Memory manipulation        */

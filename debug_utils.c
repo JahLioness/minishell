@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   debug_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 12:18:04 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/06/21 01:13:37 by andjenna         ###   ########.fr       */
+/*   Updated: 2024/06/21 10:52:11 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,7 @@ void	ft_print_lst(t_mini *mini)
 		printf("MINI: %d\n", i);
 		printf("cell: %s\n", tmp_mini->cell);
 		printf("MINI ERROR: %d\n", tmp_mini->error);
+		printf("MINI is heredoc = %d\n", tmp_mini->is_heredoc);
 		ft_print_token_lst(tmp_mini->tokens);
 		// ft_print_env(&tmp_mini->env, 1);
 		tmp_mini = tmp_mini->next;
