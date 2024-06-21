@@ -6,7 +6,7 @@
 /*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 16:45:28 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/06/21 06:35:50 by andjenna         ###   ########.fr       */
+/*   Updated: 2024/06/21 07:44:22 by andjenna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 // cat >file = comme un heredoc on ecrit dans le file jusqu'a ce qu'on fasse ctrl + D ou ctrl + C ou ctrl + "\""
 //  ls && ls - l (echo hey || echo bye) <-- syntaxe error non geree
+// je dois paufiner heredoc --> randomiser le nom de fichier, le faire executer en premier si il y a d'autre commande avant 
+// les pipes et la norminette a faire.
 
 int ft_exec_builtin(t_token *token, t_env **env, int fd)
 {
@@ -92,6 +94,7 @@ int ft_get_heredoc(t_redir *redir)
 	char *line;
 
 	line = NULL;
+	// dois randomiser le nom du fichier, en parcourant /dev/urandom et en convertissant x char en ascii (NOT DONE YET)
 	urandom_fd = open(".txt", O_CREAT | O_WRONLY | O_TRUNC, 0644);
 	if (urandom_fd < 0)
 		return (5);
@@ -147,6 +150,7 @@ int ft_handle_redir_file(int redir_fd, t_ast *root)
 		}
 		else if (current->type == REDIR_HEREDOC)
 		{
+			//creer le fichier here doc
 			ft_get_heredoc(current);
 			redir_fd = open(".txt", O_RDONLY);
 			if (redir_fd < 0)
@@ -174,6 +178,7 @@ int ft_exec_cmd(t_ast *root, t_mini **mini, char *prompt)
 	error = 0;
 	last = ft_minilast(*mini);
 	envp = ft_get_envp(&last->env);
+	//gestion des quotes
 	if (root->token->type == T_CMD && root->token->cmd)
 	{
 		int i = 0;
@@ -188,8 +193,10 @@ int ft_exec_cmd(t_ast *root, t_mini **mini, char *prompt)
 			free(root->token->cmd->cmd);
 			root->token->cmd->cmd = ft_strdup(root->token->cmd->args[0]);
 		}
+		//premier appel de la focntion pour verifier les file
 		if (root->token->cmd->redir && root->token->cmd->redir->type != REDIR_HEREDOC)
 			redir_fd = ft_handle_redir_file(redir_fd, root);
+		//si erreur de file, on execute pas le reste des commandes
 		if (redir_fd == 5)
 		{
 			e_status = ft_get_exit_status(&last->env);
@@ -200,6 +207,7 @@ int ft_exec_cmd(t_ast *root, t_mini **mini, char *prompt)
 			error = 1;
 		}
 		ft_set_var_underscore(root->token->cmd->args, &last->env, envp);
+		//si pas de file de redirection, on redirige vers la sortie standard
 		if (redir_fd == -1)
 			redir_fd = STDOUT_FILENO;
 		if (!error)
@@ -220,6 +228,7 @@ int ft_exec_cmd(t_ast *root, t_mini **mini, char *prompt)
 					return (ft_putendl_fd("minishell: fork failed", 2), 1);
 				if (pid == 0)
 				{
+					//deuxieme appel de la fonction pour verifier les file et here_doc
 					redir_fd = ft_handle_redir_file(redir_fd, root);
 					if (redir_fd != -1 && redir_fd != STDOUT_FILENO)
 					{
@@ -234,6 +243,7 @@ int ft_exec_cmd(t_ast *root, t_mini **mini, char *prompt)
 						unlink(".txt");
 						close(redir_fd);
 					}
+					//cas de redirection pour "cat file"
 					else if (redir_fd == -1 && root->token->cmd->args[1])
 					{
 						fd = open(root->token->cmd->args[1], O_RDONLY);
