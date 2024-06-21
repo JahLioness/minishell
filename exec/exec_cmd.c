@@ -6,7 +6,7 @@
 /*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 16:45:28 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/06/21 07:44:22 by andjenna         ###   ########.fr       */
+/*   Updated: 2024/06/21 07:48:01 by andjenna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -193,7 +193,7 @@ int ft_exec_cmd(t_ast *root, t_mini **mini, char *prompt)
 			free(root->token->cmd->cmd);
 			root->token->cmd->cmd = ft_strdup(root->token->cmd->args[0]);
 		}
-		//premier appel de la focntion pour verifier les file
+		//premier appel de la fonction pour verifier les file
 		if (root->token->cmd->redir && root->token->cmd->redir->type != REDIR_HEREDOC)
 			redir_fd = ft_handle_redir_file(redir_fd, root);
 		//si erreur de file, on execute pas le reste des commandes
@@ -243,7 +243,7 @@ int ft_exec_cmd(t_ast *root, t_mini **mini, char *prompt)
 						unlink(".txt");
 						close(redir_fd);
 					}
-					//cas de redirection pour "cat file"
+					//cas de redirection pour "cat file" sans sympbole de redirection
 					else if (redir_fd == -1 && root->token->cmd->args[1])
 					{
 						fd = open(root->token->cmd->args[1], O_RDONLY);
@@ -262,6 +262,7 @@ int ft_exec_cmd(t_ast *root, t_mini **mini, char *prompt)
 						dup2(fd, STDIN_FILENO);
 						close(fd);
 					}
+					//execution de la commande
 					ft_exec_cmd_path(root, mini, envp, prompt);
 					exit(EXIT_SUCCESS);
 				}
