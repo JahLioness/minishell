@@ -6,7 +6,7 @@
 /*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 16:45:28 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/06/21 06:15:26 by andjenna         ###   ########.fr       */
+/*   Updated: 2024/06/21 06:35:50 by andjenna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -200,7 +200,8 @@ int ft_exec_cmd(t_ast *root, t_mini **mini, char *prompt)
 			error = 1;
 		}
 		ft_set_var_underscore(root->token->cmd->args, &last->env, envp);
-		redir_fd = STDOUT_FILENO;
+		if (redir_fd == -1)
+			redir_fd = STDOUT_FILENO;
 		if (!error)
 		{
 			if (ft_is_builtin(root->token->cmd->cmd))
@@ -229,10 +230,8 @@ int ft_exec_cmd(t_ast *root, t_mini **mini, char *prompt)
 						else if (root->token->cmd->redir->type == REDIR_HEREDOC)
 							dup2(redir_fd, STDIN_FILENO);
 						else if (root->token->cmd->redir->type == REDIR_APPEND)
-						{
 							dup2(redir_fd, STDOUT_FILENO);
-							unlink(".txt");
-						}
+						unlink(".txt");
 						close(redir_fd);
 					}
 					else if (redir_fd == -1 && root->token->cmd->args[1])
