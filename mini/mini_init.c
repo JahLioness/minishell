@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 12:06:46 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/06/21 10:43:28 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/06/21 16:49:22 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ t_mini	*ft_new_mini(char *line, t_mini **mini)
 	new = ft_mini_init();
 	if (!new)
 		return (NULL);
-	if (!ft_check_quote(line, 0))
+	if (!ft_check_quote(line, 0) || !line[ft_check_whitespace(line, 0)])
 	{
 		new->error = 1;
 		return (new);

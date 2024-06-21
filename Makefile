@@ -10,6 +10,7 @@ SRC = main.c \
 		debug_utils.c \
 		prompt.c \
 		prompt_utils.c \
+		signaux.c \
 		env/env_utils.c \
 		env/env_utils2.c \
 		env/env_init.c \

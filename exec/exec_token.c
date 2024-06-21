@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_token.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 10:41:30 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/06/21 04:05:04 by andjenna         ###   ########.fr       */
+/*   Updated: 2024/06/21 19:17:59 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,6 +122,6 @@ void ft_exec_token(t_mini **mini, char *prompt)
 	granny = root;
 	choose_exec(root, mini, prompt);
 	// unfold_ast(root, -1, &last->env, mini, prompt);
-	print_ast(root, 0, ' ');
+	// print_ast(root, 0, ' ');
 	ft_clear_ast(root);
 }

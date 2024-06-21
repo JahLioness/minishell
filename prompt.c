@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 11:03:48 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/06/19 18:25:16 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/06/21 19:25:11 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,18 @@ void	ft_prompt(t_mini **mini_lst, char **envp)
 		exit (1);
 	while (1)
 	{
+		ft_get_signal();
 		// ft_putstr_fd(prompt, 1);
 		line = readline(prompt);
+		// if (g_sig == 2)
+		// {
+		// 	printf("\n");
+		// 	rl_replace_line("", 0);
+		// 	rl_on_new_line();
+		// 	rl_redisplay();
+		// }
+		// if (g_sig == 3)
+		// 	continue;
 		// line = get_next_line(0, 0);
 		if (!line)
 		{

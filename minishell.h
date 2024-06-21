@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 10:44:59 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/06/21 13:41:45 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/06/21 19:02:16 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@
 # include <signal.h>
 # include <sys/types.h>
 # include <sys/wait.h>
+
+static int			g_sig = 0;
 
 typedef enum s_redir_type
 {
@@ -52,6 +54,7 @@ typedef struct s_redir
 {
 	char			*file;
 	t_redir_type	type;
+	int				fd_redir;
 	struct s_redir	*next;
 }					t_redir;
 
@@ -241,5 +244,9 @@ void				ft_clear_ast(t_ast *root);
 void				print_ast(t_ast *node, int depth, char c);
 void				unfold_ast(t_ast *root, int status, t_env **env,
 						t_mini **mini, char *prompt);
+
+/*			SIGNALS		*/
+void				ft_get_signal(void);
+void				ft_get_signal_cmd(void);
 
 #endif
