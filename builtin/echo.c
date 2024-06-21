@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
+/*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 15:56:42 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/06/18 15:32:36 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/06/20 18:47:59 by andjenna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,13 +73,13 @@ void	ft_echo_putstr(int fd, char **str)
 
 int	ft_echo(int fd, char **str, char **flag)
 {
-	if (!str || !*str)
+	if ((!str || !*str) && !flag)
 	{
 		ft_putendl_fd("", fd);
 		free(str);
 		return (0);
 	}
-	if (!flag)
+	else if (!flag)
 		ft_echo_putendl(fd, str);
 	else
 		ft_echo_wt_flag(fd, str, flag);

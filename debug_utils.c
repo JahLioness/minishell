@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   debug_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
+/*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 12:18:04 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/06/20 11:04:07 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/06/21 01:13:37 by andjenna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@ void	ft_print_lst(t_mini *mini)
 		printf("cell: %s\n", tmp_mini->cell);
 		printf("MINI ERROR: %d\n", tmp_mini->error);
 		ft_print_token_lst(tmp_mini->tokens);
-		ft_print_env(&tmp_mini->env, 1);
+		// ft_print_env(&tmp_mini->env, 1);
 		tmp_mini = tmp_mini->next;
 		i++;
 	}
