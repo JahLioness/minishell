@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 10:44:59 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/06/21 19:02:16 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/06/26 13:40:37 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -195,9 +195,9 @@ int					ft_echo(int fd, char **str, char **flag);
 char				*ft_check_key(char *key);
 int					ft_check_value(t_env **env, char *key, char *op,
 						char *value);
-int					ft_export(t_export_utils *utils, t_env **env, int fd);
+void					ft_export(t_export_utils *utils, t_env **env, int fd);
 void				ft_unset(char *key, t_env **env);
-int					ft_cd(char *path, t_env **env);
+int					ft_cd(char **path, t_env **env);
 int					ft_pwd(int fd, t_env **env);
 int					ft_exit(t_ast *root, t_mini **mini, char *prompt,
 						char **envp);
@@ -247,6 +247,7 @@ void				unfold_ast(t_ast *root, int status, t_env **env,
 
 /*			SIGNALS		*/
 void				ft_get_signal(void);
-void				ft_get_signal_cmd(void);
+// void				ft_get_signal_cmd(void);
+void				ft_handler_sigquit(int signum);
 
 #endif

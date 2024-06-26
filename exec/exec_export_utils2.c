@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 18:15:03 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/06/12 15:53:11 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/06/26 13:38:26 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	ft_exec_export_utils(char *arg, t_export_utils *utils)
 		}
 		i++;
 	}
-	if (!utils->key && arg[0] != '=' && arg[0] != '+')
+	if (!utils->key)
 		utils->key = ft_strdup(arg);
 	return (0);
 }

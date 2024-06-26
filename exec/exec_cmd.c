@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 16:45:28 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/06/21 19:33:46 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/06/26 14:08:09 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,19 +26,19 @@ int ft_exec_builtin(t_token *token, t_env **env, int fd)
 	if (!ft_strcmp(token->cmd->cmd, "echo"))
 		exit_status = ft_echo(fd, ft_get_args_echo(token->cmd->args, env), ft_get_flag_echo(token->cmd->args));
 	else if (!ft_strcmp(token->cmd->cmd, "cd"))
-		exit_status = ft_cd(token->cmd->args[1], env);
+		exit_status = ft_cd(token->cmd->args, env);
 	else if (!ft_strcmp(token->cmd->cmd, "pwd"))
 		exit_status = ft_pwd(fd, env);
 	else if (!ft_strcmp(token->cmd->cmd, "export"))
-		exit_status = ft_exec_export(token, env, fd);
+		ft_exec_export(token, env, fd);
 	else if (!ft_strcmp(token->cmd->cmd, "unset"))
 		exit_status = ft_exec_unset(token->cmd, env);
 	else if (!ft_strcmp(token->cmd->cmd, "env"))
 		exit_status = ft_print_env(env, fd);
 	status = ft_get_exit_status(env);
-	if (status)
+	if (status && exit_status != -1)
 		ft_change_exit_status(status, ft_itoa(exit_status));
-	else
+	else if (exit_status != -1)
 		ft_envadd_back(env, ft_envnew(ft_strdup("?"), ft_itoa(exit_status)));
 	return (exit_status);
 }
@@ -224,6 +224,11 @@ int ft_exec_cmd(t_ast *root, t_mini **mini, char *prompt)
 			else if (!ft_strcmp(root->token->cmd->cmd, "exit"))
 			{
 				status = ft_exit(root, mini, prompt, envp);
+				e_status = ft_get_exit_status(&last->env);
+				if (e_status)
+					ft_change_exit_status(e_status, ft_itoa(status));
+				else
+					ft_envadd_back(&last->env, ft_envnew(ft_strdup("?"), ft_itoa(status)));
 				ft_free_tab(envp);
 				envp = NULL;
 			}
@@ -281,6 +286,17 @@ int ft_exec_cmd(t_ast *root, t_mini **mini, char *prompt)
 					if (redir_fd != -1 && redir_fd != STDOUT_FILENO)
 						close(redir_fd);
 					waitpid(pid, &status, 0);
+					// if (g_sig == 3)
+					// {
+					// 	ft_putendl_fd("Quit (core dumped)", 2);
+					// 	g_sig = 0;
+					// 	e_status = ft_get_exit_status(&last->env);
+					// 	if (e_status)
+					// 		ft_change_exit_status(e_status, ft_itoa(WEXITSTATUS(1)));
+					// 	else
+					// 		ft_envadd_back(&last->env, ft_envnew(ft_strdup("?"), ft_itoa(WEXITSTATUS(1))));
+					// 	ft_free_tab(envp);
+					// }
 					if (WIFEXITED(status))
 					{
 						e_status = ft_get_exit_status(&last->env);

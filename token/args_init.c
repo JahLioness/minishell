@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 13:08:17 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/06/19 19:13:42 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/06/26 13:29:05 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,29 +22,56 @@ static void	ft_check_acco(char *str, int *i)
 	}
 }
 
+// int	ft_get_index_arg_utils(char *str, int *i)
+// {
+// 	int		k;
+// 	char	quote;
+
+// 	k = *i;
+// 	if (str[*i] == '"' || str[*i] == '\'')
+// 	{
+// 		quote = str[*i];
+// 		(*i)++;
+// 		while (str[*i] && str[*i] != quote)
+// 			(*i)++;
+// 		if (str[*i] == quote)
+// 			(*i)++;
+// 	}
+// 	else
+// 	{
+// 		while (str[*i] && ft_is_not_stop(str[*i])
+// 			&& !ft_is_whitespaces(str[*i]) )
+// 		{
+// 			ft_check_acco(str, i);
+// 			(*i)++;
+// 		}
+// 	}
+// 	return (k);
+// }
+
 int	ft_get_index_arg_utils(char *str, int *i)
 {
 	int		k;
 	char	quote;
 
 	k = *i;
-	if (str[*i] == '"' || str[*i] == '\'')
+	quote = 0;
+	while (str[*i] && !ft_is_whitespaces(str[*i]) && ft_is_not_stop(str[*i]) && !quote)
 	{
-		quote = str[*i];
-		(*i)++;
-		while (str[*i] && str[*i] != quote)
-			(*i)++;
-		if (str[*i] == quote)
-			(*i)++;
-	}
-	else
-	{
-		while (str[*i] && ft_is_not_stop(str[*i])
-			&& !ft_is_whitespaces(str[*i]))
+		if (str[*i] == '"' || str[*i] == '\'')
 		{
-			ft_check_acco(str, i);
+			quote = str[*i];
 			(*i)++;
+			while (str[*i] && str[*i] != quote)
+				(*i)++;
+			if (str[*i] == quote)
+				(*i)++;
+			quote = 0;
 		}
+		else
+			ft_check_acco(str, i);
+		if (str[*i])
+			(*i)++;
 	}
 	return (k);
 }
@@ -113,5 +140,5 @@ char	*ft_check_expand(char *str, t_env **env, int j)
 		return (free(str), NULL);
 	i++;
 	ret = ft_search_value(ret, env, i, str);
-	return (free(str), ret);
+	return (ret);
 }

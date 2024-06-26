@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 11:33:20 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/06/21 13:48:02 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/06/26 14:04:41 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,13 @@ int	ft_exit_one_arg(t_ast *root, t_mini **mini, char *prompt, char **envp)
 	char	*compare;
 
 	compare = ft_itoa(ft_atol(root->token->cmd->args[1]));
+	if (root->token->cmd->args[1][0] == '+')
+	{
+		char *tmp = ft_strndup(&root->token->cmd->args[1][0], 1);
+		char *tmp2 = compare;
+		compare = ft_strjoin_free(tmp, tmp2);
+		free(tmp2);
+	}
 	if (!ft_is_num(root->token->cmd->args[1]))
 	{
 		ft_print_exit(root->token->cmd->args[1]);
@@ -54,7 +61,7 @@ int	ft_exit_one_arg(t_ast *root, t_mini **mini, char *prompt, char **envp)
 		return (2);
 	}
 	else
-		return (ft_exit_one_ok(root, mini, prompt, envp));
+		return (free(compare), ft_exit_one_ok(root, mini, prompt, envp));
 }
 
 int	ft_exit(t_ast *root, t_mini **mini, char *prompt, char **envp)

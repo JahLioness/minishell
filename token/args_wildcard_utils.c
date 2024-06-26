@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 18:55:12 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/06/14 12:22:39 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/06/26 13:18:34 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,8 @@ int	ft_check_star(char *arg)
 			i++;
 			while (arg[i] && arg[i] != quote)
 				i++;
-			i++;
+			if (arg[i])
+				i++;
 		}
 		if (arg[i] && arg[i] == '*')
 			return (1);

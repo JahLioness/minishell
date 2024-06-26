@@ -6,54 +6,90 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 15:01:54 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/06/06 12:29:41 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/06/26 15:15:30 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-static void	ft_skip_star(char *patter, char *str, int *i, int *j)
-{
-	while (patter[*i] == '*')
-		(*i)++;
-	while (str[*j] && str[*j] != patter[*i])
-		(*j)++;
-}
+// static void	ft_skip_star(char *patter, char *str, int *i, int *j)
+// {
+// 	while (patter[*i] == '*')
+// 		(*i)++;
+// 	while (str[*j] && str[*j] != patter[*i])
+// 		(*j)++;
+// }
 
-static void	ft_skip_equal_index(char *pattern, int *i, int *j)
-{
-	if (pattern[*i + 1] != '\0')
-		(*i)++;
-	(*j)++;
-}
+// static void	ft_skip_equal_index(char *pattern, int *i, int *j)
+// {
+// 	if (pattern[*i + 1] != '\0')
+// 		(*i)++;
+// 	(*j)++;
+// }
+
+// int	ft_compare(char *pattern, char *str)
+// {
+// 	int	i;
+// 	int	j;
+
+// 	i = 0;
+// 	j = 0;
+// 	if (pattern[i] == '*' && !pattern[i + 1])
+// 		return (1);
+// 	while (str[j])
+// 	{
+// 		if (pattern[i] == '*')
+// 			ft_skip_star(pattern, str, &i, &j);
+// 		else if (pattern[i] == str[j])
+// 			ft_skip_equal_index(pattern, &i, &j);
+// 		else
+// 		{
+// 			if (i > 0 && pattern[i - 1] == '*')
+// 				j++;
+// 			else
+// 				return (0);
+// 		}
+// 		if (str[j] == pattern[i] && !str[j + 1] && (!pattern[i] || !pattern[i
+// 					+ 1]))
+// 			return (1);
+// 	}
+// 	return (0);
+// }
 
 int	ft_compare(char *pattern, char *str)
 {
 	int	i;
 	int	j;
+	int	star_idx;
+	int	match_idx;
 
 	i = 0;
 	j = 0;
-	if (pattern[i] == '*' && !pattern[i + 1])
-		return (1);
+	star_idx = -1;
+	match_idx = 0;
 	while (str[j])
 	{
 		if (pattern[i] == '*')
-			ft_skip_star(pattern, str, &i, &j);
-		else if (pattern[i] == str[j])
-			ft_skip_equal_index(pattern, &i, &j);
-		else
 		{
-			if (i > 0 && pattern[i - 1] == '*')
-				j++;
-			else
-				return (0);
+			star_idx = i++;
+			match_idx = j;
 		}
-		if (str[j] == pattern[i] && !str[j + 1] && (!pattern[i] || !pattern[i
-					+ 1]))
-			return (1);
+		else if (pattern[i] == str[j])
+		{
+			i++;
+			j++;
+		}
+		else if (star_idx != -1)
+		{
+			i = star_idx + 1;
+			j = ++match_idx;
+		}
+		else
+			return (0);
 	}
-	return (0);
+	while (pattern[i] == '*')
+		i++;
+	return (pattern[i] == '\0');
 }
 
 char	**ft_compare_entry(char **args, t_wildcard *w, int j, char **wildcard)
