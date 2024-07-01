@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_cmd_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
+/*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 18:37:11 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/06/18 15:06:54 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/07/01 15:31:31 by andjenna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,9 +116,9 @@ int	ft_exec_cmd_error(t_ast *root, t_mini **mini, char **envp, char *prompt)
 		ft_putstr_fd(last->tokens->cmd->cmd, 2);
 	ft_putstr_fd(": command not found\n", 2);
 	ft_free_tab(envp);
+	// if (root)
+	ft_clear_ast(root);
 	ft_clear_lst(mini);
-	if (root)
-		ft_clear_ast(root);
 	free(prompt);
 	free(underscore);
 	exit(127);
