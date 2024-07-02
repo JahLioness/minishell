@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 16:06:44 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/06/26 12:50:47 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/06/27 18:13:47 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ void	ft_handler(int signum, siginfo_t *info, void *context)
 		rl_replace_line("", 0);
 		rl_on_new_line();
 		rl_redisplay();
+		g_sig = signum;
 	}
 	if (signum == SIGINT && info->si_pid == 0)
 		printf("\n");
@@ -42,7 +43,7 @@ void	ft_get_signal(void)
 	// sigemptyset(&act.sa_mask);
 	if (sigaction(SIGINT, &act, NULL) == -1)
 		exit (EXIT_FAILURE);
-	act.sa_handler = SIG_IGN;
+	// act.sa_handler = SIG_IGN;
 	if (sigaction(SIGQUIT, &act, NULL) == -1)
 		exit (EXIT_FAILURE);
 }
