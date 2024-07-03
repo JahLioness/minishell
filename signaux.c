@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 16:06:44 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/07/02 10:57:42 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/07/03 16:00:58 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,5 @@ void	ft_handler_sigquit(int signum)
 
 void	ft_get_signal_cmd(void)
 {
-	if (signal(SIGQUIT, ft_handler_sigquit) == -1)
-		exit(EXIT_FAILURE);
+	signal(SIGQUIT, ft_handler_sigquit);
 }

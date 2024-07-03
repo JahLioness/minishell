@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_token.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 10:41:30 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/07/01 15:18:03 by andjenna         ###   ########.fr       */
+/*   Updated: 2024/07/03 16:16:47 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int ft_exec_multiple_cmd(t_ast *granny, t_ast *current, t_ast *parent, t_mini **
 	if (current->token->type == T_CMD)
 	{
 		printf("CMD: %s\n", current->token->cmd->cmd);
-		return (ft_exec_cmd(current, mini, prompt));
+		return (ft_exec_cmd(current, granny, mini, prompt));
 	}
 	if (current->token->type == T_AND)
 	{
