@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_cmd.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 16:45:28 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/07/01 19:36:47 by andjenna         ###   ########.fr       */
+/*   Updated: 2024/07/02 10:51:00 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -304,6 +304,7 @@ int ft_exec_cmd(t_ast *root, t_mini **mini, char *prompt)
 			}
 			else
 			{
+				ft_get_signal_cmd();
 				redir_fd = -1;
 				pid = fork();
 				if (pid < 0)
