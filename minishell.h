@@ -6,7 +6,7 @@
 /*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 10:44:59 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/07/06 19:00:01 by andjenna         ###   ########.fr       */
+/*   Updated: 2024/07/06 19:42:37 by andjenna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,19 +58,17 @@ typedef struct s_redir
 	struct s_redir	*next;
 }					t_redir;
 
-
 typedef struct s_cmd
 {
+	int				error;
 	char			*cmd;
 	char			**args;
-	int				error;
 	t_redir			*redir;
 }					t_cmd;
 
 typedef struct s_token
 {
 	int				status;
-	int				prev_fd;
 	t_token_type	type;
 	t_cmd			*cmd;
 	struct s_token	*prev;
@@ -244,7 +242,8 @@ int					ft_is_bracket(t_token *token);
 int					ft_is_builtin(char *cmd);
 int					ft_exec_cmd_error(t_ast *root, t_mini **mini, char **envp,
 						char *prompt);
-int					ft_handle_redir_file(int redir_fd, t_ast *root, t_ast *granny, t_mini *last);
+int					ft_handle_redir_file(int redir_fd, t_ast *root, t_mini *last);
+void				handle_expand(t_ast *root, t_mini *last);
 
 /*			AST				*/
 int					ft_check_bracket(t_token *token);

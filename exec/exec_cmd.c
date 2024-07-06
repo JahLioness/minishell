@@ -6,7 +6,7 @@
 /*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 16:45:28 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/07/06 19:00:35 by andjenna         ###   ########.fr       */
+/*   Updated: 2024/07/06 19:41:49 by andjenna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 // creation du here_doc
 // si plusieurs heredoc, (token->redir->next). recreer un nouveau fichier a chaque fois (mais la creation du fichier se fait dans le parent et l'ouverture dans le fils)
 // a anticiper cat devant plusieurs heredoc
-// probleme expand --> echo $USER "$USER" '$USER'
+// probleme expand --> echo $USER "$USER" $USER
 
 int ft_exec_builtin(t_token *token, t_env **env, int fd)
 {
@@ -93,13 +93,12 @@ int ft_is_builtin(char *cmd)
 	return (0);
 }
 
-int ft_handle_redir_file(int redir_fd, t_ast *root, t_ast *granny, t_mini *last)
+int ft_handle_redir_file(int redir_fd, t_ast *root, t_mini *last)
 {
 	t_redir *current;
 	char *file_heredoc;
 
 	file_heredoc = NULL;
-	(void)granny;
 	current = root->token->cmd->redir;
 	while (current)
 	{
@@ -198,7 +197,7 @@ int ft_exec_cmd(t_ast *root, t_ast *granny, t_mini **mini, char *prompt)
 			handle_expand(root, last);
 		// premier appel de la fonction pour verifier les file
 		if (root->token->cmd->redir && root->token->cmd->redir->type != REDIR_HEREDOC)
-			redir_fd = ft_handle_redir_file(redir_fd, root, granny, last);
+			redir_fd = ft_handle_redir_file(redir_fd, root, last);
 		// cas de redirection pour "cat file" sans sympbole de redirection
 		else if (!ft_strcmp(root->token->cmd->args[0], "cat") && !root->token->cmd->redir && redir_fd == -1 && root->token->cmd->args[1])
 		{
@@ -260,6 +259,7 @@ int ft_exec_cmd(t_ast *root, t_ast *granny, t_mini **mini, char *prompt)
 			else
 			{
 				ft_get_signal_cmd();
+				printf("lancement de fork\n");
 				redir_fd = -1;
 				pid = fork();
 				if (pid < 0)
@@ -268,7 +268,7 @@ int ft_exec_cmd(t_ast *root, t_ast *granny, t_mini **mini, char *prompt)
 				{
 					// deuxieme appel de la fonction pour verifier les file et here_doc
 					if (root->token->cmd->redir)
-						redir_fd = ft_handle_redir_file(redir_fd, root, granny, last);
+						redir_fd = ft_handle_redir_file(redir_fd, root, last);
 					if ((redir_fd != -1 && redir_fd != STDOUT_FILENO))
 					{
 						if (root->token->cmd->redir->type == REDIR_INPUT)
@@ -331,3 +331,15 @@ int ft_exec_cmd(t_ast *root, t_ast *granny, t_mini **mini, char *prompt)
 		ft_free_tab(envp);
 	return (status);
 }
+
+// if (g_sig == 3)
+// {
+// 	ft_putendl_fd("Quit (core dumped)", 2);
+// 	g_sig = 0;
+// 	e_status = ft_get_exit_status(&last->env);
+// 	if (e_status)
+// 		ft_change_exit_status(e_status, ft_itoa(WEXITSTATUS(1)));
+// 	else
+// 		ft_envadd_back(&last->env, ft_envnew(ft_strdup("?"), ft_itoa(WEXITSTATUS(1))));
+// 	ft_free_tab(envp);
+// }

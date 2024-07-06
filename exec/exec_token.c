@@ -6,7 +6,7 @@
 /*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 10:41:30 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/07/06 18:59:26 by andjenna         ###   ########.fr       */
+/*   Updated: 2024/07/06 19:40:03 by andjenna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,21 +29,30 @@ int ft_exec_multiple_cmd(t_ast *granny, t_ast *current, t_ast *parent, t_mini **
 	{
 		exit_status = ft_exec_multiple_cmd(granny, current->left, parent, mini, prompt, exit_status);
 		if (exit_status == 0)
+		{
+			printf("exit_status: %d\n", exit_status);
 			exit_status = ft_exec_multiple_cmd(granny, current->right, parent, mini, prompt, exit_status);
+		}
 	}
 	else if (current->token->type == T_OR)
 	{
 		exit_status = ft_exec_multiple_cmd(granny, current->left, parent, mini, prompt, exit_status);
 		if (exit_status != 0)
+		{
+			printf("exit_status: %d\n", exit_status);
 			exit_status = ft_exec_multiple_cmd(granny, current->right, parent, mini, prompt, exit_status);
+		}
 	}
 	else if (current->token->type == T_PIPE)
 	{
 		printf("PIPE\n");
-		// if (current->left->token->type == T_CMD && current->right->token->type == T_CMD)
-		// 	exit_status = ft_exec_pipe(current, granny, mini, prompt);
-		// else
-		// 	exit_status = ft_exec_multiple_cmd(granny, current->left, parent, mini, prompt, exit_status);
+		if (current->left->token->type == T_CMD && current->right->token->type == T_CMD)
+		{
+			exit_status = ft_exec_pipe(current->left, granny, mini, prompt);
+			exit_status = ft_exec_pipe(current->right, granny, mini, prompt);
+		}
+		else
+			exit_status = ft_exec_multiple_cmd(granny, current->left, parent, mini, prompt, exit_status);
 	}
 	else
 	{
