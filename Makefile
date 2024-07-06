@@ -49,6 +49,7 @@ SRC = main.c \
 		exec/exec_token.c \
 		exec/exec_check_tokens.c \
 		exec/exec_ast.c \
+		exec/exec_heredoc.c \
 		ast/ast_init.c \
 		ast/ast_utils.c \
 

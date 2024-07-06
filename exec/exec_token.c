@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_token.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
+/*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 10:41:30 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/07/03 16:16:47 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/07/06 18:59:26 by andjenna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,14 @@ int ft_exec_multiple_cmd(t_ast *granny, t_ast *current, t_ast *parent, t_mini **
 		if (exit_status != 0)
 			exit_status = ft_exec_multiple_cmd(granny, current->right, parent, mini, prompt, exit_status);
 	}
+	else if (current->token->type == T_PIPE)
+	{
+		printf("PIPE\n");
+		// if (current->left->token->type == T_CMD && current->right->token->type == T_CMD)
+		// 	exit_status = ft_exec_pipe(current, granny, mini, prompt);
+		// else
+		// 	exit_status = ft_exec_multiple_cmd(granny, current->left, parent, mini, prompt, exit_status);
+	}
 	else
 	{
 		exit_status = ft_exec_multiple_cmd(granny, current->left, parent, mini, prompt, exit_status);
@@ -50,10 +58,10 @@ int ft_exec_multiple_cmd(t_ast *granny, t_ast *current, t_ast *parent, t_mini **
 
 void ft_exec_token(t_mini **mini, char *prompt)
 {
-	t_mini *last;
-	t_token *tmp;
-	t_token *last_t;
-	t_ast *root;
+	t_mini	*last;
+	t_token	*tmp;
+	t_token	*last_t;
+	t_ast	*root;
 
 	if (!*mini)
 		return;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
+/*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 10:44:59 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/07/03 18:46:25 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/07/06 19:00:01 by andjenna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ typedef struct s_redir
 	t_redir_type	type;
 	struct s_redir	*next;
 }					t_redir;
+
 
 typedef struct s_cmd
 {
@@ -209,21 +210,31 @@ void				ft_free_exit(t_ast *root, t_mini **mini, char **envp,
 void				ft_print_exit(char *str);
 
 /*			EXEC			*/
-int					ft_exec_builtin(t_token *token, t_env **env, int fd);
-int					ft_exec_unset(t_cmd *cmd, t_env **env);
-int					ft_exec_export_utils(char *arg, t_export_utils *utils);
-int					ft_exec_export(t_token *token, t_env **env, int fd);
-int					ft_exec_cmd(t_ast *root, t_ast *granny, t_mini **mini, char *prompt);
 // int					ft_exec_cmd_pipe(t_ast *root, t_mini **mini, char *prompt);
+int					ft_exec_cmd(t_ast *root, t_ast *granny, t_mini **mini, char *prompt);
 int					ft_exec_cmd_path(t_ast *root, t_ast *granny, t_mini **mini, char **envp,
 						char *prompt);
-char				**ft_get_args_echo(char **args, t_env **env);
-char				**ft_get_flag_echo(char **args);
 char				**ft_get_envp(t_env **env);
 char				*ft_get_cmd_path_env(char *cmd, char **env);
 void				ft_exec_token(t_mini **mini, char *prompt);
 void				ft_set_var_underscore(char **args, t_env **env,
 						char **envp);
+int					ft_exec_multiple_cmd(t_ast *granny, t_ast *current,
+						t_ast *parent, t_mini **mini, char *prompt, int status);
+int					ft_exec_pipe(t_ast *root, t_ast *granny, t_mini **mini, char *prompt);
+						
+/*			EXEC BUILTINS	*/
+int					ft_exec_builtin(t_token *token, t_env **env, int fd);
+int					ft_exec_unset(t_cmd *cmd, t_env **env);
+int					ft_exec_export_utils(char *arg, t_export_utils *utils);
+int					ft_exec_export(t_token *token, t_env **env, int fd);
+char				**ft_get_args_echo(char **args, t_env **env);
+char				**ft_get_flag_echo(char **args);
+
+
+/*			EXEC HEREDOC	*/
+char				*ft_get_heredoc(t_redir *redir, t_ast *root, t_mini *last);
+char				*randomize_name(void);
 
 /*			EXEC_UTILS		*/
 // int					ft_is_redir(t_token *token);
@@ -233,7 +244,7 @@ int					ft_is_bracket(t_token *token);
 int					ft_is_builtin(char *cmd);
 int					ft_exec_cmd_error(t_ast *root, t_mini **mini, char **envp,
 						char *prompt);
-int					ft_handle_redir_file(int redir_fd, t_ast *root, t_ast *granny);
+int					ft_handle_redir_file(int redir_fd, t_ast *root, t_ast *granny, t_mini *last);
 
 /*			AST				*/
 int					ft_check_bracket(t_token *token);

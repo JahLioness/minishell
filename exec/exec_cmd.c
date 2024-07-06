@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_cmd.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
+/*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 16:45:28 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/07/03 18:51:00 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/07/06 19:00:35 by andjenna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 // creation du here_doc
 // si plusieurs heredoc, (token->redir->next). recreer un nouveau fichier a chaque fois (mais la creation du fichier se fait dans le parent et l'ouverture dans le fils)
 // a anticiper cat devant plusieurs heredoc
+// probleme expand --> echo $USER "$USER" '$USER'
 
 int ft_exec_builtin(t_token *token, t_env **env, int fd)
 {
@@ -92,70 +93,7 @@ int ft_is_builtin(char *cmd)
 	return (0);
 }
 
-char *randomize_name()
-{
-	int urandom_fd;
-	char *name_file;
-	unsigned char random_char;
-	int i;
-
-	i = 0;
-	name_file = malloc(sizeof(char) * 11);
-	if (!name_file)
-		return (NULL);
-	urandom_fd = open("/dev/urandom", O_RDONLY);
-	if (urandom_fd < 0)
-	{
-		free(name_file);
-		return NULL;
-	}
-	while (i < 10)
-	{
-		if (read(urandom_fd, &random_char, 1) != 1)
-		{
-			close(urandom_fd);
-			free(name_file);
-			return NULL;
-		}
-		name_file[i] = random_char % 26 + 'a';
-		i++;
-	}
-	name_file[i] = '\0';
-	close(urandom_fd);
-	return (name_file);
-}
-
-char *ft_get_heredoc(t_redir *redir)
-{
-	int urandom_fd;
-	char *line;
-	char *name_file;
-
-	line = NULL;
-	// dois randomiser le nom du fichier, en parcourant /dev/urandom et en convertissant x char en ascii
-	name_file = randomize_name();
-	urandom_fd = open(name_file, O_CREAT | O_WRONLY | O_TRUNC, 0644);
-	if (urandom_fd < 0)
-		return (free(name_file), NULL);
-	// name_file[i] = NULL;
-	while (1)
-	{
-		line = readline("> ");
-		if (!line || !ft_strcmp(line, redir->file))
-			break;
-		else
-		{
-			ft_putstr_fd(line, urandom_fd);
-			ft_putstr_fd("\n", urandom_fd);
-			free(line);
-		}
-	}
-	close(urandom_fd);
-	free(line);
-	return (name_file);
-}
-
-int ft_handle_redir_file(int redir_fd, t_ast *root, t_ast *granny)
+int ft_handle_redir_file(int redir_fd, t_ast *root, t_ast *granny, t_mini *last)
 {
 	t_redir *current;
 	char *file_heredoc;
@@ -165,44 +103,52 @@ int ft_handle_redir_file(int redir_fd, t_ast *root, t_ast *granny)
 	current = root->token->cmd->redir;
 	while (current)
 	{
+		printf("redir_fd in (while current) = %d\n", redir_fd);
 		if (current->type == REDIR_INPUT)
 		{
 			if (redir_fd != -1)
+			{
+				printf("fermeture du premier redir_fd = %d\n", redir_fd);
 				close(redir_fd);
+			}
 			redir_fd = open(current->file, O_RDONLY);
 			if (redir_fd < 0)
-				return (ft_putstr_fd("minishell: ", 2), ft_putstr_fd(current->file, 2), ft_putendl_fd(": No such file or directory", 2), 1025);
+				return (ft_putstr_fd("minishell: ", 2), ft_putstr_fd(current->file, 2), ft_putendl_fd(": No such file or directory", 2), 5);
 		}
 		else if (current->type == REDIR_OUTPUT)
 		{
 			if (redir_fd != -1)
+			{
+				printf("fermeture du premier redir_fd = %d\n", redir_fd);
 				close(redir_fd);
+			}
 			redir_fd = open(current->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 			if (redir_fd < 0)
-				return (ft_putstr_fd("minishell: ", 2), ft_putstr_fd(current->file, 2), ft_putendl_fd(": No such file or directory", 2), 1025);
+				return (ft_putstr_fd("minishell: ", 2), ft_putstr_fd(current->file, 2), ft_putendl_fd(": No such file or directory", 2), 5);
 		}
 		else if (current->type == REDIR_APPEND)
 		{
 			if (redir_fd != -1)
+			{
+				printf("fermeture du premier redir_fd = %d\n", redir_fd);
 				close(redir_fd);
+			}
 			redir_fd = open(current->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
 			if (redir_fd < 0)
-				return (ft_putstr_fd("minishell: ", 2), ft_putstr_fd(current->file, 2), ft_putendl_fd(": No such file or directory", 2), 1025);
+				return (ft_putstr_fd("minishell: ", 2), ft_putstr_fd(current->file, 2), ft_putendl_fd(": No such file or directory", 2), 5);
 		}
 		else if (current->type == REDIR_HEREDOC)
 		{
 			if (redir_fd != -1)
 				close(redir_fd);
 			//creation du file heredoc && lancement du prompt
-			file_heredoc = ft_get_heredoc(current);
-			printf("redir =  %d", redir_fd);
+			file_heredoc = ft_get_heredoc(current, root, last);
 			redir_fd = open(file_heredoc, O_RDONLY);
 			if (redir_fd < 0)
 			{
-			
 				unlink(file_heredoc);
 				free(file_heredoc);
-				return (1025);
+				return (5);
 			}
 			unlink(file_heredoc);
 			free(file_heredoc);
@@ -210,7 +156,6 @@ int ft_handle_redir_file(int redir_fd, t_ast *root, t_ast *granny)
 		}
 		current = current->next;
 	}
-	
 	return (redir_fd);
 }
 
@@ -245,7 +190,7 @@ int ft_exec_cmd(t_ast *root, t_ast *granny, t_mini **mini, char *prompt)
 	error = 0;
 	file_heredoc = NULL;
 	last = ft_minilast(*mini);
-	envp = ft_get_envp(&last->env);		
+	envp = ft_get_envp(&last->env);
 	// gestion des quotes et expand
 	if (root->token->type == T_CMD && root->token->cmd)
 	{
@@ -253,7 +198,7 @@ int ft_exec_cmd(t_ast *root, t_ast *granny, t_mini **mini, char *prompt)
 			handle_expand(root, last);
 		// premier appel de la fonction pour verifier les file
 		if (root->token->cmd->redir && root->token->cmd->redir->type != REDIR_HEREDOC)
-			redir_fd = ft_handle_redir_file(redir_fd, root, granny);
+			redir_fd = ft_handle_redir_file(redir_fd, root, granny, last);
 		// cas de redirection pour "cat file" sans sympbole de redirection
 		else if (!ft_strcmp(root->token->cmd->args[0], "cat") && !root->token->cmd->redir && redir_fd == -1 && root->token->cmd->args[1])
 		{
@@ -263,12 +208,13 @@ int ft_exec_cmd(t_ast *root, t_ast *granny, t_mini **mini, char *prompt)
 				ft_putstr_fd("minishell: ", 2);
 				ft_putstr_fd(root->token->cmd->args[1], 2);
 				ft_putendl_fd(": No such file or directory", 2);
-				redir_fd = 1025;
+				redir_fd = 5;
 			}
 		}
 		// si erreur de file, on execute pas le reste des commandes
-		if (redir_fd == 1025)
+		if (redir_fd == 5 || (root->token->cmd->redir && root->token->cmd->redir->type != REDIR_HEREDOC && !root->token->cmd->cmd))
 		{
+			printf("if fd == 5 -> error == 1\n");
 			e_status = ft_get_exit_status(&last->env);
 			if (e_status)
 				ft_change_exit_status(e_status, ft_itoa(1));
@@ -279,9 +225,16 @@ int ft_exec_cmd(t_ast *root, t_ast *granny, t_mini **mini, char *prompt)
 		ft_set_var_underscore(root->token->cmd->args, &last->env, envp);
 		// si pas de file de redirection, on redirige vers la sortie standard
 		if (redir_fd == -1)
+		{
+			printf("if no file -> redir = STDOUT_FILENO\n");
 			redir_fd = STDOUT_FILENO;
-		if (redir_fd != STDOUT_FILENO)
+		}
+		if (redir_fd != STDOUT_FILENO && redir_fd != -1)
+		{
+			printf("fermutre du redir_fd = %d\n", redir_fd);
 			close(redir_fd);
+			printf(" after close -> redir_fd = %d\n", redir_fd);
+		}
 		// si pas d'erreur, on execute la commande
 		if (!error)
 		{
@@ -315,7 +268,7 @@ int ft_exec_cmd(t_ast *root, t_ast *granny, t_mini **mini, char *prompt)
 				{
 					// deuxieme appel de la fonction pour verifier les file et here_doc
 					if (root->token->cmd->redir)
-						redir_fd = ft_handle_redir_file(redir_fd, root, granny);
+						redir_fd = ft_handle_redir_file(redir_fd, root, granny, last);
 					if ((redir_fd != -1 && redir_fd != STDOUT_FILENO))
 					{
 						if (root->token->cmd->redir->type == REDIR_INPUT)
@@ -339,8 +292,8 @@ int ft_exec_cmd(t_ast *root, t_ast *granny, t_mini **mini, char *prompt)
 							ft_putendl_fd(": No shuch file or directory", 2);
 							ft_free_tab(envp);
 							ft_clear_lst(mini);
-							if (root)
-								ft_clear_ast(root);
+							if (granny)
+								ft_clear_ast(granny);
 							free(prompt);
 							exit(EXIT_FAILURE);
 						}
@@ -378,15 +331,3 @@ int ft_exec_cmd(t_ast *root, t_ast *granny, t_mini **mini, char *prompt)
 		ft_free_tab(envp);
 	return (status);
 }
-
-// if (g_sig == 3)
-// {
-// 	ft_putendl_fd("Quit (core dumped)", 2);
-// 	g_sig = 0;
-// 	e_status = ft_get_exit_status(&last->env);
-// 	if (e_status)
-// 		ft_change_exit_status(e_status, ft_itoa(WEXITSTATUS(1)));
-// 	else
-// 		ft_envadd_back(&last->env, ft_envnew(ft_strdup("?"), ft_itoa(WEXITSTATUS(1))));
-// 	ft_free_tab(envp);
-// }
