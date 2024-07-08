@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
+/*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 15:43:26 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/06/26 13:16:00 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/06/27 18:51:45 by andjenna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,10 +78,10 @@ static void	ft_print_export(t_env *env, int fd)
 	}
 }
 
-void	ft_export(t_export_utils *utils, t_env **env, int fd)
+int ft_export(t_export_utils *utils, t_env **env, int fd)
 {
-	t_env	*export;
-	t_env	*status;
+	t_env *export;
+	t_env *status;
 
 	if (!ft_strcmp(ft_check_key(utils->key), "error"))
 	{
@@ -90,19 +90,19 @@ void	ft_export(t_export_utils *utils, t_env **env, int fd)
 			ft_change_exit_status(status, ft_itoa(1));
 		else
 			ft_envadd_back(env, ft_envnew(ft_strdup("?"), ft_itoa(1)));
-		return ;
+		return (1);
 	}
 	else if (ft_check_key(utils->key) && ft_strcmp(ft_check_key(utils->key),
-			"error"))
-		ft_check_value(env, utils->key, utils->op, utils->value);
+												   "error"))
+		return (ft_check_value(env, utils->key, utils->op, utils->value));
 	else
 	{
 		if (!env || !*env)
-			return ;
+			return (1);
 		export = ft_alpha_sorted_env(env);
 		ft_print_export(export, fd);
 		ft_clearenv(&export);
 	}
 	free(utils->value);
-	// return (0);
+	return (0);
 }

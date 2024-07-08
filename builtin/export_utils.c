@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
+/*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 15:51:28 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/06/26 13:16:17 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/06/27 18:51:55 by andjenna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,6 +129,6 @@ int	ft_check_value(t_env **env, char *key, char *op, char *value)
 		ft_gestion_erreur(key, op, value, env);
 		return (1);
 	}
-	// free(value);
+	free(value);
 	return (0);
 }
