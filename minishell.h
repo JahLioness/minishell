@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 10:44:59 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/07/06 19:42:37 by andjenna         ###   ########.fr       */
+/*   Updated: 2024/07/08 14:26:27 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -258,6 +258,6 @@ t_ast				*create_operator_node(t_token *token, t_ast *left,
 /*			SIGNALS		*/
 void				ft_get_signal_cmd(void);
 void				ft_get_signal(void);
-void				ft_handler_sigquit(int signum);
+void				ft_get_signal_heredoc(void);
 
 #endif

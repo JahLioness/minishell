@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 11:03:48 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/07/08 14:22:50 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/07/08 14:26:18 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ void	ft_prompt(t_mini **mini_lst, char **envp)
 	char	*line;
 	char	*prompt;
 	t_mini	*last;
+	t_env	*e_status;
 
 	*mini_lst = ft_mini_init();
 	if (!*mini_lst || !mini_lst)
@@ -31,6 +32,17 @@ void	ft_prompt(t_mini **mini_lst, char **envp)
 	while (1)
 	{
 		ft_get_signal();
+		printf("g_sis = %d\n", g_sig);
+		if(g_sig == SIGINT)
+		{
+			last = ft_minilast(*mini_lst);
+			e_status = ft_get_exit_status(&last->env);
+			if (e_status)
+				ft_change_exit_status(e_status, ft_itoa(130));
+			else
+				ft_envadd_back(&last->env, ft_envnew(ft_strdup("?"), ft_itoa(130)));
+			g_sig = 0;
+		}
 		line = readline(prompt);
 		if (!line)
 		{
