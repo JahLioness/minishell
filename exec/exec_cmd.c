@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 16:45:28 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/07/08 14:25:37 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/07/09 11:56:20 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,72 +93,8 @@ int ft_is_builtin(char *cmd)
 	return (0);
 }
 
-char *randomize_name()
-{
-	int urandom_fd;
-	char *name_file;
-	unsigned char random_char;
-	int i;
 
-	i = 0;
-	name_file = malloc(sizeof(char) * 11);
-	if (!name_file)
-		return (NULL);
-	urandom_fd = open("/dev/urandom", O_RDONLY);
-	if (urandom_fd < 0)
-	{
-		free(name_file);
-		return NULL;
-	}
-	while (i < 10)
-	{
-		if (read(urandom_fd, &random_char, 1) != 1)
-		{
-			close(urandom_fd);
-			free(name_file);
-			return NULL;
-		}
-		name_file[i] = random_char % 26 + 'a';
-		i++;
-	}
-	name_file[i] = '\0';
-	close(urandom_fd);
-	return (name_file);
-}
-
-char *ft_get_heredoc(t_redir *redir)
-{
-	int urandom_fd;
-	char *line;
-	char *name_file;
-
-	line = NULL;
-	// dois randomiser le nom du fichier, en parcourant /dev/urandom et en convertissant x char en ascii
-	name_file = randomize_name();
-	urandom_fd = open(name_file, O_CREAT | O_WRONLY | O_TRUNC, 0644);
-	if (urandom_fd < 0)
-		return (free(name_file), NULL);
-	// name_file[i] = NULL;
-	while (1)
-	{
-		line = readline("> ");
-		if (!line || !ft_strcmp(line, redir->file))
-			break;
-		else
-		{
-			ft_putstr_fd(line, urandom_fd);
-			ft_putstr_fd("\n", urandom_fd);
-			free(line);
-		}
-		if (g_sig == 2)
-			break ;
-	}
-	close(urandom_fd);
-	free(line);
-	return (name_file);
-}
-
-int ft_handle_redir_file(int redir_fd, t_ast *root, t_ast *granny)
+int ft_handle_redir_file(int redir_fd, t_ast *root, t_mini *last)
 {
 	t_redir *current;
 	char *file_heredoc;
@@ -336,7 +272,7 @@ int ft_exec_cmd(t_ast *root, t_ast *granny, t_mini **mini, char *prompt)
 					// deuxieme appel de la fonction pour verifier les file et here_doc
 					if (root->token->cmd->redir)
 					{
-						redir_fd = ft_handle_redir_file(redir_fd, root, granny);
+						redir_fd = ft_handle_redir_file(redir_fd, root, last);
 					}
 					if ((redir_fd != -1 && redir_fd != STDOUT_FILENO))
 					{
@@ -397,7 +333,6 @@ int ft_exec_cmd(t_ast *root, t_ast *granny, t_mini **mini, char *prompt)
 		}
 	}
 	e_status = ft_get_exit_status(&last->env);
-	printf("g_sig after exec = %d\n", g_sig);
 	if (g_sig == SIGINT)
 	{
 		if (e_status)
@@ -405,6 +340,7 @@ int ft_exec_cmd(t_ast *root, t_ast *granny, t_mini **mini, char *prompt)
 		else
 			ft_envadd_back(&last->env, ft_envnew(ft_strdup("?"), ft_itoa(130)));
 		ft_free_tab(envp);
+		g_sig = 0;
 		return (130);
 	}
 	else if (g_sig == SIGQUIT)
@@ -414,21 +350,10 @@ int ft_exec_cmd(t_ast *root, t_ast *granny, t_mini **mini, char *prompt)
 		else
 			ft_envadd_back(&last->env, ft_envnew(ft_strdup("?"), ft_itoa(131)));
 		ft_free_tab(envp);
+		g_sig = 0;
 		return (131);
 	}
 	if (envp)
 		ft_free_tab(envp);
 	return (status);
 }
-
-// if (g_sig == 3)
-// {
-// 	ft_putendl_fd("Quit (core dumped)", 2);
-// 	g_sig = 0;
-// 	e_status = ft_get_exit_status(&last->env);
-// 	if (e_status)
-// 		ft_change_exit_status(e_status, ft_itoa(WEXITSTATUS(1)));
-// 	else
-// 		ft_envadd_back(&last->env, ft_envnew(ft_strdup("?"), ft_itoa(WEXITSTATUS(1))));
-// 	ft_free_tab(envp);
-// }

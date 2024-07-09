@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 10:44:59 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/07/08 14:26:27 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/07/09 11:52:01 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 
-static int			g_sig = 0;
+extern int			g_sig;
 
 typedef enum s_redir_type
 {
