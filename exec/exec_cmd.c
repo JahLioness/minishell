@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 16:45:28 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/07/09 14:44:12 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/07/09 14:51:44 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,6 +169,12 @@ void handle_expand(t_ast *root, t_mini *last)
 		root->token->cmd->args[i] = ft_verif_arg(root->token->cmd->args, &last->env, root->token->cmd, i);
 		i++;
 	}
+	// i = 0;
+	// while (root->token->cmd->args[i])
+	// {
+	// 	printf("arg[%d] = %s\n", i, root->token->cmd->args[i]);
+	// 	i++;
+	// }
 	root->token->cmd->args = ft_trim_quote_args(root->token->cmd->args);
 	if (root->token->cmd->cmd)
 		free(root->token->cmd->cmd);

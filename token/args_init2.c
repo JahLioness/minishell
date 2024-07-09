@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 14:31:53 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/06/26 13:29:39 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/07/09 14:52:58 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ char	**ft_get_args(char *cell, int *i)
 		{
 			k = ft_get_index_arg_utils(cell, i);
 			args[j] = ft_strndup(cell + k, (*i - k));
+			// printf("args[%d] = %s\n", j, args[j]);
 			if (!args[j])
 				return (ft_free_split(j, args), NULL);
 			j++;

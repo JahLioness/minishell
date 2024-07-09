@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 13:08:17 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/06/26 13:29:05 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/07/09 14:57:29 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ int	ft_get_index_arg_utils(char *str, int *i)
 				(*i)++;
 			if (str[*i] == quote)
 				(*i)++;
-			quote = 0;
+			break ;
 		}
 		else
 			ft_check_acco(str, i);
