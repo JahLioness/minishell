@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 16:06:44 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/07/09 11:53:19 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/07/09 14:48:56 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	ft_get_signal(void)
 	act.sa_sigaction = &ft_handler;
 	if (sigaction(SIGINT, &act, NULL) == -1)
 		exit (EXIT_FAILURE);
-	// act.sa_handler = SIG_IGN;
+	act.sa_handler = SIG_IGN;
 	if (sigaction(SIGQUIT, &act, NULL) == -1)
 		exit (EXIT_FAILURE);
 }
@@ -54,17 +54,20 @@ void	ft_get_signal_cmd(void)
 	signal(SIGQUIT, ft_handler_sigquit);
 }
 
-void	ft_handler_heredoc(int signum)
+void	ft_handler_heredoc(int signum, siginfo_t *info, void *context)
 {
+	(void)context;
 	g_sig = signum;
-	printf("\n");
-	rl_replace_line("", 0);
-	rl_on_new_line();
-	rl_redisplay();
+	kill(info->si_pid, SIGINT);
 }
 
 void	ft_get_signal_heredoc(void)
 {
+	struct sigaction act;
+
+	ft_bzero(&act, sizeof(act));
+	act.sa_flags = SA_SIGINFO;
+	act.sa_sigaction = &ft_handler_heredoc;
 	signal(SIGQUIT, SIG_IGN);
-	// signal(SIGINT, ft_handler_heredoc);
+	sigaction(SIGINT, &act, NULL);
 }

@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 16:45:28 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/07/09 11:56:20 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/07/09 14:44:12 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -260,7 +260,7 @@ int ft_exec_cmd(t_ast *root, t_ast *granny, t_mini **mini, char *prompt)
 			else
 			{
 				if (root->token->cmd->redir)
-					ft_get_signal_heredoc();
+					signal(SIGQUIT, SIG_IGN);
 				else
 					ft_get_signal_cmd();
 				redir_fd = -1;

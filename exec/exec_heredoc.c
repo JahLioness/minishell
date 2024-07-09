@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_heredoc.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 16:45:28 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/07/06 16:36:08 by andjenna         ###   ########.fr       */
+/*   Updated: 2024/07/09 14:42:48 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,8 +109,11 @@ char *ft_get_heredoc(t_redir * redir, t_ast * root, t_mini * last)
 	// name_file[i] = NULL;
 	while (1)
 	{
+		ft_get_signal_heredoc();
 		i++;
 		line = readline("> ");
+		if (g_sig == 2)
+			break ;
 		if (ft_strchr(line, '$'))
 			line = handle_expand_heredoc(root, last, line);
 		if (!line)
