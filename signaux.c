@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 16:06:44 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/07/09 14:48:56 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/07/16 12:18:37 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ void	ft_get_signal_heredoc(void)
 	struct sigaction act;
 
 	ft_bzero(&act, sizeof(act));
-	act.sa_flags = SA_SIGINFO;
+	act.sa_flags = SA_SIGINFO | SA_RESTART;
 	act.sa_sigaction = &ft_handler_heredoc;
 	signal(SIGQUIT, SIG_IGN);
 	sigaction(SIGINT, &act, NULL);

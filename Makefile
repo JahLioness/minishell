@@ -47,9 +47,12 @@ SRC = main.c \
 		exec/exec_export_utils2.c \
 		exec/exec_underscore.c \
 		exec/exec_token.c \
+		exec/exec_redir.c \
 		exec/exec_check_tokens.c \
 		exec/exec_ast.c \
 		exec/exec_heredoc.c \
+		exec/exec_heredoc_utils.c \
+		exec/exec_heredoc_file.c \
 		ast/ast_init.c \
 		ast/ast_utils.c \
 

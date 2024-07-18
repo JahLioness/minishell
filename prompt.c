@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 11:03:48 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/07/09 11:55:25 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/07/18 15:19:37 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,10 +37,7 @@ void	ft_prompt(t_mini **mini_lst, char **envp)
 		{
 			last = ft_minilast(*mini_lst);
 			e_status = ft_get_exit_status(&last->env);
-			if (e_status)
-				ft_change_exit_status(e_status, ft_itoa(130));
-			else
-				ft_envadd_back(&last->env, ft_envnew(ft_strdup("?"), ft_itoa(130)));
+			ft_change_exit_status(e_status, ft_itoa(130));
 			g_sig = 0;
 		}
 		if (!line)

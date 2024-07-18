@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 12:06:46 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/06/21 16:49:22 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/07/18 16:30:14 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,21 +75,26 @@ t_mini	*ft_mini_init(void)
 t_mini	*ft_new_mini(char *line, t_mini **mini)
 {
 	t_mini	*new;
+	t_mini	*last;
+	t_env	*e_status;
 
+	last = ft_minilast(*mini);
 	new = ft_mini_init();
 	if (!new)
 		return (NULL);
+	if (last)
+	{
+		new->env = ft_env_copy(last->env);
+		new->prev = last;
+	}
 	if (!ft_check_quote(line, 0) || !line[ft_check_whitespace(line, 0)])
 	{
+		e_status = ft_get_exit_status(&new->env);
+		ft_change_exit_status(e_status, ft_itoa(2));
 		new->error = 1;
 		return (new);
 	}
 	new->cell = ft_trim_empty_quotes(line);
-	if (!*new->cell && *line)
-	{
-		free(new->cell);
-		new->cell = ft_strdup("''");
-	}
-	new = ft_new_mini_part(mini, new);
+	new = ft_new_mini_part(new);
 	return (new);
 }

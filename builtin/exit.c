@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 11:33:20 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/06/26 14:04:41 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/07/18 16:28:32 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,15 +50,13 @@ int	ft_exit_one_arg(t_ast *root, t_mini **mini, char *prompt, char **envp)
 	{
 		ft_print_exit(root->token->cmd->args[1]);
 		ft_free_exit(root, mini, envp, prompt);
-		free(compare);
-		return (2);
+		return (free(compare), 2);
 	}
 	else if (ft_strcmp(compare, root->token->cmd->args[1]))
 	{
 		ft_print_exit(root->token->cmd->args[1]);
 		ft_free_exit(root, mini, envp, prompt);
-		free(compare);
-		return (2);
+		return (free(compare), 2);
 	}
 	else
 		return (free(compare), ft_exit_one_ok(root, mini, prompt, envp));

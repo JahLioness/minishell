@@ -6,55 +6,11 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 15:01:54 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/06/26 15:15:30 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/07/18 16:31:53 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-// static void	ft_skip_star(char *patter, char *str, int *i, int *j)
-// {
-// 	while (patter[*i] == '*')
-// 		(*i)++;
-// 	while (str[*j] && str[*j] != patter[*i])
-// 		(*j)++;
-// }
-
-// static void	ft_skip_equal_index(char *pattern, int *i, int *j)
-// {
-// 	if (pattern[*i + 1] != '\0')
-// 		(*i)++;
-// 	(*j)++;
-// }
-
-// int	ft_compare(char *pattern, char *str)
-// {
-// 	int	i;
-// 	int	j;
-
-// 	i = 0;
-// 	j = 0;
-// 	if (pattern[i] == '*' && !pattern[i + 1])
-// 		return (1);
-// 	while (str[j])
-// 	{
-// 		if (pattern[i] == '*')
-// 			ft_skip_star(pattern, str, &i, &j);
-// 		else if (pattern[i] == str[j])
-// 			ft_skip_equal_index(pattern, &i, &j);
-// 		else
-// 		{
-// 			if (i > 0 && pattern[i - 1] == '*')
-// 				j++;
-// 			else
-// 				return (0);
-// 		}
-// 		if (str[j] == pattern[i] && !str[j + 1] && (!pattern[i] || !pattern[i
-// 					+ 1]))
-// 			return (1);
-// 	}
-// 	return (0);
-// }
 
 int	ft_compare(char *pattern, char *str)
 {
@@ -132,7 +88,7 @@ char	**ft_wildcard_check(char **args, int j)
 	wildcard = ft_compare_entry(args, &w, j, wildcard);
 	closedir(w.dir);
 	if (w.i == 0)
-		return (args);
+		return (ft_free_tab(wildcard), args);
 	while (args[j + 1])
 	{
 		wildcard[w.i] = ft_strdup(args[j + 1]);

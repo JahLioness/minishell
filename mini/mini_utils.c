@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 17:46:46 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/06/21 10:51:27 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/07/16 16:25:09 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,21 +104,17 @@ int	ft_verif_tokens(t_mini *mini)
 	return (1);
 }
 
-t_mini	*ft_new_mini_part(t_mini **mini, t_mini *new)
+t_mini	*ft_new_mini_part(t_mini *new)
 {
-	t_mini	*last;
 	t_token	*redir;
+	t_env	*e_status;
 	char	**args;
 
-	last = ft_minilast(*mini);
-	if (last)
-	{
-		new->env = ft_env_copy(last->env);
-		new->prev = last;
-	}
 	ft_init_token(new, new->cell);
 	if (!ft_verif_tokens(new))
 	{
+		e_status = ft_get_exit_status(&new->env);
+		ft_change_exit_status(e_status, ft_itoa(2));
 		new->error = 1;
 		return (new);
 	}

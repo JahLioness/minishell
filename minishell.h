@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 10:44:59 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/07/09 11:52:01 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/07/18 18:01:54 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # include <signal.h>
 # include <sys/types.h>
 # include <sys/wait.h>
+# include <termios.h>
 
 extern int			g_sig;
 
@@ -53,17 +54,31 @@ typedef struct s_env
 typedef struct s_redir
 {
 	char			*file;
+	char			*file_heredoc;
 	int				fd_redir;
 	t_redir_type	type;
 	struct s_redir	*next;
 }					t_redir;
 
+typedef struct s_exec
+{
+	pid_t			pid;
+	int				pipe_fd[2];
+	int				prev_fd;
+	int				error_ex;
+	int				redir_fd;
+	int				redir_in;
+	int				redir_out;
+	int				status;
+}					t_exec;
+
 typedef struct s_cmd
 {
-	int				error;
 	char			*cmd;
+	int				error;
 	char			**args;
 	t_redir			*redir;
+	t_exec			*exec;
 }					t_cmd;
 
 typedef struct s_token
@@ -116,6 +131,7 @@ char				*ft_trim_empty_quotes(char *cell);
 char				*ft_trim_quote(char *line, int i, int j);
 char				*ft_tabchr(char **tab, char *str, char c);
 void				ft_print_lst(t_mini *mini);
+void				ft_check_acco(char *str, int *i);
 
 /*			PROMPT          */
 char				*ft_get_prompt(t_env *env);
@@ -138,6 +154,9 @@ t_env				*ft_get_exit_status(t_env **env);
 void				ft_clearenv(t_env **env);
 void				ft_clear_lst(t_mini **mini);
 void				ft_clear_token(t_token **token);
+void				ft_clear_exec(t_exec *exec);
+void				ft_clear_token_redir(t_redir *redir);
+void				ft_clear_redir(t_redir *redir);
 
 /*			MINI			*/
 int					ft_check_quote(char *line, int i);
@@ -147,7 +166,7 @@ void				ft_is_heredoc(t_mini *mini);
 void				ft_miniadd_back(t_mini **mini, t_mini *new);
 t_mini				*ft_new_mini(char *line, t_mini **mini);
 t_mini				*ft_mini_init(void);
-t_mini				*ft_new_mini_part(t_mini **mini, t_mini *new);
+t_mini				*ft_new_mini_part(t_mini *new);
 t_mini				*ft_minilast(t_mini *mini);
 
 /*			TOKEN			*/
@@ -208,10 +227,12 @@ void				ft_free_exit(t_ast *root, t_mini **mini, char **envp,
 void				ft_print_exit(char *str);
 
 /*			EXEC			*/
-// int					ft_exec_cmd_pipe(t_ast *root, t_mini **mini, char *prompt);
-int					ft_exec_cmd(t_ast *root, t_ast *granny, t_mini **mini, char *prompt);
-int					ft_exec_cmd_path(t_ast *root, t_ast *granny, t_mini **mini, char **envp,
+// int					ft_exec_cmd_pipe(t_ast *root, t_mini **mini,
+// char *prompt);
+int					ft_exec_cmd(t_ast *root, t_ast *granny, t_mini **mini,
 						char *prompt);
+int					ft_exec_cmd_path(t_ast *root, t_ast *granny, t_mini **mini,
+						char **envp, char *prompt);
 char				**ft_get_envp(t_env **env);
 char				*ft_get_cmd_path_env(char *cmd, char **env);
 void				ft_exec_token(t_mini **mini, char *prompt);
@@ -219,8 +240,9 @@ void				ft_set_var_underscore(char **args, t_env **env,
 						char **envp);
 int					ft_exec_multiple_cmd(t_ast *granny, t_ast *current,
 						t_ast *parent, t_mini **mini, char *prompt, int status);
-int					ft_exec_pipe(t_ast *root, t_ast *granny, t_mini **mini, char *prompt);
-						
+// int					ft_exec_pipe(t_ast *root, t_ast *granny, t_mini **mini,
+// 						char *prompt);
+
 /*			EXEC BUILTINS	*/
 int					ft_exec_builtin(t_token *token, t_env **env, int fd);
 int					ft_exec_unset(t_cmd *cmd, t_env **env);
@@ -229,21 +251,29 @@ int					ft_exec_export(t_token *token, t_env **env, int fd);
 char				**ft_get_args_echo(char **args, t_env **env);
 char				**ft_get_flag_echo(char **args);
 
-
 /*			EXEC HEREDOC	*/
-char				*ft_get_heredoc(t_redir *redir, t_ast *root, t_mini *last);
-char				*randomize_name(void);
+void				generate_heredoc_file(t_redir *redir);
+int					handle_heredoc(t_cmd *node_heredoc, t_mini **mini,
+						char *prompt);
+void				ft_get_heredoc(t_cmd *cmd, t_mini *last,
+						t_redir *current_redir);
+char				*handle_expand_heredoc(t_cmd *cmd, t_mini *last,
+						char *line);
 
 /*			EXEC_UTILS		*/
 // int					ft_is_redir(t_token *token);
 int					ft_is_operator(t_token *token);
+int					is_fd_open(int fd);
 int					ft_is_pipe(t_token *token);
 int					ft_is_bracket(t_token *token);
 int					ft_is_builtin(char *cmd);
 int					ft_exec_cmd_error(t_ast *root, t_mini **mini, char **envp,
 						char *prompt);
-int					ft_handle_redir_file(int redir_fd, t_ast *root, t_mini *last);
+void				ft_handle_redir_file(t_cmd *cmd);
 void				handle_expand(t_ast *root, t_mini *last);
+
+/*			EXEC_REDIR		*/
+void				ft_handle_redir_file(t_cmd *cmd);
 
 /*			AST				*/
 int					ft_check_bracket(t_token *token);
