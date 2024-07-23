@@ -39,7 +39,6 @@ SRC = main.c \
 		builtin/exit.c \
 		builtin/exit_utils.c \
 		exec/exec_cmd.c \
-		exec/exec_cmd2.c \
 		exec/exec_cmd_utils.c \
 		exec/exec_echo_utils.c \
 		exec/exec_unset_utils.c \
@@ -47,14 +46,18 @@ SRC = main.c \
 		exec/exec_export_utils2.c \
 		exec/exec_underscore.c \
 		exec/exec_token.c \
-		exec/exec_redir.c \
-		exec/exec_check_tokens.c \
-		exec/exec_ast.c \
-		exec/exec_heredoc.c \
-		exec/exec_heredoc_utils.c \
-		exec/exec_heredoc_file.c \
+		exec/exec_error.c \
+		exec/check_tokens.c \
+		exec/redir.c \
+		exec/redir_utils.c \
+		exec/heredoc.c \
+		exec/heredoc_prompt.c \
+		exec/heredoc_expand.c \
+		exec/heredoc_file.c \
 		ast/ast_init.c \
 		ast/ast_utils.c \
+		exec/exec_command.c \
+		exec/test_cat.c \
 
 
 

@@ -1,21 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exec_heredoc_file.c                                :+:      :+:    :+:   */
+/*   heredoc_file.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
+/*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/18 17:56:07 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/07/18 17:58:19 by ede-cola         ###   ########.fr       */
+/*   Created: 2024/07/19 12:58:49 by andjenna          #+#    #+#             */
+/*   Updated: 2024/07/19 12:59:00 by andjenna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-
-// dois randomiser le nom du fichier, en parcourant
-// /dev/urandom et en convertissant x char en ascii
-static char	*get_name_file(int	urandom_fd)
+static char	*get_name_file(int urandom_fd)
 {
 	char			*name_file;
 	unsigned char	random_char;
@@ -42,8 +39,8 @@ static char	*get_name_file(int	urandom_fd)
 
 static char	*randomize_name(void)
 {
-	int				urandom_fd;
-	char			*name_file;
+	int		urandom_fd;
+	char	*name_file;
 
 	name_file = NULL;
 	urandom_fd = open("/dev/urandom", O_RDONLY);
@@ -58,7 +55,7 @@ static char	*randomize_name(void)
 }
 
 void	generate_heredoc_file(t_redir *redir)
-{	
+{
 	while (redir)
 	{
 		if (redir->type == REDIR_HEREDOC)

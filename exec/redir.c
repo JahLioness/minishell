@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exec_redir.c                                       :+:      :+:    :+:   */
+/*   redir.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
+/*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/16 16:38:53 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/07/18 15:10:07 by ede-cola         ###   ########.fr       */
+/*   Created: 2024/07/19 13:01:03 by andjenna          #+#    #+#             */
+/*   Updated: 2024/07/23 20:45:33 by andjenna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	ft_handle_redir_file(t_cmd *cmd)
 {
 	t_redir	*current;
 	t_exec	*exec;
-	char 	*file;
+	char	*file;
 
 	current = cmd->redir;
 	exec = cmd->exec;
@@ -33,40 +33,22 @@ void	ft_handle_redir_file(t_cmd *cmd)
 	}
 	while (current)
 	{
+		if (exec->redir_fd != -1)
+			close(exec->redir_fd);
 		if (current->type == REDIR_INPUT)
 		{
-			if (exec->redir_fd != -1)
-				close(exec->redir_fd);
 			exec->redir_fd = open(current->file, O_RDONLY);
-			if (exec->redir_fd < 0)
-			{
-				exec->error_ex = 1;
-				return (ft_putstr_fd("minishell: ", 2), ft_putstr_fd(current->file, 2), ft_putendl_fd(": No such file or directory", 2));
-			}
 		}
 		else if (current->type == REDIR_OUTPUT)
 		{
-			if (exec->redir_fd != -1)
-				close(exec->redir_fd);
+			printf("current->file: %s\n", current->file);
 			exec->redir_fd = open(current->file, O_WRONLY | O_CREAT | O_TRUNC,
 					0644);
-			if (exec->redir_fd < 0)
-			{
-				exec->error_ex = 1;
-				return (ft_putstr_fd("minishell: ", 2),ft_putstr_fd(current->file, 2), ft_putendl_fd(": No such file or directory", 2));
-			}
 		}
 		else if (current->type == REDIR_APPEND)
 		{
-			if (exec->redir_fd != -1)
-				close(exec->redir_fd);
 			exec->redir_fd = open(current->file, O_WRONLY | O_CREAT | O_APPEND,
 					0644);
-			if (exec->redir_fd < 0)
-			{
-				exec->error_ex = 1;
-				return (ft_putstr_fd("minishell: ", 2), ft_putstr_fd(current->file, 2), ft_putendl_fd(": No such file or directory", 2));
-			}
 		}
 		else if (current->type == REDIR_HEREDOC)
 		{
@@ -75,6 +57,18 @@ void	ft_handle_redir_file(t_cmd *cmd)
 			exec->redir_fd = open(current->file_heredoc, O_RDONLY);
 			if (exec->redir_fd < 0)
 				exec->error_ex = 1;
+		}
+		if (exec->redir_fd < 0)
+		{
+			exec->error_ex = 1;
+			return (ft_putstr_fd("minishell: ", 2),
+					ft_putstr_fd(current->file, 2),
+					ft_putendl_fd(": No such file or directory", 2));
+		}
+		if (access(current->file, R_OK) == -1)
+		{
+			exec->error_ex = 1;
+			return (msg_error("minishell: ", current->file, "permission denied"));
 		}
 		current = current->next;
 	}

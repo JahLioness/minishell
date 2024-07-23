@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exec_heredoc_utils.c                               :+:      :+:    :+:   */
+/*   heredoc_expand.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
+/*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/04 16:45:28 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/07/18 18:02:30 by ede-cola         ###   ########.fr       */
+/*   Created: 2024/07/19 12:57:37 by andjenna          #+#    #+#             */
+/*   Updated: 2024/07/19 12:57:40 by andjenna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@ static int	expand_heredoc_utils(char *str, int *i)
 
 	k = *i;
 	quote = 0;
-	while (str[*i] && !ft_is_whitespaces(str[*i]) && ft_is_not_stop(str[*i]) && !quote)
+	while (str[*i] && !ft_is_whitespaces(str[*i]) && ft_is_not_stop(str[*i])
+		&& !quote)
 	{
 		if (str[*i] == '"' || str[*i] == '\'')
 		{
@@ -96,11 +97,11 @@ static char	*ft_expand_heredoc_utils(char **args_heredoc)
 	return (line);
 }
 
-char *handle_expand_heredoc(t_cmd *cmd, t_mini *last, char *line)
+char	*handle_expand_heredoc(t_cmd *cmd, t_mini *last, char *line)
 {
-	char **args_heredoc;
-	int i;
-	int	j;
+	char	**args_heredoc;
+	int		i;
+	int		j;
 
 	i = 0;
 	j = 0;

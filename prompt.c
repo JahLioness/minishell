@@ -3,14 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   prompt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
+/*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 11:03:48 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/07/18 15:19:37 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/07/23 20:56:08 by andjenna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+//check varaible $_ (EXPAND)
+//fichier de riderction avec quotes
 
 void	ft_prompt(t_mini **mini_lst, char **envp)
 {
@@ -62,7 +65,7 @@ void	ft_prompt(t_mini **mini_lst, char **envp)
 		free(line);
 	}
 	free(prompt);
-	ft_print_lst(*mini_lst);
+	// ft_print_lst(*mini_lst);
 	rl_clear_history();
 	ft_clear_lst(mini_lst);
 	exit(0);

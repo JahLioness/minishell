@@ -6,7 +6,7 @@
 /*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 18:09:22 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/06/27 18:51:00 by andjenna         ###   ########.fr       */
+/*   Updated: 2024/07/19 12:19:04 by andjenna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,11 +33,11 @@ static t_export_utils	ft_new_export_utils(char *key, char *value, char *op)
 	return (utils);
 }
 
-int ft_check_var_exist(t_env **env, char **args, int i, int fd)
+int	ft_check_var_exist(t_env **env, char **args, int i, int fd)
 {
-	t_env *tmp;
-	int exist;
-	t_export_utils utils;
+	t_env			*tmp;
+	int				exist;
+	t_export_utils	utils;
 
 	exist = 0;
 	tmp = *env;
@@ -47,7 +47,7 @@ int ft_check_var_exist(t_env **env, char **args, int i, int fd)
 		if (!ft_strcmp(tmp->key, args[i]))
 		{
 			exist = 1;
-			break;
+			break ;
 		}
 		tmp = tmp->next;
 	}
@@ -59,10 +59,10 @@ int ft_check_var_exist(t_env **env, char **args, int i, int fd)
 	return (1);
 }
 
-int ft_exec_no_var(char *arg, t_env **env, int fd)
+int	ft_exec_no_var(char *arg, t_env **env, int fd)
 {
-	t_export_utils utils;
-	int status;
+	t_export_utils	utils;
+	int				status;
 
 	utils = ft_init_export_utils();
 	status = 1;
@@ -76,12 +76,12 @@ int ft_exec_no_var(char *arg, t_env **env, int fd)
 	return (status);
 }
 
-int ft_exec_export(t_token *token, t_env **env, int fd)
+int	ft_exec_export(t_token *token, t_env **env, int fd)
 {
-	char **args;
-	int i;
-	int exit_status;
-	t_export_utils utils;
+	char			**args;
+	int				i;
+	int				exit_status;
+	t_export_utils	utils;
 
 	i = 1;
 	utils = ft_init_export_utils();

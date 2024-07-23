@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_underscore.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
+/*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 18:36:30 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/06/18 15:25:18 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/07/23 20:55:22 by andjenna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,10 @@ void	ft_set_var_underscore(char **args, t_env **env, char **envp)
 	len = ft_tab_len(args);
 	if (len == 1 && !ft_strcmp(args[0], "$_"))
 		return ;
-	arg = ft_get_cmd_path_env(args[len - 1], envp);
+	if (ft_strchr(args[len - 1], '/'))
+		arg = ft_strdup(args[len - 1]);
+	else
+		arg = ft_get_cmd_path_env(args[len - 1], envp);
 	if (!arg)
 	{
 		arg = ft_strdup(args[len - 1]);
