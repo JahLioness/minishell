@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 13:08:17 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/07/18 16:30:47 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/07/24 15:35:40 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,8 @@ int	ft_get_index_arg_utils(char *str, int *i)
 
 	k = *i;
 	quote = 0;
-	while (str[*i] && !ft_is_whitespaces(str[*i]) && ft_is_not_stop(str[*i]) && !quote)
+	while (str[*i] && !ft_is_whitespaces(str[*i]) && ft_is_not_stop(str[*i])
+		&& !quote)
 	{
 		if (str[*i] == '"' || str[*i] == '\'')
 		{
@@ -97,13 +98,13 @@ char	*ft_check_expand(char *str, t_env **env, int j)
 	i = ft_get_index_ba_var(str, 0);
 	if (!ft_strchr(str, '$'))
 		return (str);
-	if (str[i] == '$' && ((!ft_isalnum(str[i + 1]) && str[i + 1] != '?')
-			|| (j == 0 && str[i + 1] == '_')))
+	if (str[i] == '$' && ((!ft_isalnum(str[i + 1]) && str[i + 1] != '?' && str[i
+				+ 1] != '_') || (j == 0 && str[i + 1] == '_')))
 	{
 		ret = ft_strdup(str);
 		if (!ret)
-			return (free(str), NULL);
-		return (free(str), ret);
+			return (NULL);
+		return (ret);
 	}
 	if (i > 0)
 		ret = ft_strndup(str, i);

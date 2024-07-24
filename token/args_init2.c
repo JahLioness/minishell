@@ -6,36 +6,48 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 14:31:53 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/07/18 16:31:30 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/07/24 15:39:43 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-char	*ft_verif_arg(char **str, t_env **env, t_cmd *cmd, int j)
+char	*ft_set_expand(char **str, int j, t_env **env)
 {
 	char	*ret;
 	char	*tmp;
 
+	ret = ft_check_expand(str[j], env, j);
+	tmp = ret;
+	while (ft_strchr(ret, '$'))
+	{
+		ret = ft_check_expand(tmp, env, j);
+		if (!ft_strcmp(tmp, ret))
+		{
+			free(tmp);
+			break ;
+		}
+		free(tmp);
+		tmp = ret;
+	}
+	return (ret);
+}
+
+char	*ft_verif_arg(char **str, t_env **env, t_cmd *cmd, int j)
+{
+	char	*ret;
+
 	if (!ft_strchr(str[j], '$') || (ft_strchr(str[j], '$')
 			&& *(ft_strchr(str[j], '$') + 1) != '?'
-			&& !ft_isalnum(*(ft_strchr(str[j], '$') + 1))))
+			&& !ft_isalnum(*(ft_strchr(str[j], '$') + 1)) && *(ft_strchr(str[j],
+					'$') + 1) != '_'))
 		return (str[j]);
 	else if (str[j][0] == '\'')
 		return (str[j]);
 	else if (ft_strchr(str[j], 123))
 		ret = ft_check_acc_expand(str[j], env, cmd, j);
 	else
-	{
-		ret = ft_check_expand(str[j], env, j);
-		tmp = ret;
-		while (ft_strchr(ret, '$'))
-		{
-			ret = ft_check_expand(tmp, env, j);
-			free(tmp);
-			tmp = ret;
-		}
-	}
+		ret = ft_set_expand(str, j, env);
 	if (!ret)
 		return (free(str[j]), ft_strdup(""));
 	return (free(str[j]), ret);

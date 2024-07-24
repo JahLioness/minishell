@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 12:54:14 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/06/18 17:12:11 by andjenna         ###   ########.fr       */
+/*   Updated: 2024/07/24 14:27:12 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,27 @@
 char	*ft_get_redir_file(char *str, int *i)
 {
 	int		j;
+	char 	quote;
 	char	*ret;
 
-	while (str[*i] && ft_is_whitespaces(str[*i]))
-		(*i)++;
+	quote = 0;
+	*i = ft_check_whitespace(str, *i);
+	if (str[*i] == '"' || str[*i] == '\'')
+		quote = ft_set_quote(str, i);
 	j = *i;
-	while (str[*i] && ft_is_not_stop(str[*i]) && !ft_is_whitespaces(str[*i]))
-		(*i)++;
+	if (quote)
+	{
+		while (str[*i] && str[*i] != quote)
+			(*i)++;
+	}
+	else
+	{
+		while (str[*i] && ft_is_not_stop(str[*i]) && !ft_is_whitespaces(str[*i]))
+			(*i)++;
+	}
 	ret = ft_substr(str, j, *i - j);
+	if (quote)
+		(*i)++;
 	return (ret);
 }
 

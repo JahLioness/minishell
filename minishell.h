@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 10:44:59 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/07/23 19:51:23 by andjenna         ###   ########.fr       */
+/*   Updated: 2024/07/24 14:27:45 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,6 +133,7 @@ char				*ft_trim_quote(char *line, int i, int j);
 char				*ft_tabchr(char **tab, char *str, char c);
 void				ft_print_lst(t_mini *mini);
 void				ft_check_acco(char *str, int *i);
+int					ft_set_quote(char *str, int *i);
 
 /*			PROMPT          */
 char				*ft_get_prompt(t_env *env);
@@ -282,7 +283,7 @@ t_ast				*create_operator_node(t_token *token, t_ast *left,
 						t_ast *right);
 /*			ERROR		*/
 void				msg_error(char *msg, char *cmd, char *strerror);
-void					ft_exec_cmd_error(t_ast *root, t_mini **mini, char **envp,
+void				ft_exec_cmd_error(t_ast *root, t_mini **mini, char **envp,
 						char *prompt);
 int					exit_free(t_ast *granny, t_mini **mini, char **envp,
 						char *prompt);

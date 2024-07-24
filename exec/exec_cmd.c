@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_cmd.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 16:45:28 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/07/23 20:49:52 by andjenna         ###   ########.fr       */
+/*   Updated: 2024/07/24 15:15:43 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,10 +78,12 @@ void	handle_expand(t_ast *root, t_mini *last)
 		i++;
 	}
 	root->token->cmd->args = ft_trim_quote_args(root->token->cmd->args);
-	if (root->token->cmd->cmd)
-		free(root->token->cmd->cmd);
 	if (root->token->cmd->args && root->token->cmd->args[0])
+	{
+		if (root->token->cmd->cmd)
+			free(root->token->cmd->cmd);
 		root->token->cmd->cmd = ft_strdup(root->token->cmd->args[0]);
+	}
 	if (root->token->cmd->args && !*root->token->cmd->args[0]
 		&& root->token->cmd->args[1])
 		ft_handle_empty_first_arg(root);

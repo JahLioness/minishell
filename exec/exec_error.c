@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_error.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 13:07:14 by andjenna          #+#    #+#             */
-/*   Updated: 2024/07/23 18:35:00 by andjenna         ###   ########.fr       */
+/*   Updated: 2024/07/24 14:32:08 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,6 @@
 
 void	ft_exec_cmd_error(t_ast *root, t_mini **mini, char **envp, char *prompt)
 {
-	t_mini	*last;
-
-	last = ft_minilast(*mini);
 	if (envp)
 		ft_free_tab(envp);
 	if (root)
