@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   test_cat.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 13:35:08 by andjenna          #+#    #+#             */
-/*   Updated: 2024/07/23 16:49:32 by andjenna         ###   ########.fr       */
+/*   Updated: 2024/07/25 17:13:08 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,13 +32,13 @@ void	cat_wt_symbole(t_cmd *cmd, t_exec *exec)
 		}
 		else
 		{
-			exec->redir_fd = open(cmd->args[i], O_RDONLY);
-			if (exec->redir_fd < 0)
+			exec->redir_in = open(cmd->args[i], O_RDONLY);
+			if (exec->redir_in < 0)
 			{
 				msg_error("minishell: cat : ", cmd->args[i], strerror(errno));
 				exec->error_ex = 1;
 			}
-			reset_fd(exec->redir_fd);
+			reset_fd(&exec->redir_fd, &exec->redir_in, &exec->redir_out);
 		}
 		i++;
 	}
@@ -51,26 +51,26 @@ void	builtin_w_redir(t_redir *tmp_redir, t_exec *exec)
 		if (exec->redir_fd != -1)
 			close(exec->redir_fd);
 		if (tmp_redir->type == REDIR_OUTPUT)
-			exec->redir_fd = open(tmp_redir->file, O_RDWR | O_CREAT | O_TRUNC,
+			exec->redir_out = open(tmp_redir->file, O_RDWR | O_CREAT | O_TRUNC,
 					0644);
 		else if (tmp_redir->type == REDIR_APPEND)
-			exec->redir_fd = open(tmp_redir->file, O_RDWR | O_CREAT | O_APPEND,
+			exec->redir_out = open(tmp_redir->file, O_RDWR | O_CREAT | O_APPEND,
 					0644);
 		else if (tmp_redir->type == REDIR_INPUT)
 		{
-			exec->redir_fd = open(tmp_redir->file, O_RDONLY);
-			if (exec->redir_fd < 0)
+			exec->redir_in = open(tmp_redir->file, O_RDONLY);
+			if (exec->redir_in < 0)
 			{
 				msg_error("minishell: ", tmp_redir->file, strerror(errno));
 				exec->error_ex = 1;
 			}
 			else
 			{
-				close(exec->redir_fd);
-				exec->redir_fd = STDOUT_FILENO;
+				close(exec->redir_in);
+				exec->redir_out = STDOUT_FILENO;
 			}
 		}
-		if (exec->redir_fd < 0)
+		if (exec->redir_out < 0)
 		{
 			msg_error("minishell: ", tmp_redir->file, strerror(errno));
 			exec->error_ex = 1;

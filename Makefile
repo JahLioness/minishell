@@ -7,6 +7,7 @@ NAME = minishell
 SRC = main.c \
 		all_utils.c \
 		all_utils2.c \
+		all_utils3.c \
 		debug_utils.c \
 		prompt.c \
 		prompt_utils.c \
@@ -49,7 +50,7 @@ SRC = main.c \
 		exec/exec_error.c \
 		exec/check_tokens.c \
 		exec/redir.c \
-		exec/redir_utils.c \
+		exec/exec_redir_utils.c \
 		exec/heredoc.c \
 		exec/heredoc_prompt.c \
 		exec/heredoc_expand.c \

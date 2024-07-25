@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 10:44:59 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/07/24 14:27:45 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/07/25 16:32:47 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,6 +134,7 @@ char				*ft_tabchr(char **tab, char *str, char c);
 void				ft_print_lst(t_mini *mini);
 void				ft_check_acco(char *str, int *i);
 int					ft_set_quote(char *str, int *i);
+void				ft_skip_betwen_quote(char *str, int *i, char quote);
 
 /*			PROMPT          */
 char				*ft_get_prompt(t_env *env);
@@ -204,7 +205,7 @@ t_redir				*ft_init_redir(void);
 
 /*			REDIR			*/
 int					ft_is_redir(char *str, int *i);
-char				*ft_get_redir_file(char *str, int *i);
+char				*ft_get_redir_file(char *str, int *i, char *tofree);
 char				*ft_get_redir_type(char *str, int *i);
 
 /*			BUILTINS		*/
@@ -261,7 +262,7 @@ char				*handle_expand_heredoc(t_cmd *cmd, t_mini *last,
 
 /*			EXEC_UTILS		*/
 int					set_e_status(int status, t_mini *last);
-void				reset_fd(int fd);
+void				reset_fd(int *fd, int *fd_in, int *fd_out);
 int					ft_is_operator(t_token *token);
 int					ft_is_pipe(t_token *token);
 int					ft_is_bracket(t_token *token);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 13:01:03 by andjenna          #+#    #+#             */
-/*   Updated: 2024/07/23 20:45:33 by andjenna         ###   ########.fr       */
+/*   Updated: 2024/07/25 17:22:59 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,17 +37,23 @@ void	ft_handle_redir_file(t_cmd *cmd)
 			close(exec->redir_fd);
 		if (current->type == REDIR_INPUT)
 		{
-			exec->redir_fd = open(current->file, O_RDONLY);
+			exec->redir_in = open(current->file, O_RDONLY);
+			if (exec->redir_in < 0)
+			{
+				exec->error_ex = 1;
+				return (ft_putstr_fd("minishell: ", 2),
+						ft_putstr_fd(current->file, 2),
+						ft_putendl_fd(": No such file or directory", 2));
+			}
 		}
 		else if (current->type == REDIR_OUTPUT)
 		{
-			printf("current->file: %s\n", current->file);
-			exec->redir_fd = open(current->file, O_WRONLY | O_CREAT | O_TRUNC,
+			exec->redir_out = open(current->file, O_WRONLY | O_CREAT | O_TRUNC,
 					0644);
 		}
 		else if (current->type == REDIR_APPEND)
 		{
-			exec->redir_fd = open(current->file, O_WRONLY | O_CREAT | O_APPEND,
+			exec->redir_out = open(current->file, O_WRONLY | O_CREAT | O_APPEND,
 					0644);
 		}
 		else if (current->type == REDIR_HEREDOC)
@@ -56,19 +62,17 @@ void	ft_handle_redir_file(t_cmd *cmd)
 				close(exec->redir_fd);
 			exec->redir_fd = open(current->file_heredoc, O_RDONLY);
 			if (exec->redir_fd < 0)
+			{
 				exec->error_ex = 1;
-		}
-		if (exec->redir_fd < 0)
-		{
-			exec->error_ex = 1;
-			return (ft_putstr_fd("minishell: ", 2),
+				return (ft_putstr_fd("minishell: ", 2),
 					ft_putstr_fd(current->file, 2),
 					ft_putendl_fd(": No such file or directory", 2));
+			}
 		}
-		if (access(current->file, R_OK) == -1)
+		if (access(current->file, R_OK | W_OK) == -1)
 		{
 			exec->error_ex = 1;
-			return (msg_error("minishell: ", current->file, "permission denied"));
+			return (msg_error("minishell: ", current->file, "Permission denied"));
 		}
 		current = current->next;
 	}

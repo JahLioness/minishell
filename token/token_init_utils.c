@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 14:10:24 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/07/24 14:08:55 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/07/25 16:21:59 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ static void	ft_init_cmd_redir(t_cmd *new, char *cell, int *i)
 	ft_set_redir_type(redir, redir_type);
 	if (redir)
 	{
-		redir->file = ft_get_redir_file(cell, i);
+		redir->file = ft_get_redir_file(cell, i, NULL);
 		ft_redir_addback(&new->redir, redir);
 	}
 	if (redir)

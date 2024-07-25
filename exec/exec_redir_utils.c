@@ -1,23 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   redir_utils.c                                      :+:      :+:    :+:   */
+/*   exec_redir_utils.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 13:01:09 by andjenna          #+#    #+#             */
-/*   Updated: 2024/07/23 15:56:27 by andjenna         ###   ########.fr       */
+/*   Updated: 2024/07/25 16:32:24 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	reset_fd(int fd)
+void	reset_fd(int *fd, int *fd_in, int *fd_out)
 {
-	if (fd != -1 && fd != STDOUT_FILENO)
+	if (*fd != -1 && *fd != STDOUT_FILENO)
 	{
-		close(fd);
-		fd = -1;
+		close(*fd);
+		*fd = -1;
+	}
+	if (*fd_in != -1 && *fd_in != STDOUT_FILENO)
+	{
+		close(*fd_in);
+		*fd_in = -1;
+	}
+	if (*fd_out != -1 && *fd_out != STDOUT_FILENO)
+	{
+		close(*fd_out);
+		*fd_out = -1;
 	}
 }
 
