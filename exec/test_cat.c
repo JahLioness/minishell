@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   test_cat.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
+/*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 13:35:08 by andjenna          #+#    #+#             */
-/*   Updated: 2024/07/25 17:13:08 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/07/25 20:31:11 by andjenna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	cat_wt_symbole(t_cmd *cmd, t_exec *exec)
 				msg_error("minishell: cat : ", cmd->args[i], strerror(errno));
 				exec->error_ex = 1;
 			}
-			reset_fd(&exec->redir_fd, &exec->redir_in, &exec->redir_out);
+			reset_fd(exec);
 		}
 		i++;
 	}
@@ -48,8 +48,11 @@ void	builtin_w_redir(t_redir *tmp_redir, t_exec *exec)
 {
 	while (tmp_redir)
 	{
-		if (exec->redir_fd != -1)
-			close(exec->redir_fd);
+		// if (exec->redir_in != -1)
+		// 	close(exec->redir_in);
+		// if (exec->redir_out != -1)
+		// 	close(exec->redir_out);
+		reset_fd(exec);
 		if (tmp_redir->type == REDIR_OUTPUT)
 			exec->redir_out = open(tmp_redir->file, O_RDWR | O_CREAT | O_TRUNC,
 					0644);

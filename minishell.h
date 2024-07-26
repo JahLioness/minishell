@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
+/*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 10:44:59 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/07/25 16:32:47 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/07/25 21:51:40 by andjenna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,6 @@ typedef struct s_exec
 	int				pipe_fd[2];
 	int				prev_fd;
 	int				error_ex;
-	int				redir_fd;
 	int				redir_in;
 	int				redir_out;
 	int				status;
@@ -230,6 +229,8 @@ void				ft_free_exit(t_ast *root, t_mini **mini, char **envp,
 void				ft_print_exit(char *str);
 
 /*			EXEC			*/
+int					ft_exec_pipe(t_ast *current, t_ast *granny, t_mini **mini,
+						char *prompt);
 int					ft_exec_cmd(t_ast *root, t_ast *granny, t_mini **mini,
 						char *prompt);
 int					ft_exec_cmd_path(t_ast *root, t_ast *granny, t_mini **mini,
@@ -262,7 +263,7 @@ char				*handle_expand_heredoc(t_cmd *cmd, t_mini *last,
 
 /*			EXEC_UTILS		*/
 int					set_e_status(int status, t_mini *last);
-void				reset_fd(int *fd, int *fd_in, int *fd_out);
+void				reset_fd(t_exec *exec);
 int					ft_is_operator(t_token *token);
 int					ft_is_pipe(t_token *token);
 int					ft_is_bracket(t_token *token);

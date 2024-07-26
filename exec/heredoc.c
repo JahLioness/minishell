@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
+/*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 12:59:24 by andjenna          #+#    #+#             */
-/*   Updated: 2024/07/25 16:34:43 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/07/25 20:48:39 by andjenna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,8 @@ void	process_child_heredoc(t_cmd *cmd, t_mini *last, t_mini **mini,
 			ft_get_heredoc(cmd, last, redir);
 		redir = redir->next;
 	}
-	reset_fd(&cmd->exec->redir_fd, &cmd->exec->redir_in, &cmd->exec->redir_out);
-	cmd->exec->redir_fd = STDOUT_FILENO;
+	reset_fd(cmd->exec);
+	cmd->exec->redir_out = STDOUT_FILENO;
 	ft_clear_lst(mini);
 	free(prompt);
 	exit(EXIT_SUCCESS);
@@ -36,7 +36,7 @@ int	process_parent_heredoc(t_cmd *cmd, t_mini *last,
 {
 	t_env	*e_status;
 
-	reset_fd(&cmd->exec->redir_fd, &cmd->exec->redir_in, &cmd->exec->redir_out);
+	reset_fd(cmd->exec);
 	waitpid(cmd->exec->pid, &cmd->exec->status, 0);
 	if (WIFEXITED(cmd->exec->status))
 	{
