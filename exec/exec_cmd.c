@@ -6,7 +6,7 @@
 /*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 16:45:28 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/07/26 04:22:58 by andjenna         ###   ########.fr       */
+/*   Updated: 2024/07/30 14:08:40 by andjenna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -193,7 +193,8 @@ int	ft_exec_cmd(t_ast *root, t_ast *granny, t_mini **mini, char *prompt)
 				}
 				else
 				{
-					// ft_free_tab(envp);
+					if (envp)
+						ft_free_tab(envp);
 					reset_fd(exec);
 					waitpid(exec->pid, &exec->status, 0);
 					if (WIFEXITED(exec->status))
@@ -216,9 +217,10 @@ int	ft_exec_cmd(t_ast *root, t_ast *granny, t_mini **mini, char *prompt)
 	e_status = ft_get_exit_status(&last->env);
 	if (g_sig == SIGQUIT)
 	{
+		if (envp)
+			ft_free_tab(envp);
 		reset_fd(exec);
 		ft_change_exit_status(e_status, ft_itoa(131));
-		// ft_free_tab(envp);
 		g_sig = 0;
 		return (131);
 	}
