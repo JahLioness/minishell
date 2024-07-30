@@ -3,31 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   exec_redir_utils.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
+/*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 13:01:09 by andjenna          #+#    #+#             */
-/*   Updated: 2024/07/25 16:32:24 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/07/25 20:27:16 by andjenna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	reset_fd(int *fd, int *fd_in, int *fd_out)
+void	reset_fd(t_exec *exec)
 {
-	if (*fd != -1 && *fd != STDOUT_FILENO)
+	if (exec->redir_out != -1 && exec->redir_out != STDOUT_FILENO)
 	{
-		close(*fd);
-		*fd = -1;
+		close(exec->redir_out);
+		exec->redir_out = -1;
 	}
-	if (*fd_in != -1 && *fd_in != STDOUT_FILENO)
+	if (exec->redir_in != -1 && exec->redir_in != STDOUT_FILENO)
 	{
-		close(*fd_in);
-		*fd_in = -1;
-	}
-	if (*fd_out != -1 && *fd_out != STDOUT_FILENO)
-	{
-		close(*fd_out);
-		*fd_out = -1;
+		close(exec->redir_in);
+		exec->redir_in = -1;
 	}
 }
 

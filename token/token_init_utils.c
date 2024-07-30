@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token_init_utils.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
+/*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 14:10:24 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/07/25 16:21:59 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/07/25 20:45:06 by andjenna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,6 @@ static t_exec	*init_exec(void)
 	exec->error_ex = 0;
 	exec->pid = -1;
 	exec->prev_fd = -1;
-	exec->redir_fd = -1;
 	exec->redir_in = -1;
 	exec->redir_out = -1;
 	exec->status = 0;

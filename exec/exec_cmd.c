@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_cmd.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
+/*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 16:45:28 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/07/25 17:19:25 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/07/30 14:08:40 by andjenna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,7 @@ int	ft_exec_cmd(t_ast *root, t_ast *granny, t_mini **mini, char *prompt)
 			&& root->token->cmd->redir->type != REDIR_HEREDOC)
 		{
 			ft_handle_redir_file(cmd);
-			reset_fd(&exec->redir_fd, &exec->redir_in, &exec->redir_out);
+			reset_fd(exec);
 		}
 		// cas de redirection pour "cat file" sans sympbole de redirection
 		else if (!root->token->cmd->redir
@@ -128,7 +128,7 @@ int	ft_exec_cmd(t_ast *root, t_ast *granny, t_mini **mini, char *prompt)
 				&& root->token->cmd->redir->type != REDIR_HEREDOC
 				&& !root->token->cmd->cmd))
 		{
-			reset_fd(&exec->redir_fd, &exec->redir_in, &exec->redir_out);
+			reset_fd(exec);
 			e_status = ft_get_exit_status(&last->env);
 			ft_change_exit_status(e_status, ft_itoa(1));
 		}
@@ -141,10 +141,10 @@ int	ft_exec_cmd(t_ast *root, t_ast *granny, t_mini **mini, char *prompt)
 				if (tmp && tmp->type != REDIR_HEREDOC)
 					builtin_w_redir(tmp, exec);
 				else
-					exec->redir_fd = STDOUT_FILENO;
+					exec->redir_out = STDOUT_FILENO;
 				exec->status = ft_exec_builtin(root->token, &last->env,
 						exec->redir_out);
-				reset_fd(&exec->redir_fd, &exec->redir_in, &exec->redir_out);
+				reset_fd(exec);
 				ft_free_tab(envp);
 				envp = NULL;
 			}
@@ -159,7 +159,7 @@ int	ft_exec_cmd(t_ast *root, t_ast *granny, t_mini **mini, char *prompt)
 			else
 			{
 				ft_get_signal_cmd();
-				exec->redir_fd = -1;
+				reset_fd(exec);
 				exec->pid = fork();
 				if (exec->pid < 0)
 					return (ft_putendl_fd("minishell: fork failed", 2), 1);
@@ -168,20 +168,12 @@ int	ft_exec_cmd(t_ast *root, t_ast *granny, t_mini **mini, char *prompt)
 					// deuxieme appel de la fonction pour verifier les file et here_doc
 					if (root->token->cmd->redir)
 						ft_handle_redir_file(cmd);
-					if (root->token->cmd->redir && ((exec->redir_fd != -1
-							&& exec->redir_fd != STDOUT_FILENO) || (exec->redir_in != -1
+					if (root->token->cmd->redir && ((exec->redir_in != -1
 							&& exec->redir_in != STDOUT_FILENO) || (exec->redir_out != -1
 							&& exec->redir_out != STDOUT_FILENO)))
 					{
-						if (root->token->cmd->redir->type == REDIR_INPUT)
-							dup2(exec->redir_in, STDIN_FILENO);
-						else if (root->token->cmd->redir->type == REDIR_OUTPUT)
-							dup2(exec->redir_out, STDOUT_FILENO);
-						else if (root->token->cmd->redir->type == REDIR_APPEND)
-							dup2(exec->redir_out, STDOUT_FILENO);
-						else if (root->token->cmd->redir->type == REDIR_HEREDOC)
-							dup2(exec->redir_fd, STDIN_FILENO);
-						// reset_fd(exec->redir_fd);
+						dup2(exec->redir_in, STDIN_FILENO);
+						dup2(exec->redir_out, STDOUT_FILENO);
 					}
 					// cas de redirection pour "cat file" sans sympbole de redirection
 					else if (!root->token->cmd->redir
@@ -190,19 +182,20 @@ int	ft_exec_cmd(t_ast *root, t_ast *granny, t_mini **mini, char *prompt)
 					{
 						cat_wt_symbole(root->token->cmd, exec);
 						dup2(exec->redir_in, STDIN_FILENO);
+						dup2(exec->redir_out, STDOUT_FILENO);
 						// reset_fd(exec->redir_fd);
 					}
-					reset_fd(&exec->redir_fd, &exec->redir_in, &exec->redir_out);				
-					// execution de la commande
+					reset_fd(exec);
 					ft_free_tab(envp);
+					// execution de la commande
 					exec_command(root, granny, mini, prompt);
 					exit(EXIT_SUCCESS);
 				}
 				else
 				{
-					ft_free_tab(envp);
-					reset_fd(&exec->redir_fd, &exec->redir_in, &exec->redir_out);
-					exec->redir_fd = -1;
+					if (envp)
+						ft_free_tab(envp);
+					reset_fd(exec);
 					waitpid(exec->pid, &exec->status, 0);
 					if (WIFEXITED(exec->status))
 					{
@@ -224,9 +217,10 @@ int	ft_exec_cmd(t_ast *root, t_ast *granny, t_mini **mini, char *prompt)
 	e_status = ft_get_exit_status(&last->env);
 	if (g_sig == SIGQUIT)
 	{
-		reset_fd(&exec->redir_fd, &exec->redir_in, &exec->redir_out);
+		if (envp)
+			ft_free_tab(envp);
+		reset_fd(exec);
 		ft_change_exit_status(e_status, ft_itoa(131));
-		ft_free_tab(envp);
 		g_sig = 0;
 		return (131);
 	}

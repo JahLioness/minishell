@@ -6,7 +6,7 @@
 /*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 10:41:30 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/07/19 12:18:50 by andjenna         ###   ########.fr       */
+/*   Updated: 2024/07/26 02:04:47 by andjenna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,13 @@ int	ft_exec_multiple_cmd(t_ast *granny, t_ast *current, t_ast *parent,
 		exit_status = 0;
 		return (exit_status);
 	}
-	if (current->token->type == T_CMD)
+	if (current->token->type == T_CMD && parent->token->type != T_PIPE)
 		return (ft_exec_cmd(current, granny, mini, prompt));
+	else if (current->token->type == T_CMD && parent->token->type == T_PIPE)
+	{
+		exit_status = ft_exec_pipe(parent->left, granny, mini, prompt);
+		exit_status = ft_exec_pipe(parent->right, granny, mini, prompt);
+	}
 	if (current->token->type == T_AND)
 	{
 		exit_status = ft_exec_multiple_cmd(granny, current->left, parent, mini,
@@ -48,6 +53,8 @@ int	ft_exec_multiple_cmd(t_ast *granny, t_ast *current, t_ast *parent,
 			exit_status = ft_exec_multiple_cmd(granny, current->right, parent,
 					mini, prompt, exit_status);
 	}
+	else if (current->token->type == T_PIPE)
+		exit_status = ft_exec_multiple_cmd(granny,current->left, parent, mini, prompt, exit_status);
 	else
 	{
 		exit_status = ft_exec_multiple_cmd(granny, current->left, parent, mini,

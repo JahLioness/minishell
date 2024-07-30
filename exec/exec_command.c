@@ -6,7 +6,7 @@
 /*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 13:14:38 by andjenna          #+#    #+#             */
-/*   Updated: 2024/07/23 20:51:55 by andjenna         ###   ########.fr       */
+/*   Updated: 2024/07/25 20:23:12 by andjenna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,15 +99,3 @@ int	exec_command(t_ast *root, t_ast *granny, t_mini **mini, char *prompt)
 			1);
 	return (free(full_path), ft_free_tab(envp), 0);
 }
-
-// if (!ft_strcmp(root->token->cmd->cmd, "."))
-// 	return ((msg_error("minishell .", root->token->cmd->cmd,
-// 				"filename argument required"),
-// 				free(full_path),
-// 				exit_free(granny, mini, envp, prompt)));
-// else if (!ft_strcmp(root->token->cmd->cmd, "$_"))
-// 	full_path = ft_tabchr(envp, "_", '=');
-// else if (ft_strchr(root->token->cmd->cmd, '/'))
-// 	full_path = handle_backslash(root->token->cmd, last);
-// else
-// 	full_path = handle_cmd(root->token->cmd, tmp_envp, last);
