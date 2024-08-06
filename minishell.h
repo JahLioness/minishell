@@ -6,7 +6,7 @@
 /*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 10:44:59 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/07/25 21:51:40 by andjenna         ###   ########.fr       */
+/*   Updated: 2024/07/30 17:52:15 by andjenna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -229,8 +229,7 @@ void				ft_free_exit(t_ast *root, t_mini **mini, char **envp,
 void				ft_print_exit(char *str);
 
 /*			EXEC			*/
-int					ft_exec_pipe(t_ast *current, t_ast *granny, t_mini **mini,
-						char *prompt);
+int				ft_exec_pipe(t_ast *root, t_ast *granny, t_mini **mini, char *prompt);
 int					ft_exec_cmd(t_ast *root, t_ast *granny, t_mini **mini,
 						char *prompt);
 int					ft_exec_cmd_path(t_ast *root, t_ast *granny, t_mini **mini,

@@ -6,7 +6,7 @@
 /*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 16:45:28 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/07/30 14:08:40 by andjenna         ###   ########.fr       */
+/*   Updated: 2024/07/30 15:35:26 by andjenna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -205,7 +205,6 @@ int	ft_exec_cmd(t_ast *root, t_ast *granny, t_mini **mini, char *prompt)
 							kill(cmd->exec->pid, SIGKILL);
 							ft_change_exit_status(e_status, ft_itoa(130));
 							g_sig = 0;
-							ft_free_tab(envp);
 							return (130);
 						}
 						return (set_e_status(cmd->exec->status, last));
