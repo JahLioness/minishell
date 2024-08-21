@@ -6,7 +6,7 @@
 /*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 18:37:11 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/07/23 19:49:07 by andjenna         ###   ########.fr       */
+/*   Updated: 2024/08/21 15:18:57 by andjenna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,10 +109,10 @@ int	set_e_status(int status, t_mini *last)
 	e_status = ft_get_exit_status(&last->env);
 	if (e_status)
 		ft_change_exit_status(e_status,
-								ft_itoa(WEXITSTATUS(status)));
+			ft_itoa(WEXITSTATUS(status)));
 	else
 		ft_envadd_back(&last->env,
-						ft_envnew(ft_strdup("?"),
-									ft_itoa(WEXITSTATUS(status))));
+			ft_envnew(ft_strdup("?"),
+				ft_itoa(WEXITSTATUS(status))));
 	return (WEXITSTATUS(status));
 }

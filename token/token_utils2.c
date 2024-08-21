@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token_utils2.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
+/*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 14:31:02 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/07/18 19:33:28 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/08/21 15:00:58 by andjenna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	ft_token_delone_utils(t_token *token)
 
 void	ft_clear_redir(t_redir *redir)
 {
-		t_redir	*tmp;
+	t_redir	*tmp;
 
 	while (redir)
 	{

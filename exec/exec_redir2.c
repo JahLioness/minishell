@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   test_cat.c                                         :+:      :+:    :+:   */
+/*   exec_redir2.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/23 13:35:08 by andjenna          #+#    #+#             */
-/*   Updated: 2024/07/25 20:31:11 by andjenna         ###   ########.fr       */
+/*   Created: 2024/08/21 15:13:36 by andjenna          #+#    #+#             */
+/*   Updated: 2024/08/21 15:13:39 by andjenna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	cat_wt_symbole(t_cmd *cmd, t_exec *exec)
 		{
 			exec->error_ex = 1;
 			msg_error("minishell: cat : ", cmd->args[i],
-					"no such file or directory");
+				"no such file or directory");
 		}
 		else if (access(cmd->args[i], R_OK) == -1)
 		{
@@ -48,10 +48,6 @@ void	builtin_w_redir(t_redir *tmp_redir, t_exec *exec)
 {
 	while (tmp_redir)
 	{
-		// if (exec->redir_in != -1)
-		// 	close(exec->redir_in);
-		// if (exec->redir_out != -1)
-		// 	close(exec->redir_out);
 		reset_fd(exec);
 		if (tmp_redir->type == REDIR_OUTPUT)
 			exec->redir_out = open(tmp_redir->file, O_RDWR | O_CREAT | O_TRUNC,
@@ -70,7 +66,8 @@ void	builtin_w_redir(t_redir *tmp_redir, t_exec *exec)
 			else
 			{
 				close(exec->redir_in);
-				exec->redir_out = STDOUT_FILENO;
+				if (exec->redir_out == -1)
+					exec->redir_out = STDOUT_FILENO;
 			}
 		}
 		if (exec->redir_out < 0)

@@ -6,12 +6,11 @@
 /*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 10:51:09 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/07/23 12:46:28 by andjenna         ###   ########.fr       */
+/*   Updated: 2024/08/21 15:01:04 by andjenna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
 
 void	ft_clear_token(t_token **token)
 {
@@ -26,7 +25,8 @@ void	ft_clear_token(t_token **token)
 			free(tmp->cmd->exec);
 			if (tmp->cmd->args)
 				ft_free_tab(tmp->cmd->args);
-			if (tmp->cmd->cmd && !ft_is_builtin(tmp->cmd->cmd) && tmp->cmd->redir)
+			if (tmp->cmd->cmd && !ft_is_builtin(tmp->cmd->cmd)
+				&& tmp->cmd->redir)
 				ft_clear_redir(tmp->cmd->redir);
 			else if (tmp->cmd && tmp->cmd->redir)
 				ft_clear_token_redir(tmp->cmd->redir);

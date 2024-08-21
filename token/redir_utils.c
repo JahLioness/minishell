@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
+/*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 12:54:14 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/07/25 15:32:56 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/08/21 15:04:52 by andjenna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ char	*ft_get_redir_file(char *str, int *i, char *tofree)
 	j = *i;
 	if (quote && !ft_is_whitespaces(str[*i]))
 	{
-		ft_skip_betwen_quote(str, i , quote);
+		ft_skip_betwen_quote(str, i, quote);
 		if (!ft_is_whitespaces(str[*i]))
 			tofree = ft_get_redir_file(str, i, tofree);
 		if (tofree)
@@ -48,15 +48,15 @@ char	*ft_get_redir_type(char *str, int *i)
 	while (str[*i])
 	{
 		if (((str[*i] == '>' && str[*i + 1] == '>') || (str[*i] == '<' && str[*i
-					+ 1] == '<')) && str[*i + 1])
+						+ 1] == '<')) && str[*i + 1])
 		{
 			ret = ft_substr(str, *i, 2);
 			*i += 2;
 			return (ret);
 		}
 		else if ((str[*i + 1] && ((str[*i] == '>' && str[*i + 1] != '>')
-					|| (str[*i] == '<' && str[*i + 1] != '<'))) || (!str[*i + 1]
-				&& (str[*i] == '<' || str[*i] == '>')))
+					|| (str[*i] == '<' && str[*i + 1] != '<')))
+			|| (!str[*i + 1] && (str[*i] == '<' || str[*i] == '>')))
 		{
 			ret = ft_substr(str, *i, 1);
 			*i += 1;
@@ -74,12 +74,12 @@ int	ft_is_redir(char *str, int *i)
 	j = *i;
 	while (str[j] && str[j] != '&' && str[j] != '|')
 	{
-		if (((str[j] == '>' && str[j + 1] == '>') || (str[j] == '<' && str[j
-					+ 1] == '<')) && str[j + 1])
+		if (((str[j] == '>' && str[j + 1] == '>')
+				|| (str[j] == '<' && str[j + 1] == '<')) && str[j + 1])
 			return (1);
 		else if ((str[j + 1] && ((str[j] == '>' && str[j + 1] != '>')
-					|| (str[j] == '<' && str[j + 1] != '<'))) || (!str[j + 1]
-				&& (str[j] == '<' || str[j] == '>')))
+					|| (str[j] == '<' && str[j + 1] != '<')))
+			|| (!str[j + 1] && (str[j] == '<' || str[j] == '>')))
 			return (1);
 		j++;
 	}
