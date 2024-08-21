@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   args_init2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
+/*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 14:31:53 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/07/25 15:14:51 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/08/21 15:05:41 by andjenna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int		ft_is_expandable(char *str)
+int	ft_is_expandable(char *str)
 {
 	int		i;
 	char	quote;
@@ -21,7 +21,7 @@ int		ft_is_expandable(char *str)
 	quote = 0;
 	while (str[i])
 	{
-		if (str[i] == '"' ||str[i] == '\'')
+		if (str[i] == '"' || str[i] == '\'')
 		{
 			quote = str[i];
 			while (str[++i] && str[i] != quote)
@@ -37,7 +37,7 @@ int		ft_is_expandable(char *str)
 		if (str[i])
 			i++;
 	}
-	return (0);	
+	return (0);
 }
 
 char	*ft_set_expand(char **str, int j, t_env **env)

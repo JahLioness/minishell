@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   redir.c                                            :+:      :+:    :+:   */
+/*   exec_redir.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/19 13:01:03 by andjenna          #+#    #+#             */
-/*   Updated: 2024/07/25 20:47:46 by andjenna         ###   ########.fr       */
+/*   Created: 2024/08/21 15:13:29 by andjenna          #+#    #+#             */
+/*   Updated: 2024/08/21 15:13:31 by andjenna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,8 @@ void	ft_handle_redir_file(t_cmd *cmd)
 		if (access(current->file, R_OK | W_OK) == -1)
 		{
 			exec->error_ex = 1;
-			return (msg_error("minishell: ", current->file, "Permission denied"));
+			return (msg_error("minishell: ", current->file,
+					"Permission denied"));
 		}
 		current = current->next;
 	}

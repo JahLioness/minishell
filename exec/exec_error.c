@@ -3,24 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   exec_error.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
+/*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 13:07:14 by andjenna          #+#    #+#             */
-/*   Updated: 2024/07/24 14:32:08 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/08/21 15:19:38 by andjenna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-	// char	*underscore;
-	// underscore = ft_tabchr(envp, "_", '=');
-	// ft_putstr_fd("minishell: ", 2);
-	// if (!ft_strcmp(last->tokens->cmd->cmd, "$_"))
-	// 	ft_putstr_fd(underscore, 2);
-	// else
-	// 	ft_putstr_fd(last->tokens->cmd->cmd, 2);
-	// ft_putstr_fd(": command not found\n", 2);
-	// free(underscore);
+// char	*underscore;
+// underscore = ft_tabchr(envp, "_", '=');
+// ft_putstr_fd("minishell: ", 2);
+// if (!ft_strcmp(last->tokens->cmd->cmd, "$_"))
+// 	ft_putstr_fd(underscore, 2);
+// else
+// 	ft_putstr_fd(last->tokens->cmd->cmd, 2);
+// ft_putstr_fd(": command not found\n", 2);
+// free(underscore);
 
 void	ft_exec_cmd_error(t_ast *root, t_mini **mini, char **envp, char *prompt)
 {

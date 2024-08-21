@@ -6,7 +6,7 @@
 /*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 21:46:12 by andjenna          #+#    #+#             */
-/*   Updated: 2024/07/30 19:44:56 by andjenna         ###   ########.fr       */
+/*   Updated: 2024/08/20 17:03:19 by andjenna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,27 +14,17 @@
 
 void close_fd(int *fd, int prev_fd)
 {
-	close(fd[0]);
-	close(fd[1]);
-	close(prev_fd);
-}
-
-int ft_count_cmds(t_token *token)
-{
-	int count;
-
-	count = 0;
-	while (token)
-	{
-		if (token->type == T_PIPE)
-			count++;
-		token = token->next;
-	}
-	return (count + 1);
+	if (prev_fd != -1)
+		close(prev_fd);
+	if (fd[0] != -1)
+		close(fd[0]);
+	if (fd[1] != -1)
+		close(fd[1]);
 }
 
 int	first_child(t_cmd *cmd)
 {
+	close(cmd->exec->pipe_fd[0]);
 	dup2(cmd->exec->pipe_fd[1], STDOUT_FILENO);
 	close(cmd->exec->pipe_fd[1]);
 	if (cmd->exec->redir_in != -1)
@@ -47,18 +37,13 @@ int	first_child(t_cmd *cmd)
 
 int	last_child(t_cmd *cmd)
 {
-	printf("prev_fd = %d\n", cmd->exec->prev_fd);
-	printf("pipe_fd[0] = %d\n", cmd->exec->pipe_fd[0]);
-	printf("pipe_fd[1] = %d\n", cmd->exec->pipe_fd[1]);
-	printf("redir_out = %d\n", cmd->exec->redir_out);
-	close(cmd->exec->pipe_fd[1]);
-	close(cmd->exec->pipe_fd[0]);
-	if (cmd->exec->prev_fd != -1)
+	close_fd(cmd->exec->pipe_fd, -1);
+	if (cmd->exec->prev_fd != STDIN_FILENO && cmd->exec->prev_fd != -1)
 	{
 		dup2(cmd->exec->prev_fd, STDIN_FILENO);
 		close(cmd->exec->prev_fd);
 	}
-	if (cmd->exec->redir_out != -1)
+	if (cmd->exec->redir_out != STDOUT_FILENO && cmd->exec->redir_out != -1)
 	{
 		dup2(cmd->exec->redir_out, STDOUT_FILENO);
 		close(cmd->exec->redir_out);
@@ -76,28 +61,50 @@ int	middle_child(t_cmd *cmd)
 	return (0);
 }
 
-void	process_child(int num_cmds, int total_cmds, t_cmd *cmd)
+void	process_child(t_ast *curr)
 {
-	printf("num_cmds in processe child = %d\n", num_cmds);
-	if (num_cmds == 1)
-		last_child(cmd);
-	else if (num_cmds == total_cmds)
-		first_child(cmd);
-	else
-		middle_child(cmd);
+	printf("exec->pid == %d\n", curr->token->cmd->exec->pid);
+	if (curr->parent->right == curr && (!curr->parent->parent || curr->parent->parent->token->type != T_PIPE))
+	{
+		printf("LAST CHILD = %s\n", curr->token->cmd->cmd);
+		last_child(curr->token->cmd);
+	}
+	else if (curr->parent->left == curr)
+	{
+		printf("FIRST = %s\n", curr->token->cmd->cmd);
+		first_child(curr->token->cmd);
+	}
+	else if (curr->parent->right == curr && curr->parent->parent && curr->parent->parent->token->type == T_PIPE)
+	{
+		printf("MIDDLE CHILD = %s\n", curr->token->cmd->cmd);
+		middle_child(curr->token->cmd);
+	}
+	
 }
 
-int save_fd(int *fd, int prev_fd)
+void	set_prev_fd(t_ast *cmd_ex)
 {
-	if (prev_fd != -1)
-		close(prev_fd);
-	close(fd[1]);
-	prev_fd = fd[0];
-	return (prev_fd);
+	if (cmd_ex->parent->right->token->cmd->exec->prev_fd != -1)
+		close(cmd_ex->parent->right->token->cmd->exec->prev_fd);
+	if (cmd_ex->parent->left)
+	{
+		if (cmd_ex->parent->left->token->type == T_CMD)
+		{
+			cmd_ex->parent->right->token->cmd->exec->prev_fd = cmd_ex->parent->left->token->cmd->exec->pipe_fd[0];
+			// close(cmd_ex->parent->left->token->cmd->exec->pipe_fd[0]);
+		}
+		else if (cmd_ex->parent->left->token->type == T_PIPE)
+		{
+			cmd_ex->parent->right->token->cmd->exec->prev_fd = cmd_ex->parent->left->right->token->cmd->exec->pipe_fd[0];
+			// close(cmd_ex->parent->left->right->token->cmd->exec->pipe_fd[0]);
+		}
+	}
+	if (cmd_ex->parent->left->token->type == T_CMD && cmd_ex->parent->left->token->cmd->exec->pipe_fd[1] != -1)
+		close(cmd_ex->parent->left->token->cmd->exec->pipe_fd[1]);
 }
 
 //CACA
-int ft_exec_pipe(t_ast *current, t_ast *granny, t_mini **mini, char *prompt)
+int ft_exec_pipe(t_ast *cmd_ex, t_ast *granny, t_mini **mini, char *prompt)
 {
 	t_mini *last;
 	t_env *e_status;
@@ -105,91 +112,96 @@ int ft_exec_pipe(t_ast *current, t_ast *granny, t_mini **mini, char *prompt)
 	t_cmd *cmd;
 	t_redir *tmp;
 	char **envp;
-	int num_cmds;
-	int total_cmds;
+	// int tmp_pref_fd = -1;
 
 	tmp = NULL;
-	cmd = current->token->cmd;
+	cmd = cmd_ex->token->cmd;
 	exec = cmd->exec;
 	if (cmd->redir)
 		tmp = cmd->redir;
 	last = ft_minilast(*mini);
 	envp = ft_get_envp(&last->env);
-	num_cmds = ft_count_cmds(last->tokens);
-	total_cmds = num_cmds;
 	// gestion des quotes et expand
-	if (current->token->type == T_CMD && current->token->cmd)
+	if (cmd_ex->token->type == T_CMD && cmd_ex->token->cmd)
 	{
-		if ((current->token->cmd->cmd && current->token->cmd->args) || (!current->token->cmd->cmd && *current->token->cmd->args))
-			handle_expand(current, last);
+		if ((cmd->cmd && cmd->args) || (!cmd->cmd && *cmd->args))
+			handle_expand(cmd_ex, last);
 		// premier appel de la fonction pour verifier les file
-		if (current->token->cmd->redir && current->token->cmd->redir->type != REDIR_HEREDOC)
+		if (cmd->redir && cmd->redir->type != REDIR_HEREDOC)
 		{
 			ft_handle_redir_file(cmd);
 			reset_fd(exec);
 		}
 		// cas de redirection pour "cat file" sans sympbole de redirection
-		else if (!current->token->cmd->redir && current->token->cmd->args && !ft_strcmp(current->token->cmd->args[0], "cat") && current->token->cmd->args[1])
-			cat_wt_symbole(current->token->cmd, exec);
+		else if (!cmd->redir && cmd->args && !ft_strcmp(cmd->args[0], "cat") && cmd->args[1])
+			cat_wt_symbole(cmd, exec);
 		// si erreur de file, on execute pas le reste des commandes
-		if (exec->error_ex == 1 || (current->token->cmd->redir && current->token->cmd->redir->type != REDIR_HEREDOC && !current->token->cmd->cmd))
+		if (exec->error_ex == 1 || (cmd->redir && cmd->redir->type != REDIR_HEREDOC && !cmd->cmd))
 		{
 			reset_fd(exec);
 			e_status = ft_get_exit_status(&last->env);
 			ft_change_exit_status(e_status, ft_itoa(1));
 		}
-		ft_set_var_underscore(current->token->cmd->args, &last->env, envp);
+		ft_set_var_underscore(cmd->args, &last->env, envp);
 		// si pas d'erreur, on execute la commande
 		if (!exec->error_ex)
 		{
-			printf("num_cmds = %d\n", num_cmds);
-			while (num_cmds-- > -1)
+			if (pipe(exec->pipe_fd) == -1)
+				return (ft_putendl_fd("minishell: pipe failed", 2), 1);
+			exec->pid = fork();
+			if (exec->pid < 0)
+				return (ft_putendl_fd("minishell: fork failed", 2), 1);
+			if (exec->pid == 0)
 			{
-				if (pipe(exec->pipe_fd) == -1)
-					return (ft_putendl_fd("minishell: pipe failed", 2), 1);
-				if (ft_is_builtin(current->token->cmd->cmd))
+				process_child(cmd_ex);
+				if (ft_is_builtin(cmd->cmd))
 				{
 					if (tmp && tmp->type != REDIR_HEREDOC)
 						builtin_w_redir(tmp, exec);
-					if (current->token->cmd->redir)
-						exec->status = ft_exec_builtin(current->token, &last->env, exec->redir_out);
-					else
-						exec->status = ft_exec_builtin(current->token, &last->env, exec->pipe_fd[1]);
+					exec->status = ft_exec_builtin(cmd_ex->token, &last->env, exec->redir_out);
 				}
-				exec->pid = fork();
-				if (exec->pid < 0)
-					return (ft_putendl_fd("minishell: fork failed", 2), 1);
-				if (exec->pid == 0)
+				exec_command(cmd_ex, granny, mini, prompt);
+				close_fd(exec->pipe_fd, exec->prev_fd);
+				ft_free_tab(envp);
+				exit(EXIT_SUCCESS);
+			}
+			else
+			{
+				printf("CURR CMD == %s\n", cmd->cmd);
+				if (cmd_ex->parent->left->token->type == T_CMD)
+						printf("cmd_ex->parent->left->token->cmd->exec->prev_fd == %d && CMD == %s\n\n", cmd_ex->parent->left->token->cmd->exec->prev_fd, cmd_ex->parent->left->token->cmd->cmd);
+				printf("cmd_ex->parent->right->token->cmd->exec->prev_fd == %d && CMD == %s\n\n", cmd_ex->parent->right->token->cmd->exec->prev_fd, cmd_ex->parent->right->token->cmd->cmd);
+				if (cmd_ex->parent && cmd_ex->parent->left && cmd_ex->parent->left->right && cmd_ex->parent->left->right->token->type == T_CMD)
 				{
-					process_child(num_cmds, total_cmds, cmd);
-					exec_command(current, granny, mini, prompt); 
-					ft_free_tab(envp);
-					exit(EXIT_SUCCESS);
+					printf("cmd_ex->parent->left->right->token->cmd->exec->pipe_fd[0] == %d\n", cmd_ex->parent->left->right->token->cmd->exec->pipe_fd[0]);
+					printf("cmd_ex->parent->left->right->token->cmd->exec->prev_fd == %d\n", cmd_ex->parent->left->right->token->cmd->exec->prev_fd);
 				}
-				else
+				printf("curr pid == %d\n", cmd_ex->token->cmd->exec->pid);
+				printf("curr pipe_fd[0] == %d\n", cmd_ex->token->cmd->exec->pipe_fd[0]);
+				printf("curr pipe_fd[1] == %d\n", cmd_ex->token->cmd->exec->pipe_fd[1]);
+				printf("BEFORE SAVE curr prev_fd == %d\n", cmd_ex->token->cmd->exec->prev_fd);
+				set_prev_fd(cmd_ex);
+				printf("AFTER SAVE exec->prev_fd == %d\n", exec->prev_fd);
+				ft_free_tab(envp);
+				waitpid(exec->pid, &exec->status, 0);
+				if (cmd_ex->parent && cmd_ex->parent->left->token->type == T_CMD && cmd_ex->parent->left->token->cmd->exec->pipe_fd[0] != -1)
+					close(cmd_ex->parent->left->token->cmd->exec->pipe_fd[0]);
+				if (WIFEXITED(exec->status))
 				{
-					exec->prev_fd = save_fd(exec->pipe_fd, exec->prev_fd);
-					ft_free_tab(envp);
-					// reset_fd(exec);
-					close_fd(exec->pipe_fd, exec->prev_fd);
-					waitpid(exec->pid, &exec->status, 0);
-					if (WIFEXITED(exec->status))
+					e_status = ft_get_exit_status(&last->env);
+					if (g_sig == SIGINT)
 					{
-						e_status = ft_get_exit_status(&last->env);
-						if (g_sig == SIGINT)
-						{
-							kill(cmd->exec->pid, SIGKILL);
-							ft_change_exit_status(e_status, ft_itoa(130));
-							g_sig = 0;
-							return (130);
-						}
-						return (set_e_status(cmd->exec->status, last));
+						kill(cmd->exec->pid, SIGKILL);
+						ft_change_exit_status(e_status, ft_itoa(130));
+						g_sig = 0;
+						return (130);
 					}
+					return (set_e_status(cmd->exec->status, last));
 				}
 			}
-			// exec->status = ft_exec_pipe(current->parent->right, granny, mini, prompt);
 		}
 	}
+	close_fd(exec->pipe_fd, exec->prev_fd);
 	e_status = ft_get_exit_status(&last->env);
 	if (g_sig == SIGQUIT)
 	{
@@ -199,145 +211,15 @@ int ft_exec_pipe(t_ast *current, t_ast *granny, t_mini **mini, char *prompt)
 		g_sig = 0;
 		return (131);
 	}
-	if (envp)
-		ft_free_tab(envp);
 	return (exec->status);
 }
 
-void	create_pipe(t_exec *exec)
+int save_fd(int *fd, int prev_fd)
 {
-	if (pipe(exec->pipe_fd) == -1)
-	{
-		ft_putendl_fd("minishell: pipe failed", 2);
-		exit(EXIT_FAILURE);
-	}
+	if (prev_fd != -1)
+		close(prev_fd);
+	if (fd[1] != -1)
+		close(fd[1]);
+	prev_fd = fd[0];
+	return (prev_fd);
 }
-
-int	count_cmd(t_token *token)
-{
-	int	count;
-
-	count = 0;
-	while (token)
-	{
-		if (token->type == T_CMD)
-			count++;
-		token = token->next;
-	}
-	return (count);
-}
-
-// void gestion_pipe(t_ast *root, t_ast *granny, t_mini **mini, char *prompt, int input, int output)
-// {
-// 	pid_t pid;
-
-// 	pid = fork();
-// 	if (pid < 0)
-// 	{
-// 		ft_putendl_fd("minishell: fork failed", 2);
-// 		exit(EXIT_FAILURE);
-// 	}
-// 	if (pid < 0)
-// 	{
-// 		ft_putendl_fd("minishell: fork failed", 2);
-// 		exit(EXIT_FAILURE);
-// 	}
-// 	if (pid == 0)
-// 	{
-// 		if (input != -1)
-// 		{
-// 			dup2(input, STDIN_FILENO);
-// 			close(input);
-// 		}
-// 		if (output != -1)
-// 		{
-// 			dup2(output, STDOUT_FILENO);
-// 			close(output);
-// 		}
-// 	}
-// 	exec_command(root, granny, mini, prompt);
-// }
-
-void read_pipe(int fd)
-{
-	char buffer[1024];
-	ssize_t bytes_read;
-	while ((bytes_read = read(fd, buffer, sizeof(buffer))) > 0)
-		write(STDOUT_FILENO, buffer, bytes_read);
-	printf("t la\n");	
-	close(fd);
-}
-
-// void	ft_exec_pipe(t_ast *root, t_ast *granny, t_mini **mini, char *prompt, int input_fd, int num_cmds)
-// {
-// 	if (!root || num_cmds == 0)
-// 	{
-// 		return;
-// 	}
-
-// 	int pipefd[2];
-// 	t_cmd *cmd = root->token->cmd;
-// 	t_exec *exec = cmd->exec;
-
-// 	if (num_cmds > 0)
-// 	{
-// 		if (pipe(pipefd) == -1)
-// 		{
-// 			perror("pipe");
-// 			exit(EXIT_FAILURE);
-// 		}
-// 	}
-
-// 	exec->pid = fork();
-// 	if (exec->pid < 0)
-// 	{
-// 		perror("fork");
-// 		exit(EXIT_FAILURE);
-// 	}
-// 	if (exec->pid == 0)
-// 	{
-// 		if (input_fd != -1)
-// 		{
-// 			dup2(input_fd, STDIN_FILENO);
-// 			close(input_fd);
-// 		}
-// 		read_pipe(input_fd);
-// 		if (num_cmds > 0)
-// 		{
-// 			close(pipefd[0]);
-// 			dup2(pipefd[1], STDOUT_FILENO);
-// 			close(pipefd[1]);
-// 		}
-// 		exec_command(root, granny, mini, prompt);
-// 		exit(EXIT_SUCCESS);
-// 	}
-// 	else
-// 	{
-// 		if (input_fd != -1)
-// 		{
-// 			close(input_fd);
-// 		}
-// 		if (num_cmds > 1)
-// 		{
-// 			close(pipefd[1]);
-// 			ft_exec_pipe(root->right, granny, mini, prompt, pipefd[0], num_cmds);
-// 			close(pipefd[0]);
-// 		}
-// 		waitpid(exec->pid, &exec->status, 0);
-// 		if (WIFEXITED(exec->status))
-// 		{
-// 			t_env *e_status = ft_get_exit_status(&((*mini)->env));
-// 			if (g_sig == SIGINT)
-// 			{
-// 				kill(exec->pid, SIGKILL);
-// 				ft_change_exit_status(e_status, "130");
-// 				g_sig = 0;
-// 			}
-// 			else
-// 			{
-// 				set_e_status(exec->status, ft_minilast(*mini));
-// 			}
-// 		}
-// 	}
-// }
-	
