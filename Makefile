@@ -20,6 +20,7 @@ SRC = main.c \
 		mini/mini_utils2.c \
 		token/token_init.c \
 		token/token_init_utils.c \
+		token/token_init_utils2.c \
 		token/token_utils.c \
 		token/token_utils2.c \
 		token/args_init.c \

@@ -6,11 +6,17 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 15:01:54 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/07/18 16:31:53 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/08/22 14:53:50 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+static void ft_skip_idx(int *i, int *j)
+{
+	(*i)++;
+	(*j)++;
+}
 
 int	ft_compare(char *pattern, char *str)
 {
@@ -31,10 +37,7 @@ int	ft_compare(char *pattern, char *str)
 			match_idx = j;
 		}
 		else if (pattern[i] == str[j])
-		{
-			i++;
-			j++;
-		}
+			ft_skip_idx(&i, &j);
 		else if (star_idx != -1)
 		{
 			i = star_idx + 1;

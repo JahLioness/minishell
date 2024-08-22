@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 10:51:09 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/08/21 15:01:04 by andjenna         ###   ########.fr       */
+/*   Updated: 2024/08/22 13:26:25 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 void	ft_clear_token(t_token **token)
 {
 	t_token	*tmp;
+	t_cmd	*tmp_cmd;
 
 	while (*token)
 	{
@@ -22,17 +23,22 @@ void	ft_clear_token(t_token **token)
 		*token = (*token)->next;
 		if (tmp->cmd)
 		{
-			free(tmp->cmd->exec);
-			if (tmp->cmd->args)
-				ft_free_tab(tmp->cmd->args);
-			if (tmp->cmd->cmd && !ft_is_builtin(tmp->cmd->cmd)
-				&& tmp->cmd->redir)
-				ft_clear_redir(tmp->cmd->redir);
-			else if (tmp->cmd && tmp->cmd->redir)
-				ft_clear_token_redir(tmp->cmd->redir);
-			if (tmp->cmd->cmd)
-				free(tmp->cmd->cmd);
-			free(tmp->cmd);
+			while (tmp->cmd)
+			{
+				tmp_cmd = tmp->cmd;
+				tmp->cmd = tmp->cmd->next;
+				free(tmp_cmd->exec);
+				if (tmp_cmd->args)
+					ft_free_tab(tmp_cmd->args);
+				if (tmp_cmd->cmd && !ft_is_builtin(tmp_cmd->cmd)
+					&& tmp_cmd->redir)
+					ft_clear_redir(tmp_cmd->redir);
+				else if (tmp_cmd && tmp_cmd->redir)
+					ft_clear_token_redir(tmp_cmd->redir);
+				if (tmp_cmd->cmd)
+					free(tmp_cmd->cmd);
+				free(tmp_cmd);
+			}
 		}
 		free(tmp);
 	}

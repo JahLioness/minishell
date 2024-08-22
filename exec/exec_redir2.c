@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_redir2.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 15:13:36 by andjenna          #+#    #+#             */
-/*   Updated: 2024/08/21 15:13:39 by andjenna         ###   ########.fr       */
+/*   Updated: 2024/08/22 19:25:41 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ void	builtin_w_redir(t_redir *tmp_redir, t_exec *exec)
 			else
 			{
 				close(exec->redir_in);
-				if (exec->redir_out == -1)
+				if (exec->redir_out == -1 && !tmp_redir->prev)
 					exec->redir_out = STDOUT_FILENO;
 			}
 		}

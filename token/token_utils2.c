@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token_utils2.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 14:31:02 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/08/21 15:00:58 by andjenna         ###   ########.fr       */
+/*   Updated: 2024/08/22 19:35:52 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,8 @@ void	ft_clear_token_redir(t_redir *redir)
 	}
 }
 
-void	ft_clear_exec(t_exec *exec)
-{
-	free(exec);
-	exec = NULL;
-}
+// void	ft_clear_exec(t_exec *exec)
+// {
+// 	free(exec);
+// 	exec = NULL;
+// }

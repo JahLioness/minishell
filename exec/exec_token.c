@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_token.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 10:41:30 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/08/21 15:21:51 by andjenna         ###   ########.fr       */
+/*   Updated: 2024/08/22 13:29:41 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,7 @@ void	ft_exec_token(t_mini **mini, char *prompt)
 	}
 	root = create_ast(last->tokens, last_t);
 	ft_exec_multiple_cmd(root, root, root, mini, prompt, -1);
-	// print_ast(root, 0, ' ');
+	print_ast(root, 0, ' ');
 	ft_clear_ast(root);
 }
 

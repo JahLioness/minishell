@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 12:18:04 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/07/16 16:27:43 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/08/22 12:59:15 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 void	ft_print_token_lst(t_token *token)
 {
 	t_token			*tmp;
+	t_cmd			*tmp_cmd;
 	t_redir			*tmp_redir;
 	int				i;
 	size_t			j;
@@ -51,44 +52,49 @@ void	ft_print_token_lst(t_token *token)
 		}
 		if (tmp->cmd)
 		{
-			if (tmp->cmd->cmd && *(tmp->cmd->cmd))
-				printf("CMD: %s\n", tmp->cmd->cmd);
-			if (tmp->cmd->args)
+			tmp_cmd = tmp->cmd;
+			while (tmp_cmd)
 			{
-				j = 0;
-				while (j < ft_tab_len(tmp->cmd->args))
+				if (tmp_cmd->cmd && *(tmp_cmd->cmd))
+					printf("CMD: %s\n", tmp_cmd->cmd);
+				if (tmp_cmd->args)
 				{
-					printf("ARG[%zu]: %s\n", j, tmp->cmd->args[j]);
-					j++;
-				}
-			}
-			if (tmp->cmd->redir)
-			{
-				tmp_redir = tmp->cmd->redir;
-				while (tmp_redir)
-				{
-					switch (tmp_redir->type)
+					j = 0;
+					while (j < ft_tab_len(tmp_cmd->args))
 					{
-						case REDIR_INPUT:
-							printf("REDIR: <\n");
-							break;
-						case REDIR_OUTPUT:
-							printf("REDIR: >\n");
-							break;
-						case REDIR_APPEND:
-							printf("REDIR: >>\n");
-							break;
-						case REDIR_HEREDOC:
-							printf("REDIR: <<\n");
-							break;
-						default:
-							break;
+						printf("ARG[%zu]: %s\n", j, tmp_cmd->args[j]);
+						j++;
 					}
-					printf("FILE: %s\n", tmp_redir->file);
-					tmp_redir = tmp_redir->next;
 				}
+				if (tmp_cmd->redir)
+				{
+					tmp_redir = tmp_cmd->redir;
+					while (tmp_redir)
+					{
+						switch (tmp_redir->type)
+						{
+							case REDIR_INPUT:
+								printf("REDIR: <\n");
+								break;
+							case REDIR_OUTPUT:
+								printf("REDIR: >\n");
+								break;
+							case REDIR_APPEND:
+								printf("REDIR: >>\n");
+								break;
+							case REDIR_HEREDOC:
+								printf("REDIR: <<\n");
+								break;
+							default:
+								break;
+						}
+						printf("FILE: %s\n", tmp_redir->file);
+						tmp_redir = tmp_redir->next;
+					}
+				}
+				printf("ERROR: %d\n", tmp_cmd->error);
+				tmp_cmd = tmp_cmd->next;
 			}
-			printf("ERROR: %d\n", tmp->cmd->error);
 		}
 		tmp = (tmp)->next;
 		i++;

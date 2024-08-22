@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token_init_utils.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 14:10:24 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/07/25 20:45:06 by andjenna         ###   ########.fr       */
+/*   Updated: 2024/08/22 14:08:15 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ static void	ft_set_redir_type(t_redir *redir, char *redir_type)
 	}
 }
 
-static void	ft_init_cmd_redir(t_cmd *new, char *cell, int *i)
+void	ft_init_cmd_redir(t_cmd *new, char *cell, int *i)
 {
 	t_redir	*redir;
 	char	*redir_type;
@@ -55,7 +55,7 @@ static void	ft_init_cmd_redir(t_cmd *new, char *cell, int *i)
 		redir->file_heredoc = NULL;
 }
 
-static void	ft_get_wildcard(t_token *new, int j)
+void	ft_get_wildcard(t_token *new, int j)
 {
 	if (ft_check_star(new->cmd->args[j]))
 		new->cmd->args = ft_wildcard_check(new->cmd->args, j);
@@ -63,7 +63,7 @@ static void	ft_get_wildcard(t_token *new, int j)
 		new->cmd->error = 1;
 }
 
-static t_exec	*init_exec(void)
+t_exec	*init_exec(void)
 {
 	t_exec	*exec;
 
@@ -99,11 +99,10 @@ void	ft_init_token_cmd(t_token *new, char *cell, int *i)
 	if (new->cmd->args && *new->cmd->args)
 		new->cmd->cmd = ft_strdup(new->cmd->args[0]);
 	if (ft_is_redir(cell, i))
-	{
 		while (ft_is_redir(cell, i))
 			ft_init_cmd_redir(new->cmd, cell, i);
-	}
 	else
 		new->cmd->redir = NULL;
 	new->cmd->exec = init_exec();
+	ft_init_token_cmd_pipe(new, new->cmd, cell, i);
 }
