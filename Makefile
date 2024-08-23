@@ -40,7 +40,6 @@ SRC = main.c \
 		builtin/unset.c \
 		builtin/exit.c \
 		builtin/exit_utils.c \
-		exec/exec_pipe.c \
 		exec/exec_cmd.c \
 		exec/exec_cmd_utils.c \
 		exec/exec_cmd_utils2.c \

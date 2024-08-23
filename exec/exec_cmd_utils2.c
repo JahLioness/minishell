@@ -6,22 +6,28 @@
 /*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 17:05:12 by andjenna          #+#    #+#             */
-/*   Updated: 2024/08/21 15:09:25 by andjenna         ###   ########.fr       */
+/*   Updated: 2024/08/23 19:44:39 by andjenna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	handle_builtin(t_ast *root, t_mini *last, t_redir *tmp, t_exec *exec)
+void	handle_builtin(t_cmd *cmd, t_mini *last, t_redir *tmp, t_exec *exec)
 {
 	char	**envp;
 
+	tmp = cmd->redir;
 	envp = ft_get_envp(&last->env);
 	if (tmp && tmp->type != REDIR_HEREDOC)
 		builtin_w_redir(tmp, exec);
 	else
-		exec->redir_out = STDOUT_FILENO;
-	exec->status = ft_exec_builtin(root->token, &last->env, exec->redir_out);
+	{
+		if (cmd->next)
+			exec->redir_out = exec->pipe_fd[1];
+		else
+			exec->redir_out = STDOUT_FILENO;
+	}
+	exec->status = ft_exec_builtin(cmd, &last->env, exec->redir_out);
 	reset_fd(exec);
 	ft_free_tab(envp);
 	envp = NULL;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_token.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
+/*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 10:41:30 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/08/22 13:29:41 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/08/23 18:25:56 by andjenna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,21 +31,8 @@ int	ft_exec_multiple_cmd(t_ast *granny, t_ast *current, t_ast *parent,
 		exit_status = 0;
 		return (exit_status);
 	}
-	else if (current->token->type == T_CMD && parent->token->type == T_PIPE)
-	{
-		printf("PIPE\n");
-		// exit_status = ft_exec_pipe(current, granny, mini, prompt);
-	}
-	else if (current->token->type == T_CMD && parent->token->type != T_PIPE)
+	else if (current->token->type == T_CMD)
 		return (ft_exec_cmd(current, granny, mini, prompt));
-	else if (current->token->type == T_PIPE)
-	{
-		printf("PIPE\n");
-		// exit_status = ft_exec_multiple_cmd(granny, current->left, parent,
-		//		mini, prompt, exit_status);
-		// exit_status = ft_exec_multiple_cmd(granny, current->right, parent,
-		//		mini, prompt, exit_status);
-	}
 	if (current->token->type == T_AND)
 	{
 		exit_status = ft_exec_multiple_cmd(granny, current->left, parent, mini,
@@ -118,7 +105,7 @@ void	ft_exec_token(t_mini **mini, char *prompt)
 	}
 	root = create_ast(last->tokens, last_t);
 	ft_exec_multiple_cmd(root, root, root, mini, prompt, -1);
-	print_ast(root, 0, ' ');
+	// print_ast(root, 0, ' ');
 	ft_clear_ast(root);
 }
 

@@ -6,7 +6,7 @@
 /*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 13:01:09 by andjenna          #+#    #+#             */
-/*   Updated: 2024/08/21 15:14:52 by andjenna         ###   ########.fr       */
+/*   Updated: 2024/08/23 18:35:55 by andjenna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,11 +70,11 @@ void	handle_redir(t_ast *root, t_mini **mini, t_env *e_status)
 	}
 }
 
-void	handle_redir_dup(t_ast *root, t_exec *exec, t_cmd *cmd)
+void	handle_redir_dup(t_exec *exec, t_cmd *cmd)
 {
-	if (root->token->cmd->redir)
+	if (cmd->redir)
 		ft_handle_redir_file(cmd);
-	if (root->token->cmd->redir && ((exec->redir_in != -1
+	if (cmd->redir && ((exec->redir_in != -1
 				&& exec->redir_in != STDOUT_FILENO) || (exec->redir_out != -1
 				&& exec->redir_out != STDOUT_FILENO)))
 	{
@@ -82,10 +82,10 @@ void	handle_redir_dup(t_ast *root, t_exec *exec, t_cmd *cmd)
 		dup2(exec->redir_out, STDOUT_FILENO);
 	}
 	// cas de redirection pour "cat file" sans sympbole de redirection
-	else if (!root->token->cmd->redir && !ft_strcmp(root->token->cmd->args[0],
-				"cat") && root->token->cmd->args[1])
+	else if (!cmd->redir && !ft_strcmp(cmd->args[0],
+				"cat") && cmd->args[1])
 	{
-		cat_wt_symbole(root->token->cmd, exec);
+		cat_wt_symbole(cmd, exec);
 		dup2(exec->redir_in, STDIN_FILENO);
 		dup2(exec->redir_out, STDOUT_FILENO);
 	}

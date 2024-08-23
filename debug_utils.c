@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   debug_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
+/*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 12:18:04 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/08/22 12:59:15 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/08/23 15:39:47 by andjenna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,8 +152,17 @@ void print_ast(t_ast *node, int depth, char c)
 					break;
 			}
 		}
-        printf("CMD: %s", node->token->cmd->cmd);
-		printf(" %s", node->token->cmd->args[1]);
+		if (node->token->cmd->next)
+		{
+			t_cmd *tmp_cmd = node->token->cmd;
+			while (tmp_cmd)
+			{
+				printf("CMD: %s   ", tmp_cmd->cmd);
+				printf(" %s", node->token->cmd->args[1]);
+				tmp_cmd = tmp_cmd->next;
+			}
+		}
+        // printf("CMD: %s", node->token->cmd->cmd);
 		if (node->token->cmd->redir)
 		{
 			switch (node->token->cmd->redir->type)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
+/*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 10:44:59 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/08/22 19:35:28 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/08/23 19:43:47 by andjenna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -257,10 +257,10 @@ int					ft_exec_multiple_cmd(t_ast *granny, t_ast *current,
 						t_ast *parent, t_mini **mini, char *prompt, int status);
 
 /*			EXEC BUILTINS	*/
-int					ft_exec_builtin(t_token *token, t_env **env, int fd);
+int					ft_exec_builtin(t_cmd *cmd, t_env **env, int fd);
 int					ft_exec_unset(t_cmd *cmd, t_env **env);
 int					ft_exec_export_utils(char *arg, t_export_utils *utils);
-int					ft_exec_export(t_token *token, t_env **env, int fd);
+int					ft_exec_export(t_cmd *cmd, t_env **env, int fd);
 char				**ft_get_args_echo(char **args, t_env **env);
 char				**ft_get_flag_echo(char **args);
 
@@ -310,17 +310,17 @@ void				ft_get_signal(void);
 void				ft_get_signal_heredoc(void);
 
 /*			TEST		*/
-int					exec_command(t_ast *root, t_ast *granny, t_mini **mini,
+int					exec_command(t_cmd *cmd, t_ast *granny, t_mini **mini,
 						char *prompt);
 void				cat_wt_symbole(t_cmd *cmd, t_exec *exec);
 void				builtin_w_redir(t_redir *tmp_redir, t_exec *exec);
 int					save_fd(int *fd, int prev_fd);
 void				handle_redir(t_ast *root, t_mini **mini, t_env *e_status);
-void				handle_builtin(t_ast *root, t_mini *last, t_redir *tmp,
+void				handle_builtin(t_cmd *cmd, t_mini *last, t_redir *tmp,
 						t_exec *exec);
 void				handle_exit(t_ast *root, t_mini **mini, t_env *e_status,
 						char *prompt);
-void				handle_redir_dup(t_ast *root, t_exec *exec, t_cmd *cmd);
+void				handle_redir_dup(t_exec *exec, t_cmd *cmd);
 int					handle_sigint(t_exec *exec, t_mini *last, t_env *e_status);
 int					handle_sigquit(char **envp, t_exec *exec, t_env *e_status);
 #endif

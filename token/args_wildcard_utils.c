@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   args_wildcard_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
+/*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 18:55:12 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/06/26 13:18:34 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/08/23 13:06:08 by andjenna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,8 @@ int	ft_check_star(char *arg)
 	int		i;
 	char	quote;
 
+	if (!arg)
+		return (0);
 	i = 0;
 	while (arg[i])
 	{
