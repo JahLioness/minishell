@@ -6,7 +6,7 @@
 /*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 13:14:38 by andjenna          #+#    #+#             */
-/*   Updated: 2024/08/23 19:03:34 by andjenna         ###   ########.fr       */
+/*   Updated: 2024/08/24 18:55:44 by andjenna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ int	check_path(char *path)
 {
 	struct stat	path_stat;
 
-	printf("CHECK PATH = %s\n", path);
 	if (!path || !*path)
 		return (127);
 	if (stat(path, &path_stat) != 0)
@@ -40,7 +39,6 @@ int	check_access(char *path, t_cmd *cmd)
 	char	*tmp_path;
 	int		exit_status;
 
-	printf("CHECK ACCESS = %s\n", path);
 	if (!path || !*path)
 		return (msg_error("minishell: ", cmd->cmd, "command not found"), 127);
 	tmp_path = path;
@@ -84,7 +82,6 @@ int	exec_command(t_cmd *cmd, t_ast *granny, t_mini **mini, char *prompt)
 	full_path = NULL;
 	last = ft_minilast(*mini);
 	envp = ft_get_envp(&last->env);
-	// printf("EXEC_CMD 	cmd->cmd = %s\n", cmd->cmd);
 	if (cmd->redir)
 		unlink_files(cmd->redir);
 	if (!cmd->cmd || !*cmd->cmd)

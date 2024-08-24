@@ -6,7 +6,7 @@
 /*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 15:43:26 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/06/27 18:51:45 by andjenna         ###   ########.fr       */
+/*   Updated: 2024/08/24 19:13:54 by andjenna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,10 +78,10 @@ static void	ft_print_export(t_env *env, int fd)
 	}
 }
 
-int ft_export(t_export_utils *utils, t_env **env, int fd)
+int	ft_export(t_export_utils *utils, t_env **env, int fd)
 {
-	t_env *export;
-	t_env *status;
+	t_env	*export;
+	t_env	*status;
 
 	if (!ft_strcmp(ft_check_key(utils->key), "error"))
 	{
@@ -93,7 +93,7 @@ int ft_export(t_export_utils *utils, t_env **env, int fd)
 		return (1);
 	}
 	else if (ft_check_key(utils->key) && ft_strcmp(ft_check_key(utils->key),
-												   "error"))
+			"error"))
 		return (ft_check_value(env, utils->key, utils->op, utils->value));
 	else
 	{

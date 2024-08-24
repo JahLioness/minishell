@@ -3,14 +3,42 @@
 /*                                                        :::      ::::::::   */
 /*   mini_utils2.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
+/*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/20 10:48:22 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/06/21 13:47:50 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/08/24 19:19:18 by andjenna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+int	ft_check_operator(t_token *token)
+{
+	if (token->type == T_AND)
+		ft_putendl_fd("minishell: syntax error near unexpected token `&&'", 2);
+	else if (token->type == T_AND_E)
+		ft_putendl_fd("minishell: syntax error near unexpected token `&'", 2);
+	else if (token->type == T_OR)
+		ft_putendl_fd("minishell: syntax error near unexpected token `||'", 2);
+	else if (token->type == T_CMD)
+	{
+		if (token->cmd->redir)
+		{
+			ft_putstr_fd("minishell: syntax error near unexpected token `", 2);
+			if (token->cmd->redir->type == REDIR_INPUT)
+				ft_putendl_fd("<'", 2);
+			else if (token->cmd->redir->type == REDIR_OUTPUT)
+				ft_putendl_fd(">'", 2);
+			else if (token->cmd->redir->type == REDIR_APPEND)
+				ft_putendl_fd(">>'", 2);
+			else if (token->cmd->redir->type == REDIR_HEREDOC)
+				ft_putendl_fd("<<'", 2);
+		}
+	}
+	else if (token->type == T_PIPE)
+		ft_putendl_fd("minishell: syntax error near unexpected token `|'", 2);
+	return (0);
+}
 
 int	ft_verif_brack_f_line(t_token *token)
 {

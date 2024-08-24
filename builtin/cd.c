@@ -6,7 +6,7 @@
 /*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 16:00:19 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/07/25 21:41:40 by andjenna         ###   ########.fr       */
+/*   Updated: 2024/08/24 19:10:42 by andjenna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,12 +38,13 @@ static char	*ft_get_new_dir(char *old_dir, char *new_dir)
 	}
 	return (new_dir);
 }
+
 int	ft_cd_util(char **path, t_env **env)
 {
 	char	*new_dir;
 	char	*old_dir;
 	t_env	*status;
-	
+
 	new_dir = ft_strdup(path[1]);
 	old_dir = getcwd(NULL, 0);
 	new_dir = ft_get_new_dir(old_dir, new_dir);

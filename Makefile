@@ -12,6 +12,7 @@ SRC = main.c \
 		prompt.c \
 		prompt_utils.c \
 		signaux.c \
+		signaux_heredoc.c \
 		env/env_utils.c \
 		env/env_utils2.c \
 		env/env_init.c \
@@ -40,28 +41,30 @@ SRC = main.c \
 		builtin/unset.c \
 		builtin/exit.c \
 		builtin/exit_utils.c \
-		exec/exec_cmd.c \
+		exec/check_tokens.c \
+		exec/exec_builtin.c \
 		exec/exec_cmd_utils.c \
 		exec/exec_cmd_utils2.c \
+		exec/exec_cmd.c \
+		exec/exec_command.c \
 		exec/exec_echo_utils.c \
 		exec/exec_unset_utils.c \
 		exec/exec_export_utils.c \
 		exec/exec_export_utils2.c \
 		exec/exec_underscore.c \
-		exec/exec_token.c \
 		exec/exec_error.c \
-		exec/check_tokens.c \
+		exec/exec_utils.c \
 		exec/exec_redir.c \
 		exec/exec_redir2.c \
 		exec/exec_redir_utils.c \
+		exec/exec_token.c \
+		exec/process_child.c \
 		exec/heredoc.c \
 		exec/heredoc_prompt.c \
 		exec/heredoc_expand.c \
 		exec/heredoc_file.c \
 		ast/ast_init.c \
 		ast/ast_utils.c \
-		exec/exec_command.c \
-		# exec/test_exec.c \
 
 
 

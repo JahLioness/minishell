@@ -6,19 +6,17 @@
 /*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 10:41:30 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/08/23 18:25:56 by andjenna         ###   ########.fr       */
+/*   Updated: 2024/08/24 19:35:13 by andjenna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-// IL FAUT FAIRE CETTE FOMCTION AUTREMENT
 int	ft_exec_multiple_cmd(t_ast *granny, t_ast *current, t_ast *parent,
 		t_mini **mini, char *prompt, int status)
 {
 	int	exit_status;
 
-	// printf("current->token->type = %d\n", current->token->type);
 	exit_status = status;
 	if (!granny || !current || !mini || !prompt)
 		return (-1);
@@ -105,7 +103,7 @@ void	ft_exec_token(t_mini **mini, char *prompt)
 	}
 	root = create_ast(last->tokens, last_t);
 	ft_exec_multiple_cmd(root, root, root, mini, prompt, -1);
-	// print_ast(root, 0, ' ');
+	print_ast(root, 0, ' ');
 	ft_clear_ast(root);
 }
 

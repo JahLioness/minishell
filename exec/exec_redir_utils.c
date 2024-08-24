@@ -6,7 +6,7 @@
 /*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 13:01:09 by andjenna          #+#    #+#             */
-/*   Updated: 2024/08/23 18:35:55 by andjenna         ###   ########.fr       */
+/*   Updated: 2024/08/24 19:36:39 by andjenna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,30 +39,23 @@ void	unlink_files(t_redir *redir)
 	}
 }
 
-void	handle_redir(t_ast *root, t_mini **mini, t_env *e_status)
+void	handle_redir(t_cmd *cmd, t_mini **mini, t_env *e_status)
 {
-	t_cmd	*cmd;
 	t_exec	*exec;
 	t_mini	*last;
 
-	cmd = root->token->cmd;
 	exec = cmd->exec;
 	last = ft_minilast(*mini);
-	if (root->token->cmd->redir
-		&& root->token->cmd->redir->type != REDIR_HEREDOC)
+	if (cmd->redir && cmd->redir->type != REDIR_HEREDOC)
 	{
 		ft_handle_redir_file(cmd);
 		reset_fd(exec);
 	}
-	// cas de redirection pour "cat file" sans sympbole de redirection
-	else if (!root->token->cmd->redir && root->token->cmd->args
-			&& !ft_strcmp(root->token->cmd->args[0], "cat")
-			&& root->token->cmd->args[1])
-		cat_wt_symbole(root->token->cmd, exec);
-	// si erreur de file, on execute pas le reste des commandes
-	if (exec->error_ex == 1 || (root->token->cmd->redir
-			&& root->token->cmd->redir->type != REDIR_HEREDOC
-			&& !root->token->cmd->cmd))
+	else if (!cmd->redir && cmd->args && !ft_strcmp(cmd->args[0], "cat")
+		&& cmd->args[1])
+		cat_wt_symbole(cmd, exec);
+	if (exec->error_ex == 1 || (cmd->redir && cmd->redir->type != REDIR_HEREDOC
+			&& !cmd->cmd))
 	{
 		reset_fd(exec);
 		e_status = ft_get_exit_status(&last->env);
@@ -74,19 +67,38 @@ void	handle_redir_dup(t_exec *exec, t_cmd *cmd)
 {
 	if (cmd->redir)
 		ft_handle_redir_file(cmd);
-	if (cmd->redir && ((exec->redir_in != -1
-				&& exec->redir_in != STDOUT_FILENO) || (exec->redir_out != -1
-				&& exec->redir_out != STDOUT_FILENO)))
+	if (cmd->redir && ((exec->redir_in != -1 && exec->redir_in != STDOUT_FILENO)
+			|| (exec->redir_out != -1 && exec->redir_out != STDOUT_FILENO)))
 	{
 		dup2(exec->redir_in, STDIN_FILENO);
 		dup2(exec->redir_out, STDOUT_FILENO);
 	}
-	// cas de redirection pour "cat file" sans sympbole de redirection
-	else if (!cmd->redir && !ft_strcmp(cmd->args[0],
-				"cat") && cmd->args[1])
+	else if (!cmd->redir && !ft_strcmp(cmd->args[0], "cat") && cmd->args[1])
 	{
 		cat_wt_symbole(cmd, exec);
 		dup2(exec->redir_in, STDIN_FILENO);
 		dup2(exec->redir_out, STDOUT_FILENO);
 	}
+}
+
+void	ft_handle_redir_file(t_cmd *cmd)
+{
+	t_redir	*current;
+	t_exec	*exec;
+	char	*file;
+
+	current = cmd->redir;
+	exec = cmd->exec;
+	file = ft_trim_quote(current->file, 0, 0);
+	free(current->file);
+	current->file = file;
+	if (!ft_strcmp(current->file, "*"))
+	{
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd(current->file, 2);
+		ft_putendl_fd(": ambiguous redirect", 2);
+		exec->error_ex = 1;
+		return ;
+	}
+	set_redir(current, exec);
 }

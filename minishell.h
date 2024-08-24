@@ -6,7 +6,7 @@
 /*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 10:44:59 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/08/23 19:43:47 by andjenna         ###   ########.fr       */
+/*   Updated: 2024/08/24 19:40:08 by andjenna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,7 @@
 # include <sys/wait.h>
 # include <termios.h>
 
-# define READ_END 0
-# define WRITE_END 1
-
-extern int			g_sig;
+extern int	g_sig;
 
 typedef enum s_redir_type
 {
@@ -162,7 +159,6 @@ t_env				*ft_get_exit_status(t_env **env);
 void				ft_clearenv(t_env **env);
 void				ft_clear_lst(t_mini **mini);
 void				ft_clear_token(t_token **token);
-// void				ft_clear_exec(t_exec *exec);
 void				ft_clear_token_redir(t_redir *redir);
 void				ft_clear_redir(t_redir *redir);
 
@@ -183,14 +179,14 @@ void				ft_tokenadd_back(t_token **token, t_token *new);
 void				ft_init_token_cmd(t_token *new, char *cell, int *i);
 void				ft_token_delone(t_token *token);
 void				ft_token_delone_utils(t_token *token);
-// void				ft_token_clear_redir(t_redir *redir);
-t_token				*ft_token_init(void);
-t_token				*ft_tokenlast(t_token *token);
 void				ft_init_token_cmd_pipe(t_token *new, t_cmd *cmd, char *cell,
 						int *i);
-t_exec				*init_exec(void);
 void				ft_get_wildcard(t_token *new, int j);
 void				ft_init_cmd_redir(t_cmd *new, char *cell, int *i);
+t_token				*ft_token_init(void);
+t_token				*ft_tokenlast(t_token *token);
+t_exec				*init_exec(void);
+// void				ft_token_clear_redir(t_redir *redir);
 
 /*			ARGS				*/
 int					ft_countwords_args(char *str);
@@ -221,11 +217,11 @@ char				*ft_get_redir_type(char *str, int *i);
 /*			BUILTINS		*/
 int					ft_echo(int fd, char **str, char **flag);
 int					ft_export(t_export_utils *utils, t_env **env, int fd);
-void				ft_unset(char *key, t_env **env);
 int					ft_cd(char **path, t_env **env);
 int					ft_pwd(int fd, t_env **env);
 int					ft_exit(t_ast *root, t_mini **mini, char *prompt,
 						char **envp);
+void				ft_unset(char *key, t_env **env);
 
 /*		BUILTINS UITLS		*/
 int					ft_check_value(t_env **env, char *key, char *op,
@@ -240,21 +236,17 @@ void				ft_free_exit(t_ast *root, t_mini **mini, char **envp,
 void				ft_print_exit(char *str);
 
 /*			EXEC			*/
-// int					ft_exec_multiple_pipe(t_ast *c_left, t_ast *c_right,
-// 						t_ast *granny, t_mini **mini, char *prompt);
-int					ft_exec_pipe(t_ast *current, t_ast *granny, t_mini **mini,
+int					exec_command(t_cmd *cmd, t_ast *granny, t_mini **mini,
 						char *prompt);
 int					ft_exec_cmd(t_ast *root, t_ast *granny, t_mini **mini,
 						char *prompt);
-// int					ft_exec_cmd_path(t_ast *root, t_ast *granny, t_mini **mini,
-// 						char **envp, char *prompt);
+int					ft_exec_multiple_cmd(t_ast *granny, t_ast *current,
+						t_ast *parent, t_mini **mini, char *prompt, int status);
 char				**ft_get_envp(t_env **env);
 char				*ft_get_cmd_path_env(char *cmd, char **env);
 void				ft_exec_token(t_mini **mini, char *prompt);
 void				ft_set_var_underscore(char **args, t_env **env,
 						char **envp);
-int					ft_exec_multiple_cmd(t_ast *granny, t_ast *current,
-						t_ast *parent, t_mini **mini, char *prompt, int status);
 
 /*			EXEC BUILTINS	*/
 int					ft_exec_builtin(t_cmd *cmd, t_env **env, int fd);
@@ -263,30 +255,41 @@ int					ft_exec_export_utils(char *arg, t_export_utils *utils);
 int					ft_exec_export(t_cmd *cmd, t_env **env, int fd);
 char				**ft_get_args_echo(char **args, t_env **env);
 char				**ft_get_flag_echo(char **args);
+void				handle_builtin(t_cmd *cmd, t_mini *last, t_redir *tmp,
+						t_exec *exec);
+void				handle_exit(t_ast *root, t_mini **mini, t_env *e_status,
+						char *prompt);
 
 /*			EXEC HEREDOC	*/
-t_cmd				*get_heredoc_node(t_mini *last);
-void				generate_heredoc_file(t_redir *redir);
-void				unlink_files(t_redir *redir);
 int					handle_heredoc(t_cmd *node_heredoc, t_mini **mini,
 						char *prompt);
-void				ft_get_heredoc(t_cmd *cmd, t_mini *last,
-						t_redir *current_redir);
 char				*handle_expand_heredoc(t_cmd *cmd, t_mini *last,
 						char *line);
+void				ft_get_heredoc(t_cmd *cmd, t_mini *last,
+						t_redir *current_redir);
+void				generate_heredoc_file(t_redir *redir);
+void				unlink_files(t_redir *redir);
+t_cmd				*get_heredoc_node(t_mini *last);
 
 /*			EXEC_UTILS		*/
 int					set_e_status(int status, t_mini *last);
-void				reset_fd(t_exec *exec);
 int					ft_is_operator(t_token *token);
 int					ft_is_pipe(t_token *token);
 int					ft_is_bracket(t_token *token);
 int					ft_is_builtin(char *cmd);
-void				ft_handle_redir_file(t_cmd *cmd);
-void				handle_expand(t_ast *root, t_mini *last);
+int					ft_cmdsize(t_cmd *cmd);
+void				process_child(t_cmd *cmd, int i, int len_cmd);
+void				reset_fd(t_exec *exec);
+void				handle_expand(t_cmd *cmd, t_mini *last);
+void				close_fd(int *fd, int prev_fd);
 
 /*			EXEC_REDIR		*/
+void				handle_redir(t_cmd *cmd, t_mini **mini, t_env *e_status);
 void				ft_handle_redir_file(t_cmd *cmd);
+void				cat_wt_symbole(t_cmd *cmd, t_exec *exec);
+void				builtin_w_redir(t_redir *tmp_redir, t_exec *exec);
+void				handle_redir_dup(t_exec *exec, t_cmd *cmd);
+void				set_redir(t_redir *current, t_exec *exec);
 
 /*			AST				*/
 int					ft_check_bracket(t_token *token);
@@ -298,29 +301,17 @@ t_ast				*create_ast(t_token *first, t_token *last);
 t_ast				*create_operator_node(t_token *token, t_ast *left,
 						t_ast *right);
 /*			ERROR		*/
+int					exit_free(t_ast *granny, t_mini **mini, char **envp,
+						char *prompt);
 void				msg_error(char *msg, char *cmd, char *strerror);
 void				ft_exec_cmd_error(t_ast *root, t_mini **mini, char **envp,
 						char *prompt);
-int					exit_free(t_ast *granny, t_mini **mini, char **envp,
-						char *prompt);
 
 /*			SIGNALS		*/
+int					handle_sigint(t_exec *exec, t_mini *last, t_env *e_status);
+int					handle_sigquit(char **envp, t_exec *exec, t_env *e_status);
 void				ft_get_signal_cmd(void);
 void				ft_get_signal(void);
 void				ft_get_signal_heredoc(void);
 
-/*			TEST		*/
-int					exec_command(t_cmd *cmd, t_ast *granny, t_mini **mini,
-						char *prompt);
-void				cat_wt_symbole(t_cmd *cmd, t_exec *exec);
-void				builtin_w_redir(t_redir *tmp_redir, t_exec *exec);
-int					save_fd(int *fd, int prev_fd);
-void				handle_redir(t_ast *root, t_mini **mini, t_env *e_status);
-void				handle_builtin(t_cmd *cmd, t_mini *last, t_redir *tmp,
-						t_exec *exec);
-void				handle_exit(t_ast *root, t_mini **mini, t_env *e_status,
-						char *prompt);
-void				handle_redir_dup(t_exec *exec, t_cmd *cmd);
-int					handle_sigint(t_exec *exec, t_mini *last, t_env *e_status);
-int					handle_sigquit(char **envp, t_exec *exec, t_env *e_status);
 #endif

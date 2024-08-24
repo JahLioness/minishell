@@ -3,19 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   args_wildcard.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
+/*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 15:01:54 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/08/22 14:53:50 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/08/24 19:24:26 by andjenna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-static void ft_skip_idx(int *i, int *j)
+static void	ft_skip_idx(int *i, int *j)
 {
 	(*i)++;
 	(*j)++;
+}
+
+static int	ft_skip_star(char *pattern, int *i)
+{
+	while (pattern[*i] == '*')
+		(*i)++;
+	return (*i);
 }
 
 int	ft_compare(char *pattern, char *str)
@@ -46,8 +53,7 @@ int	ft_compare(char *pattern, char *str)
 		else
 			return (0);
 	}
-	while (pattern[i] == '*')
-		i++;
+	i = ft_skip_star(pattern, &i);
 	return (pattern[i] == '\0');
 }
 

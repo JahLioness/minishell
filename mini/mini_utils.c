@@ -6,7 +6,7 @@
 /*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 17:46:46 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/08/21 15:08:56 by andjenna         ###   ########.fr       */
+/*   Updated: 2024/08/24 19:19:51 by andjenna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,34 +36,6 @@ int	ft_check_quote(char *line, int i)
 	return (1);
 }
 
-int	ft_check_operator(t_token *token)
-{
-	if (token->type == T_AND)
-		ft_putendl_fd("minishell: syntax error near unexpected token `&&'", 2);
-	else if (token->type == T_AND_E)
-		ft_putendl_fd("minishell: syntax error near unexpected token `&'", 2);
-	else if (token->type == T_OR)
-		ft_putendl_fd("minishell: syntax error near unexpected token `||'", 2);
-	else if (token->type == T_CMD)
-	{
-		if (token->cmd->redir)
-		{
-			ft_putstr_fd("minishell: syntax error near unexpected token `", 2);
-			if (token->cmd->redir->type == REDIR_INPUT)
-				ft_putendl_fd("<'", 2);
-			else if (token->cmd->redir->type == REDIR_OUTPUT)
-				ft_putendl_fd(">'", 2);
-			else if (token->cmd->redir->type == REDIR_APPEND)
-				ft_putendl_fd(">>'", 2);
-			else if (token->cmd->redir->type == REDIR_HEREDOC)
-				ft_putendl_fd("<<'", 2);
-		}
-	}
-	else if (token->type == T_PIPE)
-		ft_putendl_fd("minishell: syntax error near unexpected token `|'", 2);
-	return (0);
-}
-
 static int	ft_is_double_op(t_token *token)
 {
 	if (!token || (token->type == T_CMD && !token->cmd))
@@ -76,6 +48,16 @@ static int	ft_is_double_op(t_token *token)
 			|| (token->next->type == T_CMD && token->next->cmd->redir
 				&& !*token->next->cmd->redir->file)
 			|| token->next->type == T_PIPE));
+}
+
+static int	ft_verif_condition_token(t_token *tmp)
+{
+	if ((ft_is_double_op(tmp) || ((!tmp->prev || (tmp->prev
+						&& tmp->prev->type == O_BRACKET)) && (tmp->type == T_AND
+					|| tmp->type == T_OR || tmp->type == T_PIPE
+					|| tmp->type == T_AND_E))))
+		return (1);
+	return (0);
 }
 
 int	ft_verif_tokens(t_mini *mini)
@@ -93,10 +75,7 @@ int	ft_verif_tokens(t_mini *mini)
 					&& tmp->next->type != T_CMD
 					&& tmp->next->type != O_BRACKET) || !tmp->next))
 			bracket--;
-		else if (ft_is_double_op(tmp) || ((!tmp->prev || (tmp->prev
-						&& tmp->prev->type == O_BRACKET))
-				&& (tmp->type == T_AND || tmp->type == T_OR
-					|| tmp->type == T_PIPE || tmp->type == T_AND_E)))
+		else if (ft_verif_condition_token(tmp))
 			return (ft_check_operator(tmp));
 		if (!ft_verif_line(tmp))
 			return (0);
@@ -104,8 +83,7 @@ int	ft_verif_tokens(t_mini *mini)
 	}
 	if (bracket != 0)
 		return (ft_putstr_fd("minishell: syntax error near ", 2),
-			ft_putendl_fd("unexpected token `newline'", 2),
-			0);
+			ft_putendl_fd("unexpected token `newline'", 2), 0);
 	return (1);
 }
 
