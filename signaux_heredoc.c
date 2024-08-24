@@ -6,11 +6,11 @@
 /*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/24 19:42:50 by andjenna          #+#    #+#             */
-/*   Updated: 2024/08/24 19:42:52 by andjenna         ###   ########.fr       */
+/*   Updated: 2024/08/24 20:43:37 by andjenna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "minishell.h"
 
 void	ft_handler_heredoc(int signum, siginfo_t *info, void *context)
 {
