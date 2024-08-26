@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token_init_utils2.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 13:59:34 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/08/24 19:24:43 by andjenna         ###   ########.fr       */
+/*   Updated: 2024/08/26 13:39:02 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 int	ft_is_pipe_init(char *line, int *i)
 {
+	*i = ft_check_whitespace(line, *i);
 	if (line[*i] && line[*i] == '|' && line[*i + 1] != '|')
 	{
 		(*i)++;

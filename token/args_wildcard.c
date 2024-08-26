@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   args_wildcard.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 15:01:54 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/08/24 19:24:26 by andjenna         ###   ########.fr       */
+/*   Updated: 2024/08/26 14:04:23 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,7 @@ int	ft_compare(char *pattern, char *str)
 	while (str[j])
 	{
 		if (pattern[i] == '*')
-		{
-			star_idx = i++;
-			match_idx = j;
-		}
+			ft_skip_m_s_idx(&i, j, &star_idx, &match_idx);
 		else if (pattern[i] == str[j])
 			ft_skip_idx(&i, &j);
 		else if (star_idx != -1)

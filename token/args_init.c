@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 13:08:17 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/08/22 13:10:40 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/08/26 13:56:49 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	ft_get_index_arg_utils(char *str, int *i)
 	int		k;
 	char	quote;
 
-	k = *i;
+	k = ft_skip_spaces(str, i);
 	quote = 0;
 	while (str[*i] && !ft_is_whitespaces(str[*i]) && ft_is_not_stop(str[*i])
 		&& !quote)

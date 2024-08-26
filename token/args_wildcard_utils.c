@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   args_wildcard_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 18:55:12 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/08/23 13:06:08 by andjenna         ###   ########.fr       */
+/*   Updated: 2024/08/26 14:04:07 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,4 +74,10 @@ int	ft_check_star(char *arg)
 			i++;
 	}
 	return (0);
+}
+
+void	ft_skip_m_s_idx(int *i, int j, int *s_idx, int *m_idx)
+{
+	*s_idx = (*i)++;
+	*m_idx = j;
 }

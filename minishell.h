@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 10:44:59 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/08/24 19:40:08 by andjenna         ###   ########.fr       */
+/*   Updated: 2024/08/26 14:03:58 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 # include <sys/wait.h>
 # include <termios.h>
 
-extern int	g_sig;
+extern int			g_sig;
 
 typedef enum s_redir_type
 {
@@ -136,6 +136,7 @@ void				ft_print_lst(t_mini *mini);
 void				ft_check_acco(char *str, int *i);
 int					ft_set_quote(char *str, int *i);
 void				ft_skip_betwen_quote(char *str, int *i, char quote);
+int					ft_skip_spaces(char *str, int *i);
 int					ft_is_pipe_init(char *line, int *i);
 
 /*			PROMPT          */
@@ -208,6 +209,7 @@ char				*ft_check_acc_expand(char *str, t_env **env, t_cmd *cmd,
 void				ft_redir_addback(t_redir **redir, t_redir *new);
 t_token				*ft_redir_token(t_token *token);
 t_redir				*ft_init_redir(void);
+void				ft_skip_m_s_idx(int *i, int j, int *s_idx, int *m_idx);
 
 /*			REDIR			*/
 int					ft_is_redir(char *str, int *i);
