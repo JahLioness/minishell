@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 10:44:59 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/08/26 14:03:58 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/08/26 18:18:13 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,6 +125,14 @@ typedef struct s_ast
 	struct s_ast	*parent;
 }					t_ast;
 
+typedef struct s_exec_utils
+{
+	t_ast			*granny;
+	t_ast			*parent;
+	t_mini			**mini;
+	char			*prompt;
+}				t_exec_utils;
+
 /*			UTILS           */
 int					ft_check_whitespace(char *str, int i);
 int					ft_is_not_stop(char c);
@@ -162,10 +170,12 @@ void				ft_clear_lst(t_mini **mini);
 void				ft_clear_token(t_token **token);
 void				ft_clear_token_redir(t_redir *redir);
 void				ft_clear_redir(t_redir *redir);
+void				ft_clear_cmd(t_cmd **cmd);
 
 /*			MINI			*/
 int					ft_check_quote(char *line, int i);
 int					ft_verif_tokens(t_mini *mini);
+int					ft_check_redir_file(t_token *token);
 char				**ft_trim_quote_args(char **args);
 void				ft_is_heredoc(t_mini *mini);
 void				ft_miniadd_back(t_mini **mini, t_mini *new);
@@ -215,6 +225,8 @@ void				ft_skip_m_s_idx(int *i, int j, int *s_idx, int *m_idx);
 int					ft_is_redir(char *str, int *i);
 char				*ft_get_redir_file(char *str, int *i, char *tofree);
 char				*ft_get_redir_type(char *str, int *i);
+void				set_redir_append(t_redir *current, t_exec *exec);
+void				set_redir_output(t_redir *current, t_exec *exec);
 
 /*			BUILTINS		*/
 int					ft_echo(int fd, char **str, char **flag);
@@ -242,8 +254,7 @@ int					exec_command(t_cmd *cmd, t_ast *granny, t_mini **mini,
 						char *prompt);
 int					ft_exec_cmd(t_ast *root, t_ast *granny, t_mini **mini,
 						char *prompt);
-int					ft_exec_multiple_cmd(t_ast *granny, t_ast *current,
-						t_ast *parent, t_mini **mini, char *prompt, int status);
+int					ft_exec_multiple_cmd(t_exec_utils *e_utils, t_ast *current);
 char				**ft_get_envp(t_env **env);
 char				*ft_get_cmd_path_env(char *cmd, char **env);
 void				ft_exec_token(t_mini **mini, char *prompt);

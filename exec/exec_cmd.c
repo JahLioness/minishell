@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_cmd.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 16:45:28 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/08/24 18:57:38 by andjenna         ###   ########.fr       */
+/*   Updated: 2024/08/26 18:56:31 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	ft_exec_cmd(t_ast *root, t_ast *granny, t_mini **mini, char *prompt)
 	t_env	*e_status;
 	t_exec	*exec;
 	t_cmd	*cmd;
-	t_cmd	*tmp_cmd;
+	// t_cmd	*tmp_cmd;
 	t_redir	*tmp;
 	char	**envp;
 	int		len_cmd;
@@ -34,14 +34,14 @@ int	ft_exec_cmd(t_ast *root, t_ast *granny, t_mini **mini, char *prompt)
 	last = ft_minilast(*mini);
 	envp = ft_get_envp(&last->env);
 	len_cmd = ft_cmdsize(cmd);
-	tmp_cmd = cmd;
+	// tmp_cmd = cmd;
 	// gestion des quotes et expand
 	if (root->token->type == T_CMD && root->token->cmd)
 	{
 		if ((cmd->cmd && cmd->args) || (!cmd->cmd && *cmd->args))
 			handle_expand(cmd, last);
 		// premier appel de la fonction pour verifier les file
-		if (cmd->redir)
+		if (cmd->redir && cmd->redir->type != REDIR_HEREDOC)
 			handle_redir(cmd, mini, e_status);
 		ft_set_var_underscore(cmd->args, &last->env, envp);
 		// si pas d'erreur, on execute la commande
@@ -136,7 +136,7 @@ int	ft_exec_cmd(t_ast *root, t_ast *granny, t_mini **mini, char *prompt)
 				if (envp)
 					ft_free_tab(envp);
 				envp = NULL;
-				cmd = tmp_cmd;
+				// root->token->cmd = tmp_cmd;
 				close_fd(exec->pipe_fd, exec->prev_fd);
 				waitpid(exec->pid, &exec->status, 0);
 				return (handle_sigint(exec, last, e_status));

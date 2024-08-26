@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mini_utils2.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/20 10:48:22 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/08/24 19:19:18 by andjenna         ###   ########.fr       */
+/*   Updated: 2024/08/26 16:34:54 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,4 +92,30 @@ void	ft_is_heredoc(t_mini *mini)
 		}
 		tmp = tmp->next;
 	}
+}
+
+int	ft_check_redir_file(t_token *token)
+{
+	t_token	*tmp;
+	t_cmd	*tmp_cmd;
+	t_redir	*tmp_redir;
+
+	tmp = token;
+	while (tmp)
+	{
+		tmp_cmd = tmp->cmd;
+		while (tmp_cmd)
+		{
+			tmp_redir = tmp_cmd->redir;
+			while (tmp_redir)
+			{
+				if (!tmp_redir->file || !*tmp_redir->file)
+					return (1);
+				tmp_redir = tmp_redir->next;
+			}
+			tmp_cmd = tmp_cmd->next;
+		}
+		tmp = tmp->next;
+	}
+	return (0);
 }

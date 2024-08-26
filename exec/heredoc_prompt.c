@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc_prompt.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 13:03:22 by andjenna          #+#    #+#             */
-/*   Updated: 2024/08/21 15:11:54 by andjenna         ###   ########.fr       */
+/*   Updated: 2024/08/26 18:33:45 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,10 +57,8 @@ void	ft_get_heredoc(t_cmd *cmd, t_mini *last, t_redir *current_redir)
 {
 	int		urandom_fd;
 	char	*line;
-	int		i;
 
 	line = NULL;
-	i = 0;
 	urandom_fd = open(current_redir->file_heredoc, O_CREAT | O_WRONLY | O_TRUNC,
 			0644);
 	if (urandom_fd < 0)

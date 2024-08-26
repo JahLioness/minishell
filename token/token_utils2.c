@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 14:31:02 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/08/22 19:35:52 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/08/26 18:58:01 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,25 @@ void	ft_clear_token_redir(t_redir *redir)
 	}
 }
 
-// void	ft_clear_exec(t_exec *exec)
-// {
-// 	free(exec);
-// 	exec = NULL;
-// }
+void	ft_clear_cmd(t_cmd **cmd)
+{
+	t_cmd	*tmp;
+
+	while (*cmd)
+	{
+		tmp = *cmd;
+		*cmd = (*cmd)->next;
+		free(tmp->exec);
+		if (tmp->args)
+			ft_free_tab(tmp->args);
+		if (tmp->cmd && !ft_is_builtin(tmp->cmd) && tmp->redir)
+			ft_clear_redir(tmp->redir);
+		else if (tmp && tmp->redir)
+			ft_clear_token_redir(tmp->redir);
+		// if (tmp->redir)
+		// 	ft_clear_redir(tmp->redir);
+		if (tmp->cmd)
+			free(tmp->cmd);
+		free(tmp);
+	}
+}

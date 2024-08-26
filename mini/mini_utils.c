@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mini_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 17:46:46 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/08/24 19:19:51 by andjenna         ###   ########.fr       */
+/*   Updated: 2024/08/26 16:34:19 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,8 @@ static int	ft_verif_condition_token(t_token *tmp)
 	if ((ft_is_double_op(tmp) || ((!tmp->prev || (tmp->prev
 						&& tmp->prev->type == O_BRACKET)) && (tmp->type == T_AND
 					|| tmp->type == T_OR || tmp->type == T_PIPE
-					|| tmp->type == T_AND_E))))
+					|| tmp->type == T_AND_E)) || (tmp->type == T_CMD
+				&& ft_check_redir_file(tmp))))
 		return (1);
 	return (0);
 }
@@ -72,8 +73,8 @@ int	ft_verif_tokens(t_mini *mini)
 		if (tmp->type == O_BRACKET)
 			bracket++;
 		else if (tmp->type == C_BRACKET && ((tmp->next
-					&& tmp->next->type != T_CMD
-					&& tmp->next->type != O_BRACKET) || !tmp->next))
+					&& tmp->next->type != T_CMD && tmp->next->type != O_BRACKET)
+				|| !tmp->next))
 			bracket--;
 		else if (ft_verif_condition_token(tmp))
 			return (ft_check_operator(tmp));

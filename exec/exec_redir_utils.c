@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_redir_utils.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 13:01:09 by andjenna          #+#    #+#             */
-/*   Updated: 2024/08/24 19:36:39 by andjenna         ###   ########.fr       */
+/*   Updated: 2024/08/26 19:00:27 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void	handle_redir(t_cmd *cmd, t_mini **mini, t_env *e_status)
 
 	exec = cmd->exec;
 	last = ft_minilast(*mini);
-	if (cmd->redir && cmd->redir->type != REDIR_HEREDOC)
+	if (cmd->redir)
 	{
 		ft_handle_redir_file(cmd);
 		reset_fd(exec);
@@ -100,5 +100,6 @@ void	ft_handle_redir_file(t_cmd *cmd)
 		exec->error_ex = 1;
 		return ;
 	}
-	set_redir(current, exec);
+	if (cmd->cmd)
+		set_redir(current, exec);
 }
