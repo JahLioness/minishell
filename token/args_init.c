@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 13:08:17 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/08/26 13:56:49 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/08/27 16:18:09 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,8 +75,7 @@ char	*ft_search_value(char *ret, t_env **env, int i, char *str)
 			{
 				if (!ft_strcmp(tmp->key, "_"))
 				{
-					ret = ft_strjoin_free(ret, ft_strrchr(tmp->value, '/') + 1);
-					ret = ft_strjoin_free(ret, str + i + ft_strlen(tmp->key));
+					ret = ft_get_value_from_varu(tmp, str, i, ret);
 					return (ret);
 				}
 				ret = ft_strjoin_free(ret, tmp->value);
@@ -117,58 +116,3 @@ char	*ft_check_expand(char *str, t_env **env, int j)
 	ret = ft_search_value(ret, env, i, str);
 	return (ret);
 }
-
-// int	ft_get_index_ba_var(char *str, int i)
-// {
-// 	char	quote;
-
-// 	quote = 0;
-// 	while (str[i])
-// 	{
-// 		if (str[i] == '"' || str[i] == '\'')
-// 		{
-// 			quote = str[i];
-// 			i++;
-// 			if (str[i] == '$' && quote != '\'')
-// 				break ;
-// 			while (str[i] && str[i] != quote)
-// 				i++;
-// 			if (str[i] == quote)
-// 				i++;
-// 			quote = 0;
-// 		}
-// 		if (str[i] == '$' && quote != '\'')
-// 			break ;
-// 		if (str[i] && str[i] != '\'' && str[i] != '"')
-// 			i++;
-// 	}
-// 	return (i);
-// }
-// int	ft_get_index_arg_utils(char *str, int *i)
-// {
-// 	int		k;
-// 	char	quote;
-
-// 	k = *i;
-// 	if (str[*i] == '"' || str[*i] == '\'')
-// 	{
-// 		quote = str[*i];
-// 		(*i)++;
-// 		while (str[*i] && str[*i] != quote)
-// 			(*i)++;
-// 		if (str[*i] == quote)
-// 			(*i)++;
-// 		if (!ft_is_whitespaces(str[*i]))
-// 			ft_get_index_arg_utils(str, i);
-// 	}
-// 	else
-// 	{
-// 		while (str[*i] && ft_is_not_stop(str[*i])
-// 			&& !ft_is_whitespaces(str[*i]))
-// 		{
-// 			ft_check_acco(str, i);
-// 			(*i)++;
-// 		}
-// 	}
-// 	return (k);
-// }

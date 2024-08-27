@@ -46,6 +46,7 @@ SRC = main.c \
 		exec/exec_cmd_utils.c \
 		exec/exec_cmd_utils2.c \
 		exec/exec_cmd.c \
+		exec/exec_cmd2.c \
 		exec/exec_command.c \
 		exec/exec_echo_utils.c \
 		exec/exec_unset_utils.c \

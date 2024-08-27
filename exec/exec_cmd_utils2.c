@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 17:05:12 by andjenna          #+#    #+#             */
-/*   Updated: 2024/08/26 16:02:40 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/08/27 18:17:38 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,11 @@ void	handle_builtin(t_cmd *cmd, t_mini *last, t_redir *tmp, t_exec *exec)
 	envp = NULL;
 }
 
-void	handle_exit(t_ast *root, t_mini **mini, t_env *e_status, char *prompt)
+void	handle_exit(t_ast *root, t_mini **mini, char *prompt)
 {
 	t_exec	*exec;
 	t_mini	*last;
+	t_env	*e_status;
 	char	**envp;
 
 	exec = root->token->cmd->exec;
@@ -49,33 +50,36 @@ void	handle_exit(t_ast *root, t_mini **mini, t_env *e_status, char *prompt)
 	envp = NULL;
 }
 
-int	handle_sigint(t_exec *exec, t_mini *last, t_env *e_status)
+int	handle_sigint(t_exec *exec, t_mini *last)
 {
-	if (WIFEXITED(exec->status))
+	t_env	*e_status;
+
+	e_status = ft_get_exit_status(&last->env);
+	if (g_sig == SIGINT)
 	{
-		e_status = ft_get_exit_status(&last->env);
-		if (g_sig == SIGINT)
-		{
-			kill(exec->pid, SIGKILL);
-			ft_change_exit_status(e_status, ft_itoa(130));
-			g_sig = 0;
-			return (130);
-		}
-		return (set_e_status(exec->status, last));
+		kill(exec->pid, SIGKILL);
+		ft_change_exit_status(e_status, ft_itoa(130));
+		g_sig = 0;
+		return (130);
 	}
-	return (exec->status);
+	return (set_e_status(exec->status, last));
 }
 
-int	handle_sigquit(char **envp, t_exec *exec, t_env *e_status)
+int	handle_sigquit(t_exec *exec, t_mini *last)
 {
-	if (g_sig == SIGQUIT)
-	{
-		if (envp)
-			ft_free_tab(envp);
-		reset_fd(exec);
-		ft_change_exit_status(e_status, ft_itoa(131));
-		g_sig = 0;
-		return (131);
-	}
+	t_env	*e_status;
+
+	e_status = ft_get_exit_status(&last->env);
+	reset_fd(exec);
+	ft_change_exit_status(e_status, ft_itoa(131));
+	g_sig = 0;
+	return (131);
+}
+
+int	ft_waitpid(t_exec *exec, t_mini *last)
+{
+	waitpid(exec->pid, &exec->status, 0);
+	if (WIFEXITED(exec->status))
+		return (handle_sigint(exec, last));
 	return (exec->status);
 }

@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 13:01:09 by andjenna          #+#    #+#             */
-/*   Updated: 2024/08/26 19:00:27 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/08/27 13:46:37 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,11 @@ void	unlink_files(t_redir *redir)
 	}
 }
 
-void	handle_redir(t_cmd *cmd, t_mini **mini, t_env *e_status)
+void	handle_redir(t_cmd *cmd, t_mini **mini)
 {
 	t_exec	*exec;
 	t_mini	*last;
+	t_env	*e_status;
 
 	exec = cmd->exec;
 	last = ft_minilast(*mini);

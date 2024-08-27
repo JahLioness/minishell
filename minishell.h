@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 10:44:59 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/08/26 18:18:13 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/08/27 18:08:56 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,7 +131,8 @@ typedef struct s_exec_utils
 	t_ast			*parent;
 	t_mini			**mini;
 	char			*prompt;
-}				t_exec_utils;
+	char			**envp;
+}					t_exec_utils;
 
 /*			UTILS           */
 int					ft_check_whitespace(char *str, int i);
@@ -146,6 +147,7 @@ int					ft_set_quote(char *str, int *i);
 void				ft_skip_betwen_quote(char *str, int *i, char quote);
 int					ft_skip_spaces(char *str, int *i);
 int					ft_is_pipe_init(char *line, int *i);
+char				**ft_free_envp(t_exec_utils *e_utils);
 
 /*			PROMPT          */
 char				*ft_get_prompt(t_env *env);
@@ -220,6 +222,8 @@ void				ft_redir_addback(t_redir **redir, t_redir *new);
 t_token				*ft_redir_token(t_token *token);
 t_redir				*ft_init_redir(void);
 void				ft_skip_m_s_idx(int *i, int j, int *s_idx, int *m_idx);
+char				*ft_get_value_from_varu(t_env *env, char *str, int i,
+						char *ret);
 
 /*			REDIR			*/
 int					ft_is_redir(char *str, int *i);
@@ -250,16 +254,17 @@ void				ft_free_exit(t_ast *root, t_mini **mini, char **envp,
 void				ft_print_exit(char *str);
 
 /*			EXEC			*/
-int					exec_command(t_cmd *cmd, t_ast *granny, t_mini **mini,
-						char *prompt);
-int					ft_exec_cmd(t_ast *root, t_ast *granny, t_mini **mini,
-						char *prompt);
+int					exec_command(t_cmd *cmd, t_exec_utils *e_utils);
+int					ft_exec_lst_cmd(t_ast *root, t_exec_utils *e_utils);
+int					ft_exec_cmd(t_ast *root, t_exec_utils *e_utils);
 int					ft_exec_multiple_cmd(t_exec_utils *e_utils, t_ast *current);
 char				**ft_get_envp(t_env **env);
 char				*ft_get_cmd_path_env(char *cmd, char **env);
 void				ft_exec_token(t_mini **mini, char *prompt);
 void				ft_set_var_underscore(char **args, t_env **env,
 						char **envp);
+void				ft_exec_builtins(t_ast *root, t_cmd *cmd,
+						t_exec_utils *e_utils);
 
 /*			EXEC BUILTINS	*/
 int					ft_exec_builtin(t_cmd *cmd, t_env **env, int fd);
@@ -270,8 +275,7 @@ char				**ft_get_args_echo(char **args, t_env **env);
 char				**ft_get_flag_echo(char **args);
 void				handle_builtin(t_cmd *cmd, t_mini *last, t_redir *tmp,
 						t_exec *exec);
-void				handle_exit(t_ast *root, t_mini **mini, t_env *e_status,
-						char *prompt);
+void				handle_exit(t_ast *root, t_mini **mini, char *prompt);
 
 /*			EXEC HEREDOC	*/
 int					handle_heredoc(t_cmd *node_heredoc, t_mini **mini,
@@ -295,9 +299,10 @@ void				process_child(t_cmd *cmd, int i, int len_cmd);
 void				reset_fd(t_exec *exec);
 void				handle_expand(t_cmd *cmd, t_mini *last);
 void				close_fd(int *fd, int prev_fd);
+int					ft_waitpid(t_exec *exec, t_mini *last);
 
 /*			EXEC_REDIR		*/
-void				handle_redir(t_cmd *cmd, t_mini **mini, t_env *e_status);
+void				handle_redir(t_cmd *cmd, t_mini **mini);
 void				ft_handle_redir_file(t_cmd *cmd);
 void				cat_wt_symbole(t_cmd *cmd, t_exec *exec);
 void				builtin_w_redir(t_redir *tmp_redir, t_exec *exec);
@@ -317,12 +322,11 @@ t_ast				*create_operator_node(t_token *token, t_ast *left,
 int					exit_free(t_ast *granny, t_mini **mini, char **envp,
 						char *prompt);
 void				msg_error(char *msg, char *cmd, char *strerror);
-void				ft_exec_cmd_error(t_ast *root, t_mini **mini, char **envp,
-						char *prompt);
+void				ft_exec_cmd_error(t_exec_utils *e_utils, char **envp);
 
 /*			SIGNALS		*/
-int					handle_sigint(t_exec *exec, t_mini *last, t_env *e_status);
-int					handle_sigquit(char **envp, t_exec *exec, t_env *e_status);
+int					handle_sigint(t_exec *exec, t_mini *last);
+int					handle_sigquit(t_exec *exec, t_mini *last);
 void				ft_get_signal_cmd(void);
 void				ft_get_signal(void);
 void				ft_get_signal_heredoc(void);

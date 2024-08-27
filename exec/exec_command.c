@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_command.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 13:14:38 by andjenna          #+#    #+#             */
-/*   Updated: 2024/08/24 18:55:44 by andjenna         ###   ########.fr       */
+/*   Updated: 2024/08/27 18:18:01 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,16 @@ char	*get_full_path(t_cmd *cmd, char **envp)
 
 	full_path = NULL;
 	if (!ft_strcmp(cmd->cmd, "$_"))
+	{
 		full_path = ft_tabchr(envp, "_", '=');
+		free(cmd->cmd);
+		cmd->cmd = ft_strdup(full_path);
+		if (!ft_strchr(full_path, '/'))
+		{
+			free(full_path);
+			full_path = ft_get_cmd_path_env(cmd->cmd, envp);
+		}
+	}
 	else if (ft_strchr(cmd->cmd, '/'))
 		full_path = ft_strdup(cmd->cmd);
 	else
@@ -71,31 +80,29 @@ char	*get_full_path(t_cmd *cmd, char **envp)
 	return (full_path);
 }
 
-int	exec_command(t_cmd *cmd, t_ast *granny, t_mini **mini, char *prompt)
+int	exec_command(t_cmd *cmd, t_exec_utils *e_utils)
 {
 	char	**envp;
 	char	*full_path;
 	int		exit_status;
 	t_mini	*last;
 
-	exit_status = 0;
 	full_path = NULL;
-	last = ft_minilast(*mini);
+	last = ft_minilast(*e_utils->mini);
 	envp = ft_get_envp(&last->env);
 	if (cmd->redir)
 		unlink_files(cmd->redir);
 	if (!cmd->cmd || !*cmd->cmd)
-		return (ft_exec_cmd_error(granny, mini, envp, prompt), 1);
+		return (ft_exec_cmd_error(e_utils, envp), 1);
 	full_path = get_full_path(cmd, envp);
 	exit_status = check_access(full_path, cmd);
 	if (exit_status != 0)
 	{
 		free(full_path);
-		ft_exec_cmd_error(granny, mini, envp, prompt);
+		ft_exec_cmd_error(e_utils, envp);
 		exit(exit_status);
 	}
 	else if (execve(full_path, cmd->args, envp) == -1)
-		return (free(full_path), ft_exec_cmd_error(granny, mini, envp,
-				prompt), 1);
+		return (free(full_path), ft_exec_cmd_error(e_utils, envp), 1);
 	return (free(full_path), ft_free_tab(envp), 0);
 }
