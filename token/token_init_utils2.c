@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 13:59:34 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/08/26 13:39:02 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/08/28 18:41:18 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,15 @@ int	ft_is_pipe_init(char *line, int *i)
 	return (0);
 }
 
+void	ft_set_cmd_redir(char *cell, int *i, t_cmd *cmd)
+{
+	if (ft_is_redir(cell, i))
+		while (ft_is_redir(cell, i))
+			ft_init_cmd_redir(cmd, cell, i);
+	else
+		cmd->redir = NULL;
+}
+
 void	ft_init_token_cmd_pipe(t_token *new, t_cmd *cmd, char *cell, int *i)
 {
 	char	**args;
@@ -32,6 +41,7 @@ void	ft_init_token_cmd_pipe(t_token *new, t_cmd *cmd, char *cell, int *i)
 
 	while (ft_is_pipe_init(cell, i))
 	{
+		cmd->pipe = 1;
 		cmd->next = ft_calloc(sizeof(t_cmd), 1);
 		if (!cmd->next)
 			return ;
@@ -44,12 +54,8 @@ void	ft_init_token_cmd_pipe(t_token *new, t_cmd *cmd, char *cell, int *i)
 			ft_get_wildcard(new, j++);
 		if (cmd->next->args && *cmd->next->args)
 			cmd->next->cmd = ft_strdup(cmd->next->args[0]);
-		if (ft_is_redir(cell, i))
-			while (ft_is_redir(cell, i))
-				ft_init_cmd_redir(cmd->next, cell, i);
-		else
-			cmd->next->redir = NULL;
-		cmd->next->exec = init_exec();
+		ft_set_cmd_redir(cell, i, cmd->next);
+		init_exec(cmd->next);
 		cmd = cmd->next;
 	}
 }

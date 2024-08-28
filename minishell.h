@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 10:44:59 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/08/28 13:57:54 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/08/28 19:53:24 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,8 @@ typedef struct s_cmd
 	int				error;
 	char			**args;
 	t_redir			*redir;
-	t_exec			*exec;
+	t_exec			exec;
+	int				pipe;
 	struct s_cmd	*next;
 }					t_cmd;
 
@@ -147,6 +148,7 @@ int					ft_set_quote(char *str, int *i);
 void				ft_skip_betwen_quote(char *str, int *i, char quote);
 int					ft_skip_spaces(char *str, int *i);
 int					ft_is_pipe_init(char *line, int *i);
+int					ft_is_pipe_alone(t_token *token);
 char				**ft_free_envp(t_exec_utils *e_utils);
 
 /*			PROMPT          */
@@ -177,6 +179,7 @@ void				ft_clear_cmd(t_cmd **cmd);
 /*			MINI			*/
 int					ft_check_quote(char *line, int i);
 int					ft_verif_tokens(t_mini *mini);
+void				ft_cmd_syntax_error(t_token *token);
 int					ft_check_redir_file(t_token *token);
 char				**ft_trim_quote_args(char **args);
 void				ft_is_heredoc(t_mini *mini);
@@ -199,8 +202,7 @@ void				ft_get_wildcard(t_token *new, int j);
 void				ft_init_cmd_redir(t_cmd *new, char *cell, int *i);
 t_token				*ft_token_init(void);
 t_token				*ft_tokenlast(t_token *token);
-t_exec				*init_exec(void);
-// void				ft_token_clear_redir(t_redir *redir);
+void				init_exec(t_cmd *cmd);
 
 /*			ARGS				*/
 int					ft_countwords_args(char *str);
@@ -287,8 +289,9 @@ char				*handle_expand_heredoc(t_cmd *cmd, t_mini *last,
 void				ft_get_heredoc(t_cmd *cmd, t_mini *last,
 						t_redir *current_redir);
 void				generate_heredoc_file(t_redir *redir);
-void				unlink_files(t_redir *redir);
-t_cmd				*get_heredoc_node(t_mini *last);
+void				unlink_files(t_cmd *cmd);
+// t_cmd				*get_heredoc_node(t_mini *last);
+t_cmd				*get_heredoc_node(t_cmd *cmd);
 
 /*			EXEC_UTILS		*/
 int					set_e_status(int status, t_mini *last);
@@ -301,7 +304,7 @@ void				process_child(t_cmd *cmd, int i, int len_cmd);
 void				reset_fd(t_exec *exec);
 void				handle_expand(t_cmd *cmd, t_mini *last);
 void				close_fd(int *fd, int prev_fd);
-int					ft_waitpid(t_exec *exec, t_mini *last);
+int					ft_waitpid(t_cmd *cmd, t_mini *last, int len_cmd);
 
 /*			EXEC_REDIR		*/
 void				handle_redir(t_cmd *cmd, t_mini **mini);
@@ -309,7 +312,7 @@ void				ft_handle_redir_file(t_cmd *cmd);
 void				cat_wt_symbole(t_cmd *cmd, t_exec *exec);
 void				builtin_w_redir(t_redir *tmp_redir, t_exec *exec);
 void				handle_redir_dup(t_exec *exec, t_cmd *cmd);
-void				set_redir(t_redir *current, t_exec *exec);
+void				set_redir(t_redir *current, t_exec *exec, t_cmd *cmd);
 
 /*			AST				*/
 int					ft_check_bracket(t_token *token);

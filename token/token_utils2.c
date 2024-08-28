@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 14:31:02 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/08/27 18:19:24 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/08/28 19:11:36 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,13 +51,13 @@ void	ft_clear_token_redir(t_redir *redir)
 	{
 		tmp = redir;
 		redir = redir->next;
-		free(tmp->file);
 		if (tmp->file_heredoc)
 		{
 			if (access(tmp->file_heredoc, F_OK) == 0)
 				unlink(tmp->file_heredoc);
-			free(tmp->file_heredoc);
 		}
+		free(tmp->file_heredoc);
+		free(tmp->file);
 		free(tmp);
 	}
 }
@@ -70,12 +70,11 @@ void	ft_clear_cmd(t_cmd **cmd)
 	{
 		tmp = *cmd;
 		*cmd = (*cmd)->next;
-		free(tmp->exec);
 		if (tmp->args)
 			ft_free_tab(tmp->args);
-		if (tmp->cmd && !ft_is_builtin(tmp->cmd) && tmp->redir)
+		if (tmp->cmd && tmp->redir && !tmp->redir->file_heredoc)
 			ft_clear_redir(tmp->redir);
-		else if (tmp && tmp->redir)
+		else if (tmp && tmp->redir && !tmp->cmd)
 			ft_clear_token_redir(tmp->redir);
 		if (tmp->cmd)
 			free(tmp->cmd);

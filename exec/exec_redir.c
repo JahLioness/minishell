@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 15:13:29 by andjenna          #+#    #+#             */
-/*   Updated: 2024/08/26 18:55:59 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/08/28 19:12:41 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ static void	set_redir_heredoc(t_redir *current, t_exec *exec)
 	}
 }
 
-void	set_redir(t_redir *current, t_exec *exec)
+void	set_redir(t_redir *current, t_exec *exec, t_cmd *cmd)
 {
 	while (current)
 	{
@@ -90,7 +90,7 @@ void	set_redir(t_redir *current, t_exec *exec)
 			set_redir_output(current, exec);
 		else if (current->type == REDIR_APPEND)
 			set_redir_append(current, exec);
-		else if (current->type == REDIR_HEREDOC)
+		else if (current->type == REDIR_HEREDOC && cmd->cmd)
 			set_redir_heredoc(current, exec);
 		current = current->next;
 	}

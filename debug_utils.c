@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 12:18:04 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/08/27 14:40:34 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/08/28 19:17:33 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ void	ft_print_token_lst(t_token *token)
 	t_redir			*tmp_redir;
 	int				i;
 	size_t			j;
+	int				k;
 	
 	tmp = token;
 	i = 0;
@@ -53,8 +54,10 @@ void	ft_print_token_lst(t_token *token)
 		if (tmp->cmd)
 		{
 			tmp_cmd = tmp->cmd;
+			k = 0;
 			while (tmp_cmd)
 			{
+				printf("CMD: %d\n\n", k);
 				if (tmp_cmd->cmd && *(tmp_cmd->cmd))
 					printf("CMD: %s\n", tmp_cmd->cmd);
 				if (tmp_cmd->args)
@@ -93,6 +96,7 @@ void	ft_print_token_lst(t_token *token)
 					}
 				}
 				printf("ERROR: %d\n", tmp_cmd->error);
+				k++;
 				tmp_cmd = tmp_cmd->next;
 			}
 		}

@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 13:01:09 by andjenna          #+#    #+#             */
-/*   Updated: 2024/08/27 13:46:37 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/08/28 19:34:39 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,16 +26,22 @@ void	reset_fd(t_exec *exec)
 	}
 }
 
-void	unlink_files(t_redir *redir)
+void	unlink_files(t_cmd *cmd)
 {
 	t_redir	*tmp;
+	t_cmd	*tmp_cmd;
 
-	tmp = redir;
-	while (tmp)
+	tmp_cmd = cmd;
+	while (tmp_cmd)
 	{
-		if (tmp->type == REDIR_HEREDOC && access(tmp->file_heredoc, F_OK) == 0)
-			unlink(tmp->file_heredoc);
-		tmp = tmp->next;
+		tmp = tmp_cmd->redir;
+		while (tmp)
+		{
+			if (tmp->file_heredoc && access(tmp->file_heredoc, F_OK) == 0)
+				unlink(tmp->file_heredoc);
+			tmp = tmp->next;
+		}
+		tmp_cmd = tmp_cmd->next;
 	}
 }
 
@@ -45,7 +51,7 @@ void	handle_redir(t_cmd *cmd, t_mini **mini)
 	t_mini	*last;
 	t_env	*e_status;
 
-	exec = cmd->exec;
+	exec = &cmd->exec;
 	last = ft_minilast(*mini);
 	if (cmd->redir)
 	{
@@ -89,7 +95,7 @@ void	ft_handle_redir_file(t_cmd *cmd)
 	char	*file;
 
 	current = cmd->redir;
-	exec = cmd->exec;
+	exec = &cmd->exec;
 	file = ft_trim_quote(current->file, 0, 0);
 	free(current->file);
 	current->file = file;
@@ -101,6 +107,5 @@ void	ft_handle_redir_file(t_cmd *cmd)
 		exec->error_ex = 1;
 		return ;
 	}
-	if (cmd->cmd)
-		set_redir(current, exec);
+	set_redir(current, exec, cmd);
 }

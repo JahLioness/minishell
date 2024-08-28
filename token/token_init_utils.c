@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 14:10:24 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/08/26 13:37:31 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/08/28 18:45:09 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,20 +63,14 @@ void	ft_get_wildcard(t_token *new, int j)
 		new->cmd->error = 1;
 }
 
-t_exec	*init_exec(void)
+void	init_exec(t_cmd *cmd)
 {
-	t_exec	*exec;
-
-	exec = ft_calloc(sizeof(t_exec), 1);
-	if (!exec)
-		return (NULL);
-	exec->error_ex = 0;
-	exec->pid = -1;
-	exec->prev_fd = -1;
-	exec->redir_in = -1;
-	exec->redir_out = -1;
-	exec->status = 0;
-	return (exec);
+	cmd->exec.error_ex = 0;
+	cmd->exec.pid = -1;
+	cmd->exec.prev_fd = -1;
+	cmd->exec.redir_in = -1;
+	cmd->exec.redir_out = -1;
+	cmd->exec.status = 0;
 }
 
 void	ft_init_token_cmd(t_token *new, char *cell, int *i)
@@ -103,6 +97,6 @@ void	ft_init_token_cmd(t_token *new, char *cell, int *i)
 			ft_init_cmd_redir(new->cmd, cell, i);
 	else
 		new->cmd->redir = NULL;
-	new->cmd->exec = init_exec();
+	init_exec(new->cmd);
 	ft_init_token_cmd_pipe(new, new->cmd, cell, i);
 }

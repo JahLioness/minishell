@@ -6,13 +6,14 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 17:02:14 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/08/28 11:59:56 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/08/28 19:32:36 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
 // struct exec qui ne se free pas
+// infile non existant ne renvoie pas d'erreur < infile << eof << eof
 
 int	ft_exec_single_cmd(t_exec_utils *e_utils, t_cmd *cmd, t_exec *exec,
 		t_mini *last)
@@ -60,8 +61,6 @@ void	ft_execution(t_ast *root, t_exec_utils *e_utils, t_cmd *cmd,
 	}
 }
 
-// receck expand : echo "'"'$HOME'"'" ne doit pas expand
-
 int	ft_exec_cmd(t_ast *root, t_exec_utils *e_utils)
 {
 	t_mini	*last;
@@ -69,17 +68,19 @@ int	ft_exec_cmd(t_ast *root, t_exec_utils *e_utils)
 	t_cmd	*cmd;
 
 	cmd = root->token->cmd;
-	exec = cmd->exec;
+	exec = &cmd->exec;
 	last = ft_minilast(*e_utils->mini);
 	e_utils->envp = ft_get_envp(&last->env);
 	if (root->token->type == T_CMD && root->token->cmd)
 	{
 		if ((cmd->cmd && cmd->args) || (!cmd->cmd && *cmd->args))
 			handle_expand(cmd, last);
-		if (cmd->redir && cmd->redir->type != REDIR_HEREDOC)
+		if (cmd->redir)
 			handle_redir(cmd, e_utils->mini);
 		ft_set_var_underscore(cmd->args, &last->env, e_utils->envp);
-		if (!exec->error_ex)
+		if (exec->error_ex)
+			unlink_files(cmd);
+		else if (!exec->error_ex)
 			ft_execution(root, e_utils, cmd, exec);
 	}
 	e_utils->envp = ft_free_envp(e_utils);

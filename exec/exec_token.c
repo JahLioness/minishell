@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 10:41:30 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/08/27 16:01:16 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/08/28 19:57:08 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,26 +69,48 @@ t_cmd	*ft_return_heredoc(t_cmd *cmd, t_redir *redir)
 	return (heredoc);
 }
 
-t_cmd	*get_heredoc_node(t_mini *last)
+// t_cmd	*get_heredoc_node(t_mini *last)
+// {
+// 	t_token	*tmp_token;
+// 	t_redir	*tmp_redir;
+// 	t_cmd	*tmp_cmd;
+// 	t_cmd	*node_heredoc;
+
+// 	if (!last)
+// 		return (NULL);
+// 	node_heredoc = NULL;
+// 	tmp_token = last->tokens;
+// 	while (tmp_token)
+// 	{
+// 		tmp_cmd = tmp_token->cmd;
+// 		if (tmp_cmd && tmp_cmd->redir)
+// 		{
+// 			tmp_redir = tmp_cmd->redir;
+// 			node_heredoc = ft_return_heredoc(tmp_cmd, tmp_redir);
+// 		}
+// 		tmp_token = tmp_token->next;
+// 	}
+// 	return (node_heredoc);
+// }
+
+t_cmd	*get_heredoc_node(t_cmd *cmd)
 {
-	t_token	*tmp_token;
 	t_redir	*tmp_redir;
-	t_cmd	*tmp_cmd;
 	t_cmd	*node_heredoc;
 
-	if (!last)
-		return (NULL);
 	node_heredoc = NULL;
-	tmp_token = last->tokens;
-	while (tmp_token)
+	if (cmd && cmd->redir)
 	{
-		tmp_cmd = tmp_token->cmd;
-		if (tmp_cmd && tmp_cmd->redir)
+		tmp_redir = cmd->redir;
+		while (tmp_redir)
 		{
-			tmp_redir = tmp_cmd->redir;
-			node_heredoc = ft_return_heredoc(tmp_cmd, tmp_redir);
+			if (tmp_redir->type == REDIR_HEREDOC)
+			{
+				node_heredoc = cmd;
+				break ;
+			}
+			tmp_redir = tmp_redir->next;
 		}
-		tmp_token = tmp_token->next;
 	}
 	return (node_heredoc);
 }
@@ -96,7 +118,7 @@ t_cmd	*get_heredoc_node(t_mini *last)
 void	ft_exec_token(t_mini **mini, char *prompt)
 {
 	t_mini			*last;
-	t_token			*tmp;
+	t_cmd			*tmp;
 	t_token			*last_t;
 	t_exec_utils	exec_utils;
 	t_cmd			*node_heredoc;
@@ -105,18 +127,33 @@ void	ft_exec_token(t_mini **mini, char *prompt)
 		return ;
 	node_heredoc = NULL;
 	last = ft_minilast(*mini);
-	tmp = last->tokens;
-	last_t = ft_tokenlast(tmp);
+	last_t = ft_tokenlast(last->tokens);
 	if (last->is_heredoc)
 	{
-		node_heredoc = get_heredoc_node(last);
-		handle_heredoc(node_heredoc, mini, prompt);
+		tmp = last->tokens->cmd;
+		if (tmp->next)
+		{
+			while (tmp->next)
+			{
+				if (tmp->redir && tmp->redir->type == REDIR_HEREDOC)
+				{
+					node_heredoc = get_heredoc_node(tmp);
+					handle_heredoc(node_heredoc, mini, prompt);
+				}
+				tmp = tmp->next;
+			}
+		}
+		else
+		{
+			node_heredoc = get_heredoc_node(tmp);
+			handle_heredoc(node_heredoc, mini, prompt);
+		}
 	}
 	exec_utils.granny = create_ast(last->tokens, last_t);
 	exec_utils.parent = NULL;
 	exec_utils.mini = mini;
 	exec_utils.prompt = prompt;
 	ft_exec_multiple_cmd(&exec_utils, exec_utils.granny);
-	print_ast(exec_utils.granny, 0, ' ');
+	// print_ast(exec_utils.granny, 0, ' ');
 	ft_clear_ast(exec_utils.granny);
 }

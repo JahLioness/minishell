@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 16:45:28 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/08/27 18:20:41 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/08/28 18:47:50 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,27 +14,27 @@
 
 void	ft_close_pipe(t_cmd *cmd)
 {
-	if (cmd->exec->prev_fd != -1)
-		close(cmd->exec->prev_fd);
+	if (cmd->exec.prev_fd != -1)
+		close(cmd->exec.prev_fd);
 	if (cmd->next)
 	{
-		close(cmd->exec->pipe_fd[1]);
-		cmd->next->exec->prev_fd = cmd->exec->pipe_fd[0];
+		close(cmd->exec.pipe_fd[1]);
+		cmd->next->exec.prev_fd = cmd->exec.pipe_fd[0];
 	}
 }
 
 int	ft_exec_multi_lst_cmd(t_exec_utils *e_utils, t_cmd *cmd, int i, int len_cmd)
 {
-	cmd->exec->pid = fork();
-	if (cmd->exec->pid < 0)
+	cmd->exec.pid = fork();
+	if (cmd->exec.pid < 0)
 		return (ft_putendl_fd("minishell: fork failed", 2), 1);
-	if (cmd->exec->pid == 0)
+	if (cmd->exec.pid == 0)
 	{
 		if (cmd->redir)
-			handle_redir_dup(cmd->exec, cmd);
+			handle_redir_dup(&cmd->exec, cmd);
 		e_utils->envp = ft_free_envp(e_utils);
 		process_child(cmd, i, len_cmd);
-		reset_fd(cmd->exec);
+		reset_fd(&cmd->exec);
 		exec_command(cmd, e_utils);
 		exit(EXIT_SUCCESS);
 	}
@@ -52,7 +52,7 @@ void	ft_exec_builtins(t_ast *root, t_cmd *cmd, t_exec_utils *e_utils)
 	last = ft_minilast(*e_utils->mini);
 	if (ft_is_builtin(cmd->cmd))
 	{
-		handle_builtin(cmd, last, cmd->redir, cmd->exec);
+		handle_builtin(cmd, last, cmd->redir, &cmd->exec);
 		ft_close_pipe(cmd);
 	}
 	else if (!ft_strcmp(cmd->cmd, "exit"))
@@ -74,19 +74,18 @@ int	ft_exec_lst_cmd(t_ast *root, t_exec_utils *e_utils)
 	cmd = root->token->cmd;
 	len_cmd = ft_cmdsize(cmd);
 	ft_get_signal_cmd();
-	reset_fd(cmd->exec);
+	reset_fd(&cmd->exec);
 	while (++i < len_cmd)
 	{
-		if (pipe(cmd->exec->pipe_fd) < 0)
+		if (pipe(cmd->exec.pipe_fd) < 0)
 			return (ft_putendl_fd("minishell: pipe failed", 2), 1);
 		ft_exec_builtins(root, cmd, e_utils);
 		if (!ft_is_builtin(cmd->cmd) && ft_strcmp(cmd->cmd, "exit"))
-			cmd->exec->status = ft_exec_multi_lst_cmd(e_utils, cmd, i, len_cmd);
-		reset_fd(cmd->exec);
+			cmd->exec.status = ft_exec_multi_lst_cmd(e_utils, cmd, i, len_cmd);
+		reset_fd(&cmd->exec);
 		if (cmd->next)
 			cmd = cmd->next;
 	}
 	e_utils->envp = ft_free_envp(e_utils);
-	close_fd(cmd->exec->pipe_fd, cmd->exec->prev_fd);
-	return (ft_waitpid(cmd->exec, last));
+	return (ft_waitpid(root->token->cmd, last, len_cmd));
 }

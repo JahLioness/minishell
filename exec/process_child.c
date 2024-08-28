@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   process_child.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/24 18:36:42 by andjenna          #+#    #+#             */
-/*   Updated: 2024/08/24 19:34:53 by andjenna         ###   ########.fr       */
+/*   Updated: 2024/08/28 18:49:12 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,40 +24,40 @@ void	close_fd(int *fd, int prev_fd)
 
 int	first_child(t_cmd *cmd)
 {
-	close(cmd->exec->pipe_fd[0]);
-	dup2(cmd->exec->pipe_fd[1], STDOUT_FILENO);
-	close(cmd->exec->pipe_fd[1]);
-	if (cmd->exec->redir_in != -1)
+	close(cmd->exec.pipe_fd[0]);
+	dup2(cmd->exec.pipe_fd[1], STDOUT_FILENO);
+	close(cmd->exec.pipe_fd[1]);
+	if (cmd->exec.redir_in != -1)
 	{
-		dup2(cmd->exec->redir_in, STDIN_FILENO);
-		close(cmd->exec->redir_in);
+		dup2(cmd->exec.redir_in, STDIN_FILENO);
+		close(cmd->exec.redir_in);
 	}
 	return (0);
 }
 
 int	last_child(t_cmd *cmd)
 {
-	close_fd(cmd->exec->pipe_fd, -1);
-	if (cmd->exec->prev_fd != STDIN_FILENO && cmd->exec->prev_fd != -1)
+	close_fd(cmd->exec.pipe_fd, -1);
+	if (cmd->exec.prev_fd != STDIN_FILENO && cmd->exec.prev_fd != -1)
 	{
-		dup2(cmd->exec->prev_fd, STDIN_FILENO);
-		close(cmd->exec->prev_fd);
+		dup2(cmd->exec.prev_fd, STDIN_FILENO);
+		close(cmd->exec.prev_fd);
 	}
-	if (cmd->exec->redir_out != STDOUT_FILENO && cmd->exec->redir_out != -1)
+	if (cmd->exec.redir_out != STDOUT_FILENO && cmd->exec.redir_out != -1)
 	{
-		dup2(cmd->exec->redir_out, STDOUT_FILENO);
-		close(cmd->exec->redir_out);
+		dup2(cmd->exec.redir_out, STDOUT_FILENO);
+		close(cmd->exec.redir_out);
 	}
 	return (0);
 }
 
 int	middle_child(t_cmd *cmd)
 {
-	close(cmd->exec->pipe_fd[0]);
-	dup2(cmd->exec->prev_fd, STDIN_FILENO);
-	close(cmd->exec->prev_fd);
-	dup2(cmd->exec->pipe_fd[1], STDOUT_FILENO);
-	close(cmd->exec->pipe_fd[1]);
+	close(cmd->exec.pipe_fd[0]);
+	dup2(cmd->exec.prev_fd, STDIN_FILENO);
+	close(cmd->exec.prev_fd);
+	dup2(cmd->exec.pipe_fd[1], STDOUT_FILENO);
+	close(cmd->exec.pipe_fd[1]);
 	return (0);
 }
 

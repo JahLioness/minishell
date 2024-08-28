@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/20 10:48:22 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/08/28 13:58:09 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/08/28 15:34:08 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,23 +21,7 @@ int	ft_check_operator(t_token *token)
 	else if (token->type == T_OR)
 		ft_putendl_fd("minishell: syntax error near unexpected token `||'", 2);
 	else if (token->type == T_CMD)
-	{
-		if (token->cmd->redir)
-		{
-			ft_putstr_fd("minishell: syntax error near unexpected token `", 2);
-			if (token->cmd->redir->type == REDIR_INPUT)
-				ft_putendl_fd("<'", 2);
-			else if (token->cmd->redir->type == REDIR_OUTPUT)
-				ft_putendl_fd(">'", 2);
-			else if (token->cmd->redir->type == REDIR_APPEND)
-				ft_putendl_fd(">>'", 2);
-			else if (token->cmd->redir->type == REDIR_HEREDOC)
-				ft_putendl_fd("<<'", 2);
-		}
-		else if (!token->cmd->cmd || !*token->cmd->cmd)
-			ft_putendl_fd("minishell: syntax error near unexpected token `|'",
-				2);
-	}
+		ft_cmd_syntax_error(token);
 	return (0);
 }
 

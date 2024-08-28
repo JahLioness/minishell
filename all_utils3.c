@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 15:32:12 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/08/27 18:05:51 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/08/28 17:33:04 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,8 @@ void	ft_skip_betwen_quote(char *str, int *i, char quote)
 {
 	while (str[*i] && str[*i] != quote)
 		(*i)++;
-	(*i)++;
+	if (str[*i] == quote)
+		(*i)++;
 }
 
 int	ft_skip_spaces(char *str, int *i)

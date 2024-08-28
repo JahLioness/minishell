@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 17:05:12 by andjenna          #+#    #+#             */
-/*   Updated: 2024/08/28 14:14:41 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/08/28 18:46:26 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	handle_builtin(t_cmd *cmd, t_mini *last, t_redir *tmp, t_exec *exec)
 
 void	handle_exit(t_ast *root, t_mini **mini, char *prompt)
 {
-	t_exec	*exec;
+	t_exec	exec;
 	t_mini	*last;
 	t_env	*e_status;
 	char	**envp;
@@ -43,9 +43,9 @@ void	handle_exit(t_ast *root, t_mini **mini, char *prompt)
 	exec = root->token->cmd->exec;
 	last = ft_minilast(*mini);
 	envp = ft_get_envp(&(*mini)->env);
-	exec->status = ft_exit(root, mini, prompt, envp);
+	exec.status = ft_exit(root, mini, prompt, envp);
 	e_status = ft_get_exit_status(&last->env);
-	ft_change_exit_status(e_status, ft_itoa(exec->status));
+	ft_change_exit_status(e_status, ft_itoa(exec.status));
 	ft_free_tab(envp);
 	envp = NULL;
 }
@@ -76,10 +76,20 @@ int	handle_sigquit(t_exec *exec, t_mini *last)
 	return (131);
 }
 
-int	ft_waitpid(t_exec *exec, t_mini *last)
+int	ft_waitpid(t_cmd *cmd, t_mini *last, int len_cmd)
 {
-	waitpid(exec->pid, &exec->status, 0);
-	if (WIFEXITED(exec->status))
-		return (handle_sigint(exec, last));
-	return (exec->status);
+	int	i;
+
+	i = 0;
+	while (i <= len_cmd)
+	{
+		close_fd(cmd->exec.pipe_fd, cmd->exec.prev_fd);
+		waitpid(cmd->exec.pid, &cmd->exec.status, 0);
+		if (cmd->next)
+			cmd = cmd->next;
+		i++;
+	}
+	if (WIFEXITED(cmd->exec.status))
+		return (handle_sigint(&cmd->exec, last));
+	return (cmd->exec.status);
 }
