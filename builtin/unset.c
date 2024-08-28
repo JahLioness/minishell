@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 15:59:48 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/06/04 16:00:05 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/08/28 14:03:31 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	ft_unset(char *key, t_env **env)
 	i = 0;
 	while (tmp)
 	{
-		if (!strncmp(tmp->key, key, ft_strlen(key)))
+		if (!ft_strncmp(tmp->key, key, ft_strlen(tmp->key) + 1))
 		{
 			if (i == 0)
 				*env = tmp->next;

@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/24 18:34:53 by andjenna          #+#    #+#             */
-/*   Updated: 2024/08/26 16:02:47 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/08/28 14:14:16 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,10 @@ int	ft_exec_builtin(t_cmd *cmd, t_env **env, int fd)
 	else if (!ft_strcmp(cmd->cmd, "env"))
 		exit_status = ft_print_env(env, fd);
 	status = ft_get_exit_status(env);
-	ft_change_exit_status(status, ft_itoa(exit_status));
+	if (!status)
+		ft_envadd_back(env, ft_envnew(ft_strdup("?"), ft_itoa(exit_status)));
+	else
+		ft_change_exit_status(status, ft_itoa(exit_status));
 	return (exit_status);
 }
 

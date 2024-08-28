@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 10:44:59 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/08/28 12:27:13 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/08/28 13:57:54 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,6 +180,7 @@ int					ft_verif_tokens(t_mini *mini);
 int					ft_check_redir_file(t_token *token);
 char				**ft_trim_quote_args(char **args);
 void				ft_is_heredoc(t_mini *mini);
+void				ft_set_heredoc_node(t_mini *mini);
 void				ft_miniadd_back(t_mini **mini, t_mini *new);
 t_mini				*ft_new_mini(char *line, t_mini **mini);
 t_mini				*ft_mini_init(void);

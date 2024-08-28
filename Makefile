@@ -19,6 +19,7 @@ SRC = main.c \
 		mini/mini_init.c \
 		mini/mini_utils.c \
 		mini/mini_utils2.c \
+		mini/mini_utils3.c \
 		token/token_init.c \
 		token/token_init_utils.c \
 		token/token_init_utils2.c \

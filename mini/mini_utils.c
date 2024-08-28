@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 17:46:46 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/08/28 11:53:24 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/08/28 13:44:57 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,10 +42,10 @@ static int	ft_is_double_op(t_token *token)
 		return (0);
 	return ((token->type == T_AND || token->type == T_AND_E
 			|| token->type == T_OR || (token->type == T_CMD && token->cmd->redir
-				&& ft_check_redir_file(token)))
-		&& token->next && (token->next->type == T_AND
-			|| token->next->type == T_AND_E || token->next->type == T_OR
-			|| (token->next->type == T_CMD && token->next->cmd->redir
+				&& ft_check_redir_file(token))) && token->next
+		&& (token->next->type == T_AND || token->next->type == T_AND_E
+			|| token->next->type == T_OR || (token->next->type == T_CMD
+				&& token->next->cmd->redir
 				&& ft_check_redir_file(token->next))));
 }
 
@@ -55,7 +55,8 @@ static int	ft_verif_condition_token(t_token *tmp)
 						&& tmp->prev->type == O_BRACKET)) && (tmp->type == T_AND
 					|| tmp->type == T_OR || tmp->type == T_AND_E))
 			|| (tmp->type == T_CMD && ft_check_redir_file(tmp))
-			|| (tmp->type == T_CMD && (!tmp->cmd->cmd || !*tmp->cmd->cmd))))
+			|| (tmp->type == T_CMD && (!tmp->cmd->cmd || !*tmp->cmd->cmd)
+				&& !tmp->cmd->redir)))
 		return (1);
 	return (0);
 }
