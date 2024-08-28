@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/20 10:48:22 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/08/26 16:34:54 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/08/28 11:49:40 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,10 @@ int	ft_check_operator(t_token *token)
 			else if (token->cmd->redir->type == REDIR_HEREDOC)
 				ft_putendl_fd("<<'", 2);
 		}
+		else if (!token->cmd->cmd || !*token->cmd->cmd)
+			ft_putendl_fd("minishell: syntax error near unexpected token `|'",
+				2);
 	}
-	else if (token->type == T_PIPE)
-		ft_putendl_fd("minishell: syntax error near unexpected token `|'", 2);
 	return (0);
 }
 

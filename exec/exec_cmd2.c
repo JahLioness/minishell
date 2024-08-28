@@ -6,11 +6,13 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 17:02:14 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/08/27 18:18:41 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/08/28 11:59:56 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+// struct exec qui ne se free pas
 
 int	ft_exec_single_cmd(t_exec_utils *e_utils, t_cmd *cmd, t_exec *exec,
 		t_mini *last)
@@ -57,6 +59,8 @@ void	ft_execution(t_ast *root, t_exec_utils *e_utils, t_cmd *cmd,
 			exec->status = ft_exec_single_cmd(e_utils, cmd, exec, last);
 	}
 }
+
+// receck expand : echo "'"'$HOME'"'" ne doit pas expand
 
 int	ft_exec_cmd(t_ast *root, t_exec_utils *e_utils)
 {

@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 10:44:59 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/08/27 18:08:56 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/08/28 12:27:13 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -224,6 +224,7 @@ t_redir				*ft_init_redir(void);
 void				ft_skip_m_s_idx(int *i, int j, int *s_idx, int *m_idx);
 char				*ft_get_value_from_varu(t_env *env, char *str, int i,
 						char *ret);
+int					ft_is_expandable(char *str);
 
 /*			REDIR			*/
 int					ft_is_redir(char *str, int *i);

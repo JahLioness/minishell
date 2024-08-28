@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 14:31:53 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/08/26 14:00:17 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/08/28 12:36:59 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,12 @@ int	ft_is_expandable(char *str)
 				if (quote == '"' && str[i] == '$')
 					return (1);
 			}
-			if (str[i] == quote)
-				i++;
+			if (str[i++] == quote)
+				quote = 0;
 		}
 		if (!quote && str[i] == '$')
 			return (1);
-		if (str[i])
+		if (str[i] && str[i] != '"' && str[i] != '\'')
 			i++;
 	}
 	return (0);

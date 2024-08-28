@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 13:08:17 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/08/27 16:18:09 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/08/28 12:32:06 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,8 +96,8 @@ char	*ft_check_expand(char *str, t_env **env, int j)
 	char	*ret;
 
 	i = ft_get_index_ba_var(str, 0);
-	if (!ft_strchr(str, '$'))
-		return (str);
+	if (!ft_strchr(str, '$') || !ft_is_expandable(str))
+		return (ft_strdup(str));
 	if (str[i] == '$' && ((!ft_isalnum(str[i + 1]) && str[i + 1] != '?'
 				&& str[i + 1] != '_') || (j == 0 && str[i + 1] == '_')))
 	{
