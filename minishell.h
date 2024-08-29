@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 10:44:59 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/08/28 19:53:24 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/08/29 12:17:27 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,7 @@ typedef struct s_cmd
 	t_redir			*redir;
 	t_exec			exec;
 	int				pipe;
+	int				heredoc;
 	struct s_cmd	*next;
 }					t_cmd;
 
@@ -183,7 +184,7 @@ void				ft_cmd_syntax_error(t_token *token);
 int					ft_check_redir_file(t_token *token);
 char				**ft_trim_quote_args(char **args);
 void				ft_is_heredoc(t_mini *mini);
-void				ft_set_heredoc_node(t_mini *mini);
+void				ft_set_heredoc_node(t_cmd *cmd, t_mini *mini);
 void				ft_miniadd_back(t_mini **mini, t_mini *new);
 t_mini				*ft_new_mini(char *line, t_mini **mini);
 t_mini				*ft_mini_init(void);

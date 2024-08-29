@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/20 10:48:22 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/08/28 15:34:08 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/08/29 12:17:11 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,6 @@ void	ft_is_heredoc(t_mini *mini)
 {
 	t_token	*tmp;
 	t_cmd	*tmp_cmd;
-	t_redir	*tmp_redir;
 
 	tmp = mini->tokens;
 	while (tmp)
@@ -76,13 +75,7 @@ void	ft_is_heredoc(t_mini *mini)
 			tmp_cmd = tmp->cmd;
 			while (tmp_cmd)
 			{
-				tmp_redir = tmp_cmd->redir;
-				while (tmp_redir)
-				{
-					if (tmp_redir->type == REDIR_HEREDOC)
-						return (ft_set_heredoc_node(mini));
-					tmp_redir = tmp_redir->next;
-				}
+				ft_set_heredoc_node(tmp_cmd, mini);
 				tmp_cmd = tmp_cmd->next;
 			}
 		}

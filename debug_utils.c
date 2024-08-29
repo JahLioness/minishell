@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 12:18:04 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/08/28 19:17:33 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/08/29 12:12:05 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ void	ft_print_token_lst(t_token *token)
 				}
 				if (tmp_cmd->redir)
 				{
+					printf("Nb heredoc: %d\n", tmp_cmd->heredoc);
 					tmp_redir = tmp_cmd->redir;
 					while (tmp_redir)
 					{
