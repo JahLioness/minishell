@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 10:44:59 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/08/29 12:17:27 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/08/29 17:04:44 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -293,6 +293,9 @@ void				generate_heredoc_file(t_redir *redir);
 void				unlink_files(t_cmd *cmd);
 // t_cmd				*get_heredoc_node(t_mini *last);
 t_cmd				*get_heredoc_node(t_cmd *cmd);
+int					ft_count_heredoc(t_cmd *cmd);
+void				ft_get_heredoc_loop(t_token *token, t_mini **mini,
+						char *prompt);
 
 /*			EXEC_UTILS		*/
 int					set_e_status(int status, t_mini *last);

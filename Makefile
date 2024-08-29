@@ -60,6 +60,7 @@ SRC = main.c \
 		exec/exec_redir2.c \
 		exec/exec_redir_utils.c \
 		exec/exec_token.c \
+		exec/exec_token2.c \
 		exec/process_child.c \
 		exec/heredoc.c \
 		exec/heredoc_prompt.c \

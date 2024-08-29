@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 16:45:28 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/08/28 18:47:50 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/08/29 19:38:30 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,13 @@ void	ft_close_pipe(t_cmd *cmd)
 	if (cmd->next)
 	{
 		close(cmd->exec.pipe_fd[1]);
-		cmd->next->exec.prev_fd = cmd->exec.pipe_fd[0];
+		if (cmd->next->redir && (cmd->next->redir->type == REDIR_HEREDOC || cmd->next->redir->type == REDIR_INPUT))
+		{
+			close(cmd->exec.pipe_fd[0]);
+			cmd->next->exec.prev_fd = cmd->next->exec.redir_in;
+		}
+		else
+			cmd->next->exec.prev_fd = cmd->exec.pipe_fd[0];
 	}
 }
 
@@ -77,6 +83,8 @@ int	ft_exec_lst_cmd(t_ast *root, t_exec_utils *e_utils)
 	reset_fd(&cmd->exec);
 	while (++i < len_cmd)
 	{
+		printf(" PIPE cmd->cmd = %s\n", cmd->cmd);
+		// printf("PIPE cmd->redir->file == %s\n", cmd->redir->file);
 		if (pipe(cmd->exec.pipe_fd) < 0)
 			return (ft_putendl_fd("minishell: pipe failed", 2), 1);
 		ft_exec_builtins(root, cmd, e_utils);

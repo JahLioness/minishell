@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/24 18:36:42 by andjenna          #+#    #+#             */
-/*   Updated: 2024/08/28 18:49:12 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/08/29 19:39:33 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 void	close_fd(int *fd, int prev_fd)
 {
+	(void)fd;
 	if (prev_fd != -1)
 		close(prev_fd);
 	if (fd[0] != -1)
@@ -24,7 +25,9 @@ void	close_fd(int *fd, int prev_fd)
 
 int	first_child(t_cmd *cmd)
 {
-	close(cmd->exec.pipe_fd[0]);
+	if (!cmd->next->redir || (cmd->next->redir->type != REDIR_HEREDOC
+			&& cmd->next->redir->type != REDIR_INPUT))
+		close(cmd->exec.pipe_fd[0]);
 	dup2(cmd->exec.pipe_fd[1], STDOUT_FILENO);
 	close(cmd->exec.pipe_fd[1]);
 	if (cmd->exec.redir_in != -1)
@@ -40,9 +43,11 @@ int	last_child(t_cmd *cmd)
 	close_fd(cmd->exec.pipe_fd, -1);
 	if (cmd->exec.prev_fd != STDIN_FILENO && cmd->exec.prev_fd != -1)
 	{
+		printf("LAST CHILD cmd->exec.prev_fd: %d\n", cmd->exec.prev_fd);
 		dup2(cmd->exec.prev_fd, STDIN_FILENO);
 		close(cmd->exec.prev_fd);
 	}
+	printf("LAST CHILD cmd->exec.redir_out: %d\n", cmd->exec.redir_out);
 	if (cmd->exec.redir_out != STDOUT_FILENO && cmd->exec.redir_out != -1)
 	{
 		dup2(cmd->exec.redir_out, STDOUT_FILENO);

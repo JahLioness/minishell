@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 10:41:30 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/08/29 12:08:51 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/08/29 17:05:23 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,37 +118,15 @@ t_cmd	*get_heredoc_node(t_cmd *cmd)
 void	ft_exec_token(t_mini **mini, char *prompt)
 {
 	t_mini			*last;
-	t_cmd			*tmp;
 	t_token			*last_t;
 	t_exec_utils	exec_utils;
-	t_cmd			*node_heredoc;
 
 	if (!*mini)
 		return ;
-	node_heredoc = NULL;
 	last = ft_minilast(*mini);
 	last_t = ft_tokenlast(last->tokens);
 	if (last->is_heredoc)
-	{
-		tmp = last->tokens->cmd;
-		if (tmp->next)
-		{
-			while (tmp->next)
-			{
-				if (tmp->redir && tmp->redir->type == REDIR_HEREDOC)
-				{
-					node_heredoc = get_heredoc_node(tmp);
-					handle_heredoc(node_heredoc, mini, prompt);
-				}
-				tmp = tmp->next;
-			}
-		}
-		else
-		{
-			node_heredoc = get_heredoc_node(tmp);
-			handle_heredoc(node_heredoc, mini, prompt);
-		}
-	}
+		ft_get_heredoc_loop(last->tokens, mini, prompt);
 	exec_utils.granny = create_ast(last->tokens, last_t);
 	exec_utils.parent = NULL;
 	exec_utils.mini = mini;

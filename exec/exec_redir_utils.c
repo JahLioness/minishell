@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 13:01:09 by andjenna          #+#    #+#             */
-/*   Updated: 2024/08/29 12:07:19 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/08/29 19:27:16 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,17 +74,22 @@ void	handle_redir_dup(t_exec *exec, t_cmd *cmd)
 {
 	if (cmd->redir)
 		ft_handle_redir_file(cmd);
-	if (cmd->redir && ((exec->redir_in != -1 && exec->redir_in != STDOUT_FILENO)
-			|| (exec->redir_out != -1 && exec->redir_out != STDOUT_FILENO)))
+	printf("IN DUP cmd->exec.redir_in: %d\n", cmd->exec.redir_in);
+	if (cmd->redir && cmd->exec.redir_out != -1 && cmd->exec.redir_out != STDOUT_FILENO)
 	{
-		dup2(exec->redir_in, STDIN_FILENO);
-		dup2(exec->redir_out, STDOUT_FILENO);
+		dup2(cmd->exec.redir_out, STDOUT_FILENO);
+		// close(cmd->exec.redir_out);
+	}
+	if (cmd->redir && cmd->exec.redir_in != -1 && cmd->exec.redir_in != STDIN_FILENO)
+	{
+		dup2(cmd->exec.redir_in, STDIN_FILENO);
+		// close(cmd->exec.redir_in);
 	}
 	else if (!cmd->redir && !ft_strcmp(cmd->args[0], "cat") && cmd->args[1])
 	{
 		cat_wt_symbole(cmd, exec);
-		dup2(exec->redir_in, STDIN_FILENO);
-		dup2(exec->redir_out, STDOUT_FILENO);
+		dup2(cmd->exec.redir_in, STDIN_FILENO);
+		dup2(cmd->exec.redir_out, STDOUT_FILENO);
 	}
 }
 
