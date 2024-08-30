@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 14:10:24 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/08/28 18:45:09 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/08/30 17:29:36 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,39 @@ static void	ft_set_redir_type(t_redir *redir, char *redir_type)
 	}
 }
 
+void	ft_check_redir_arg(t_cmd *new, char *cell, int *i)
+{
+	int		j;
+	int		k;
+	char	**new_args;
+
+	j = 0;
+	if (!new || !new->args)
+		return ;
+	new_args = ft_calloc(ft_tab_len(new->args) + 2, sizeof(char *));
+	while (new->args && new->args[j])
+	{
+		new_args[j] = ft_strdup(new->args[j]);
+		j++;
+	}
+	ft_free_tab(new->args);
+	new->args = new_args;
+	while (cell[*i] && ft_is_not_stop(cell[*i]))
+	{
+		if (cell[*i])
+		{
+			k = ft_get_index_arg_utils(cell, i);
+			new->args[j] = ft_strndup(cell + k, (*i - k));
+			j++;
+		}
+		if (cell[*i] && ft_is_not_stop(cell[*i]) && cell[*i] != '$'
+			&& cell[*i] != 123 && cell[*i] != '"' && cell[*i] != '\''
+			&& !ft_isalnum(cell[*i]))
+			(*i)++;
+	}
+	
+}
+
 void	ft_init_cmd_redir(t_cmd *new, char *cell, int *i)
 {
 	t_redir	*redir;
@@ -49,6 +82,7 @@ void	ft_init_cmd_redir(t_cmd *new, char *cell, int *i)
 	if (redir)
 	{
 		redir->file = ft_get_redir_file(cell, i, NULL);
+		ft_check_redir_arg(new, cell, i);
 		ft_redir_addback(&new->redir, redir);
 	}
 	if (redir)
@@ -80,6 +114,7 @@ void	ft_init_token_cmd(t_token *new, char *cell, int *i)
 
 	if (!new)
 		return ;
+	printf("cell = %s\n", cell + *i);
 	new->cmd = ft_calloc(sizeof(t_cmd), 1);
 	if (!new->cmd)
 		return ;

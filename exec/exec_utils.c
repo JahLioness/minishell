@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/24 18:35:55 by andjenna          #+#    #+#             */
-/*   Updated: 2024/08/28 16:36:03 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/08/30 17:21:58 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ void	handle_expand(t_cmd *cmd, t_mini *last)
 	i = 0;
 	while (cmd->args[i])
 	{
+		printf("cmd->args[%d] = %s\n", i, cmd->args[i]);
 		cmd->args[i] = ft_verif_arg(cmd->args,
 				&last->env, cmd, i);
 		i++;

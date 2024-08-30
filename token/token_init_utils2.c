@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 13:59:34 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/08/28 18:41:18 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/08/30 16:48:40 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ int	ft_is_pipe_init(char *line, int *i)
 	*i = ft_check_whitespace(line, *i);
 	if (line[*i] && line[*i] == '|' && line[*i + 1] != '|')
 	{
+		printf("line + *i = %s\n", line + *i);
 		(*i)++;
 		if (line[*i] && ft_is_whitespaces(line[*i]))
 			*i = ft_check_whitespace(line, *i);
@@ -39,6 +40,8 @@ void	ft_init_token_cmd_pipe(t_token *new, t_cmd *cmd, char *cell, int *i)
 	char	**args;
 	int		j;
 
+	printf("cell = %s\n", cell + *i);
+	printf("is_pipe_init = %d\n", ft_is_pipe_init(cell, i));
 	while (ft_is_pipe_init(cell, i))
 	{
 		cmd->pipe = 1;
@@ -48,6 +51,7 @@ void	ft_init_token_cmd_pipe(t_token *new, t_cmd *cmd, char *cell, int *i)
 		cmd->next->cmd = NULL;
 		cmd->next->error = 0;
 		args = ft_get_args(cell, i);
+		printf("args = %s\n", args[0]);
 		cmd->next->args = args;
 		j = 0;
 		while (cmd->next->args && cmd->next->args[j])

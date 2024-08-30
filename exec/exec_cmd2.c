@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 17:02:14 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/08/29 18:04:31 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/08/30 16:43:59 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	ft_exec_single_cmd(t_exec_utils *e_utils, t_cmd *cmd, t_exec *exec,
 	if (exec->pid == 0)
 	{
 		if (cmd->redir)
-			handle_redir_dup(exec, cmd);
+			handle_redir_dup(exec, cmd, last);
 		reset_fd(exec);
 		e_utils->envp = ft_free_envp(e_utils);
 		exec_command(cmd, e_utils);
