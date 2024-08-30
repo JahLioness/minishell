@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 10:44:59 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/08/30 14:13:19 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/08/30 18:18:15 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -217,7 +217,6 @@ char				**ft_get_args(char *cell, int *i);
 char				*ft_check_expand(char *str, t_env **env, int j);
 char				**ft_wildcard_check(char **args, int j);
 char				**ft_init_wildcard(char **args, int j);
-char				**ft_check_redir_args(t_token *token);
 char				**ft_check_redir_args_utils(t_token *redir, char **ret);
 char				*ft_verif_arg(char **str, t_env **env, t_cmd *cmd, int j);
 char				*ft_check_acc_expand(char *str, t_env **env, t_cmd *cmd,
@@ -236,6 +235,7 @@ char				*ft_get_redir_file(char *str, int *i, char *tofree);
 char				*ft_get_redir_type(char *str, int *i);
 void				set_redir_append(t_redir *current, t_exec *exec);
 void				set_redir_output(t_redir *current, t_exec *exec);
+void				ft_check_redir_arg(t_cmd *new, char *cell, int *i);
 
 /*			BUILTINS		*/
 int					ft_echo(int fd, char **str, char **flag);

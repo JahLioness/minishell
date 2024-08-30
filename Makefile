@@ -33,6 +33,7 @@ SRC = main.c \
 		token/args_utils2.c \
 		token/redir_utils.c \
 		token/redir_utils2.c \
+		token/redir_utils3.c \
 		builtin/cd.c \
 		builtin/cd_utils.c \
 		builtin/echo.c \

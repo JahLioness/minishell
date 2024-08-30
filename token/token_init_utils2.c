@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 13:59:34 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/08/30 17:59:20 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/08/30 18:13:10 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,10 +40,8 @@ void	ft_init_token_cmd_pipe(t_token *new, t_cmd *cmd, char *cell, int *i)
 	char	**args;
 	int		j;
 
-	printf("cell = %s\n", cell + *i);
 	while (ft_is_pipe_init(cell, i))
 	{
-		printf("here\n");
 		cmd->pipe = 1;
 		cmd->next = ft_calloc(sizeof(t_cmd), 1);
 		if (!cmd->next)
@@ -51,7 +49,6 @@ void	ft_init_token_cmd_pipe(t_token *new, t_cmd *cmd, char *cell, int *i)
 		cmd->next->cmd = NULL;
 		cmd->next->error = 0;
 		args = ft_get_args(cell, i);
-		printf("args = %s\n", args[0]);
 		cmd->next->args = args;
 		j = 0;
 		while (cmd->next->args && cmd->next->args[j])
