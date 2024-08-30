@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_cmd.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
+/*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 16:45:28 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/08/30 14:13:07 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/08/30 19:06:11 by andjenna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ void	ft_exec_builtins(t_ast *root, t_cmd *cmd, t_exec_utils *e_utils)
 	t_mini	*last;
 
 	last = ft_minilast(*e_utils->mini);
-	if (ft_is_builtin(cmd->cmd))
+	if (ft_is_builtin(cmd->cmd) && ft_strcmp(cmd->cmd, "exit"))
 	{
 		handle_builtin(cmd, last, cmd->redir, &cmd->exec);
 		ft_close_pipe(cmd);
@@ -86,11 +86,12 @@ int	ft_exec_lst_cmd(t_ast *root, t_exec_utils *e_utils)
 	reset_fd(&cmd->exec);
 	while (++i < len_cmd)
 	{
-		printf(" PIPE cmd->cmd = %s\n", cmd->cmd);
-		// printf("PIPE cmd->redir->file == %s\n", cmd->redir->file);
+		if ((cmd->cmd && cmd->args) || (!cmd->cmd && *cmd->args))
+			handle_expand(cmd, last);
 		if (pipe(cmd->exec.pipe_fd) < 0)
 			return (ft_putendl_fd("minishell: pipe failed", 2), 1);
-		ft_exec_builtins(root, cmd, e_utils);
+		if (ft_is_builtin(cmd->cmd))
+			ft_exec_builtins(root, cmd, e_utils);
 		if (!ft_is_builtin(cmd->cmd) && ft_strcmp(cmd->cmd, "exit"))
 			cmd->exec.status = ft_exec_multi_lst_cmd(e_utils, cmd, i, len_cmd);
 		reset_fd(&cmd->exec);

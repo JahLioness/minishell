@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   process_child.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
+/*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/24 18:36:42 by andjenna          #+#    #+#             */
-/*   Updated: 2024/08/29 19:39:33 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/08/30 18:41:31 by andjenna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,11 +43,9 @@ int	last_child(t_cmd *cmd)
 	close_fd(cmd->exec.pipe_fd, -1);
 	if (cmd->exec.prev_fd != STDIN_FILENO && cmd->exec.prev_fd != -1)
 	{
-		printf("LAST CHILD cmd->exec.prev_fd: %d\n", cmd->exec.prev_fd);
 		dup2(cmd->exec.prev_fd, STDIN_FILENO);
 		close(cmd->exec.prev_fd);
 	}
-	printf("LAST CHILD cmd->exec.redir_out: %d\n", cmd->exec.redir_out);
 	if (cmd->exec.redir_out != STDOUT_FILENO && cmd->exec.redir_out != -1)
 	{
 		dup2(cmd->exec.redir_out, STDOUT_FILENO);

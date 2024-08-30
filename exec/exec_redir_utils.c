@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_redir_utils.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
+/*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 13:01:09 by andjenna          #+#    #+#             */
-/*   Updated: 2024/08/30 14:13:37 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/08/30 18:41:17 by andjenna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,6 @@ void	ft_handle_redir_file(t_cmd *cmd, t_mini *last)
 		file = ft_trim_quote(current->file, 0, 0);
 	free(current->file);
 	current->file = file;
-	printf("current->file = %s\n", current->file);
 	if (!ft_strcmp(current->file, "*"))
 	{
 		ft_putstr_fd("minishell: ", 2);
