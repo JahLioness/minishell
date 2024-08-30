@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 13:01:09 by andjenna          #+#    #+#             */
-/*   Updated: 2024/08/29 19:27:16 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/08/30 14:13:37 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void	handle_redir(t_cmd *cmd, t_mini **mini)
 	last = ft_minilast(*mini);
 	if (cmd->redir)
 	{
-		ft_handle_redir_file(cmd);
+		ft_handle_redir_file(cmd, last);
 		reset_fd(exec);
 	}
 	else if (!cmd->redir && cmd->args && !ft_strcmp(cmd->args[0], "cat")
@@ -70,11 +70,10 @@ void	handle_redir(t_cmd *cmd, t_mini **mini)
 	}
 }
 
-void	handle_redir_dup(t_exec *exec, t_cmd *cmd)
+void	handle_redir_dup(t_exec *exec, t_cmd *cmd, t_mini *last)
 {
 	if (cmd->redir)
-		ft_handle_redir_file(cmd);
-	printf("IN DUP cmd->exec.redir_in: %d\n", cmd->exec.redir_in);
+		ft_handle_redir_file(cmd, last);
 	if (cmd->redir && cmd->exec.redir_out != -1 && cmd->exec.redir_out != STDOUT_FILENO)
 	{
 		dup2(cmd->exec.redir_out, STDOUT_FILENO);
@@ -93,7 +92,7 @@ void	handle_redir_dup(t_exec *exec, t_cmd *cmd)
 	}
 }
 
-void	ft_handle_redir_file(t_cmd *cmd)
+void	ft_handle_redir_file(t_cmd *cmd, t_mini *last)
 {
 	t_redir	*current;
 	t_exec	*exec;
@@ -101,9 +100,13 @@ void	ft_handle_redir_file(t_cmd *cmd)
 
 	current = cmd->redir;
 	exec = &cmd->exec;
-	file = ft_trim_quote(current->file, 0, 0);
+	if (ft_is_expandable(current->file))
+		file = handle_expand_heredoc(cmd, last, current->file);
+	else
+		file = ft_trim_quote(current->file, 0, 0);
 	free(current->file);
 	current->file = file;
+	printf("current->file = %s\n", current->file);
 	if (!ft_strcmp(current->file, "*"))
 	{
 		ft_putstr_fd("minishell: ", 2);

@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 16:45:28 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/08/29 19:38:30 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/08/30 14:13:07 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,13 +31,16 @@ void	ft_close_pipe(t_cmd *cmd)
 
 int	ft_exec_multi_lst_cmd(t_exec_utils *e_utils, t_cmd *cmd, int i, int len_cmd)
 {
+	t_mini	*last;
+
+	last = ft_minilast(*e_utils->mini);
 	cmd->exec.pid = fork();
 	if (cmd->exec.pid < 0)
 		return (ft_putendl_fd("minishell: fork failed", 2), 1);
 	if (cmd->exec.pid == 0)
 	{
 		if (cmd->redir)
-			handle_redir_dup(&cmd->exec, cmd);
+			handle_redir_dup(&cmd->exec, cmd, last);
 		e_utils->envp = ft_free_envp(e_utils);
 		process_child(cmd, i, len_cmd);
 		reset_fd(&cmd->exec);

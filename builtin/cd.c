@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 16:00:19 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/08/29 14:46:51 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/08/30 14:07:36 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,25 @@ static char	*ft_get_new_dir(char *old_dir, char *new_dir, t_env **env)
 		new_dir = ft_strndup(old_dir, (ft_strlen(old_dir)
 					- ft_strlen(ft_strchr(ft_strchr(old_dir, '/') + 6, '/'))));
 	}
+	else if (!ft_strncmp(new_dir, "~", 1))
+		new_dir = ft_gestion_tilde(env, new_dir);
 	return (new_dir);
+}
+
+static int	ft_no_oldir(t_env **env, char *new_dir)
+{
+	t_env	*status;
+
+	status = ft_get_exit_status(env);
+	if (status)
+		ft_change_exit_status(status, ft_itoa(0));
+	else
+		ft_envadd_back(env, ft_envnew(ft_strdup("?"), ft_itoa(0)));
+	ft_putstr_fd("minishell: cd: error retrieving current directory:", 2);
+	ft_putstr_fd("getcwd: cannot access parent directories:", 2);
+	ft_putendl_fd("No such file or directory", 2);
+	free(new_dir);
+	return (0);
 }
 
 int	ft_cd_util(char **path, t_env **env)
@@ -62,19 +80,10 @@ int	ft_cd_util(char **path, t_env **env)
 
 	new_dir = ft_strdup(path[1]);
 	old_dir = getcwd(NULL, 0);
-	if (!old_dir)
-	{
-		status = ft_get_exit_status(env);
-		if (status)
-			ft_change_exit_status(status, ft_itoa(0));
-		else
-			ft_envadd_back(env, ft_envnew(ft_strdup("?"), ft_itoa(0)));
-		ft_putstr_fd("minishell: cd: error retrieving current directory:", 2);
-		ft_putstr_fd("getcwd: cannot access parent directories:", 2);
-		ft_putendl_fd("No such file or directory", 2);
-		return (free(new_dir), 0);
-	}
 	new_dir = ft_get_new_dir(old_dir, new_dir, env);
+	if (!old_dir && (ft_strncmp(new_dir, ft_get_old_pwd(env), ft_strlen(new_dir)
+				- 1) && ft_strcmp(new_dir, ft_get_home(env))))
+		return (ft_no_oldir(env, new_dir));
 	if (chdir(new_dir) == 0)
 		ft_cd_utils(env, old_dir);
 	else

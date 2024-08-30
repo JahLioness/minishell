@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 10:44:59 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/08/29 17:04:44 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/08/30 14:13:19 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -257,6 +257,9 @@ void				ft_echo_wt_flag(int fd, char **str, char **flag);
 void				ft_free_exit(t_ast *root, t_mini **mini, char **envp,
 						char *prompt);
 void				ft_print_exit(char *str);
+char				*ft_get_old_pwd(t_env **env);
+char				*ft_get_home(t_env **env);
+char				*ft_gestion_tilde(t_env **env, char *new_dir);
 
 /*			EXEC			*/
 int					exec_command(t_cmd *cmd, t_exec_utils *e_utils);
@@ -312,10 +315,10 @@ int					ft_waitpid(t_cmd *cmd, t_mini *last, int len_cmd);
 
 /*			EXEC_REDIR		*/
 void				handle_redir(t_cmd *cmd, t_mini **mini);
-void				ft_handle_redir_file(t_cmd *cmd);
+void				ft_handle_redir_file(t_cmd *cmd, t_mini *last);
 void				cat_wt_symbole(t_cmd *cmd, t_exec *exec);
 void				builtin_w_redir(t_redir *tmp_redir, t_exec *exec);
-void				handle_redir_dup(t_exec *exec, t_cmd *cmd);
+void				handle_redir_dup(t_exec *exec, t_cmd *cmd, t_mini *last);
 void				set_redir(t_redir *current, t_exec *exec, t_cmd *cmd);
 
 /*			AST				*/
