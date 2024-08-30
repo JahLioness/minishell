@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 15:33:02 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/06/21 13:09:46 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/08/30 14:01:20 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ int		ft_isprint(int c);
 void	ft_free_tab(char **tab);
 char	*ft_strchr(const char *s, int c);
 char	*ft_strdup(const char *s);
+char	*ft_strdup_free(const char *s);
 size_t	ft_strlcat(char *dest, const char *src, size_t size);
 size_t	ft_strlcpy(char *dest, const char *src, size_t size);
 size_t	ft_strlen(const char *s);

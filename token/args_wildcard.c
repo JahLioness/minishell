@@ -6,11 +6,24 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 15:01:54 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/07/18 16:31:53 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/08/26 14:04:23 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+static void	ft_skip_idx(int *i, int *j)
+{
+	(*i)++;
+	(*j)++;
+}
+
+static int	ft_skip_star(char *pattern, int *i)
+{
+	while (pattern[*i] == '*')
+		(*i)++;
+	return (*i);
+}
 
 int	ft_compare(char *pattern, char *str)
 {
@@ -26,15 +39,9 @@ int	ft_compare(char *pattern, char *str)
 	while (str[j])
 	{
 		if (pattern[i] == '*')
-		{
-			star_idx = i++;
-			match_idx = j;
-		}
+			ft_skip_m_s_idx(&i, j, &star_idx, &match_idx);
 		else if (pattern[i] == str[j])
-		{
-			i++;
-			j++;
-		}
+			ft_skip_idx(&i, &j);
 		else if (star_idx != -1)
 		{
 			i = star_idx + 1;
@@ -43,8 +50,7 @@ int	ft_compare(char *pattern, char *str)
 		else
 			return (0);
 	}
-	while (pattern[i] == '*')
-		i++;
+	i = ft_skip_star(pattern, &i);
 	return (pattern[i] == '\0');
 }
 

@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 11:51:33 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/06/20 16:36:08 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/08/22 13:28:45 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,7 @@
 
 static t_token	*ft_check_logic_op(t_token *current, t_token *root)
 {
-	if (current->type == T_AND || current->type == T_OR
-		|| current->type == T_PIPE)
+	if (current->type == T_AND || current->type == T_OR)
 	{
 		if (!root || ft_check_bracket(root) > ft_check_bracket(current))
 			root = current;
@@ -34,19 +33,6 @@ static t_token	*ft_find_root(t_token *first, t_token *last)
 	{
 		root = ft_check_logic_op(current, root);
 		current = current->prev;
-	}
-	if (!root)
-	{
-		current = last;
-		while (current && current != first)
-		{
-			if (current->type == T_PIPE)
-			{
-				root = current;
-				break ;
-			}
-			current = current->prev;
-		}
 	}
 	return (root);
 }

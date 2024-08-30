@@ -6,7 +6,7 @@
 /*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 18:09:22 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/08/21 15:15:53 by andjenna         ###   ########.fr       */
+/*   Updated: 2024/08/23 18:35:16 by andjenna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ int	ft_exec_no_var(char *arg, t_env **env, int fd)
 	return (status);
 }
 
-int	ft_exec_export(t_token *token, t_env **env, int fd)
+int	ft_exec_export(t_cmd *cmd, t_env **env, int fd)
 {
 	char			**args;
 	int				i;
@@ -85,7 +85,7 @@ int	ft_exec_export(t_token *token, t_env **env, int fd)
 
 	i = 1;
 	utils = ft_init_export_utils();
-	args = token->cmd->args;
+	args = cmd->args;
 	if (!args[i])
 		return (ft_export(&utils, env, fd));
 	while (args[i])

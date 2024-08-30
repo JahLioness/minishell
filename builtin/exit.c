@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
+/*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 11:33:20 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/07/18 16:28:32 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/08/24 19:12:59 by andjenna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 int	ft_exit_one_ok(t_ast *root, t_mini **mini, char *prompt, char **envp)
 {
 	char	*compare;
+	long	retour;
 	t_env	*status;
 	t_mini	*last;
-	long	retour;
 
 	last = ft_minilast(*mini);
 	compare = ft_itoa(ft_atol(root->token->cmd->args[1]));
@@ -37,27 +37,23 @@ int	ft_exit_one_ok(t_ast *root, t_mini **mini, char *prompt, char **envp)
 int	ft_exit_one_arg(t_ast *root, t_mini **mini, char *prompt, char **envp)
 {
 	char	*compare;
+	char	*tmp;
+	char	*tmp2;
 
 	compare = ft_itoa(ft_atol(root->token->cmd->args[1]));
 	if (root->token->cmd->args[1][0] == '+')
 	{
-		char *tmp = ft_strndup(&root->token->cmd->args[1][0], 1);
-		char *tmp2 = compare;
+		tmp = ft_strndup(&root->token->cmd->args[1][0], 1);
+		tmp2 = compare;
 		compare = ft_strjoin_free(tmp, tmp2);
 		free(tmp2);
 	}
 	if (!ft_is_num(root->token->cmd->args[1]))
-	{
-		ft_print_exit(root->token->cmd->args[1]);
-		ft_free_exit(root, mini, envp, prompt);
-		return (free(compare), 2);
-	}
+		return (ft_print_exit(root->token->cmd->args[1]), ft_free_exit(root,
+				mini, envp, prompt), free(compare), 2);
 	else if (ft_strcmp(compare, root->token->cmd->args[1]))
-	{
-		ft_print_exit(root->token->cmd->args[1]);
-		ft_free_exit(root, mini, envp, prompt);
-		return (free(compare), 2);
-	}
+		return (ft_print_exit(root->token->cmd->args[1]), ft_free_exit(root,
+				mini, envp, prompt), free(compare), 2);
 	else
 		return (free(compare), ft_exit_one_ok(root, mini, prompt, envp));
 }

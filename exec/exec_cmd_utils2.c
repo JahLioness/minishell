@@ -3,73 +3,93 @@
 /*                                                        :::      ::::::::   */
 /*   exec_cmd_utils2.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 17:05:12 by andjenna          #+#    #+#             */
-/*   Updated: 2024/08/21 15:09:25 by andjenna         ###   ########.fr       */
+/*   Updated: 2024/08/28 18:46:26 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	handle_builtin(t_ast *root, t_mini *last, t_redir *tmp, t_exec *exec)
+void	handle_builtin(t_cmd *cmd, t_mini *last, t_redir *tmp, t_exec *exec)
 {
 	char	**envp;
 
+	tmp = cmd->redir;
 	envp = ft_get_envp(&last->env);
 	if (tmp && tmp->type != REDIR_HEREDOC)
 		builtin_w_redir(tmp, exec);
 	else
-		exec->redir_out = STDOUT_FILENO;
-	exec->status = ft_exec_builtin(root->token, &last->env, exec->redir_out);
+	{
+		if (cmd->next)
+			exec->redir_out = exec->pipe_fd[1];
+		else
+			exec->redir_out = STDOUT_FILENO;
+	}
+	exec->status = ft_exec_builtin(cmd, &last->env, exec->redir_out);
 	reset_fd(exec);
 	ft_free_tab(envp);
 	envp = NULL;
 }
 
-void	handle_exit(t_ast *root, t_mini **mini, t_env *e_status, char *prompt)
+void	handle_exit(t_ast *root, t_mini **mini, char *prompt)
 {
-	t_exec	*exec;
+	t_exec	exec;
 	t_mini	*last;
+	t_env	*e_status;
 	char	**envp;
 
 	exec = root->token->cmd->exec;
 	last = ft_minilast(*mini);
 	envp = ft_get_envp(&(*mini)->env);
-	exec->status = ft_exit(root, mini, prompt, envp);
+	exec.status = ft_exit(root, mini, prompt, envp);
 	e_status = ft_get_exit_status(&last->env);
-	ft_change_exit_status(e_status, ft_itoa(exec->status));
+	ft_change_exit_status(e_status, ft_itoa(exec.status));
 	ft_free_tab(envp);
 	envp = NULL;
 }
 
-int	handle_sigint(t_exec *exec, t_mini *last, t_env *e_status)
+int	handle_sigint(t_exec *exec, t_mini *last)
 {
-	if (WIFEXITED(exec->status))
+	t_env	*e_status;
+
+	e_status = ft_get_exit_status(&last->env);
+	if (g_sig == SIGINT)
 	{
-		e_status = ft_get_exit_status(&last->env);
-		if (g_sig == SIGINT)
-		{
-			kill(exec->pid, SIGKILL);
-			ft_change_exit_status(e_status, ft_itoa(130));
-			g_sig = 0;
-			return (130);
-		}
-		return (set_e_status(exec->status, last));
+		kill(exec->pid, SIGKILL);
+		ft_change_exit_status(e_status, ft_itoa(130));
+		g_sig = 0;
+		return (130);
 	}
-	return (exec->status);
+	return (set_e_status(exec->status, last));
 }
 
-int	handle_sigquit(char **envp, t_exec *exec, t_env *e_status)
+int	handle_sigquit(t_exec *exec, t_mini *last)
 {
-	if (g_sig == SIGQUIT)
+	t_env	*e_status;
+
+	e_status = ft_get_exit_status(&last->env);
+	reset_fd(exec);
+	ft_change_exit_status(e_status, ft_itoa(131));
+	g_sig = 0;
+	return (131);
+}
+
+int	ft_waitpid(t_cmd *cmd, t_mini *last, int len_cmd)
+{
+	int	i;
+
+	i = 0;
+	while (i <= len_cmd)
 	{
-		if (envp)
-			ft_free_tab(envp);
-		reset_fd(exec);
-		ft_change_exit_status(e_status, ft_itoa(131));
-		g_sig = 0;
-		return (131);
+		close_fd(cmd->exec.pipe_fd, cmd->exec.prev_fd);
+		waitpid(cmd->exec.pid, &cmd->exec.status, 0);
+		if (cmd->next)
+			cmd = cmd->next;
+		i++;
 	}
-	return (exec->status);
+	if (WIFEXITED(cmd->exec.status))
+		return (handle_sigint(&cmd->exec, last));
+	return (cmd->exec.status);
 }

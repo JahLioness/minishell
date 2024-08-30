@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   args_init2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 14:31:53 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/08/21 15:05:41 by andjenna         ###   ########.fr       */
+/*   Updated: 2024/08/30 18:16:29 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,12 @@ int	ft_is_expandable(char *str)
 				if (quote == '"' && str[i] == '$')
 					return (1);
 			}
-			if (str[i] == quote)
-				i++;
+			if (str[i++] == quote)
+				quote = 0;
 		}
 		if (!quote && str[i] == '$')
 			return (1);
-		if (str[i])
+		if (str[i] && str[i] != '"' && str[i] != '\'')
 			i++;
 	}
 	return (0);
@@ -98,7 +98,7 @@ char	**ft_get_args(char *cell, int *i)
 			k = ft_get_index_arg_utils(cell, i);
 			args[j] = ft_strndup(cell + k, (*i - k));
 			if (!args[j])
-				return (ft_free_split(j, args), NULL);
+				break ;
 			j++;
 		}
 		if (cell[*i] && ft_is_not_stop(cell[*i]) && cell[*i] != '$'

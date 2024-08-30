@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 12:52:28 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/07/24 14:08:51 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/08/26 13:39:27 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ t_token	*ft_newtoken(char *cell, t_token_type type, int *i)
 	if (!new)
 		return (NULL);
 	new->type = type;
-	if (type == T_AND || type == T_AND_E || type == T_OR || type == T_PIPE
+	if (type == T_AND || type == T_AND_E || type == T_OR
 		|| type == O_BRACKET || type == C_BRACKET)
 	{
 		if (type == T_AND || type == T_OR)
@@ -44,9 +44,6 @@ static void	ft_switch(char *line, int *i, t_mini *mini)
 				i));
 	else if (line[*i] && line[*i] == '|' && line[*i + 1] == '|')
 		ft_tokenadd_back(&mini->tokens, ft_newtoken(line, T_OR, i));
-	else if (line[*i] && line[*i] == '|' && line[*i + 1] != '|')
-		ft_tokenadd_back(&mini->tokens, ft_newtoken(line, T_PIPE,
-				i));
 	else if (line[*i] && line[*i] == '&' && line[*i + 1] == '&')
 		ft_tokenadd_back(&mini->tokens, ft_newtoken(line, T_AND,
 				i));

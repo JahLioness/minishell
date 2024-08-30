@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token_utils2.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 14:31:02 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/08/21 15:00:58 by andjenna         ###   ########.fr       */
+/*   Updated: 2024/08/29 12:08:03 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,19 +51,33 @@ void	ft_clear_token_redir(t_redir *redir)
 	{
 		tmp = redir;
 		redir = redir->next;
-		free(tmp->file);
 		if (tmp->file_heredoc)
 		{
 			if (access(tmp->file_heredoc, F_OK) == 0)
 				unlink(tmp->file_heredoc);
 			free(tmp->file_heredoc);
 		}
+		free(tmp->file);
 		free(tmp);
 	}
 }
 
-void	ft_clear_exec(t_exec *exec)
+void	ft_clear_cmd(t_cmd **cmd)
 {
-	free(exec);
-	exec = NULL;
+	t_cmd	*tmp;
+
+	while (*cmd)
+	{
+		tmp = *cmd;
+		*cmd = (*cmd)->next;
+		if (tmp->args)
+			ft_free_tab(tmp->args);
+		if (tmp->cmd && tmp->redir)
+			ft_clear_redir(tmp->redir);
+		else if (tmp && tmp->redir && !tmp->cmd)
+			ft_clear_token_redir(tmp->redir);
+		if (tmp->cmd)
+			free(tmp->cmd);
+		free(tmp);
+	}
 }

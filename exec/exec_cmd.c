@@ -6,154 +6,101 @@
 /*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 16:45:28 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/08/21 15:16:47 by andjenna         ###   ########.fr       */
+/*   Updated: 2024/08/30 20:01:54 by andjenna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int	ft_exec_builtin(t_token *token, t_env **env, int fd)
+void	ft_close_pipe(t_cmd *cmd)
 {
-	t_env	*status;
-	int		exit_status;
-
-	exit_status = 0;
-	if (!ft_strcmp(token->cmd->cmd, "echo"))
-		exit_status = ft_echo(fd, ft_get_args_echo(token->cmd->args, env),
-				ft_get_flag_echo(token->cmd->args));
-	else if (!ft_strcmp(token->cmd->cmd, "cd"))
-		exit_status = ft_cd(token->cmd->args, env);
-	else if (!ft_strcmp(token->cmd->cmd, "pwd"))
-		exit_status = ft_pwd(fd, env);
-	else if (!ft_strcmp(token->cmd->cmd, "export"))
-		exit_status = ft_exec_export(token, env, fd);
-	else if (!ft_strcmp(token->cmd->cmd, "unset"))
-		exit_status = ft_exec_unset(token->cmd, env);
-	else if (!ft_strcmp(token->cmd->cmd, "env"))
-		exit_status = ft_print_env(env, fd);
-	status = ft_get_exit_status(env);
-	ft_change_exit_status(status, ft_itoa(exit_status));
-	return (exit_status);
-}
-
-int	ft_is_builtin(char *cmd)
-{
-	if (!ft_strcmp(cmd, "echo") || !ft_strcmp(cmd, "cd") || !ft_strcmp(cmd,
-			"pwd") || !ft_strcmp(cmd, "export") || !ft_strcmp(cmd, "unset")
-		|| !ft_strcmp(cmd, "env"))
-		return (1);
-	return (0);
-}
-
-void	ft_handle_empty_first_arg(t_ast *root)
-{
-	int	i;
-
-	i = 0;
-	if (root->token->cmd->cmd)
-		free(root->token->cmd->cmd);
-	root->token->cmd->cmd = ft_strdup(root->token->cmd->args[1]);
-	i = 0;
-	while (root->token->cmd->args[i + 1])
+	if (cmd->exec.prev_fd != -1)
+		close(cmd->exec.prev_fd);
+	if (cmd->next)
 	{
-		free(root->token->cmd->args[i]);
-		root->token->cmd->args[i] = ft_strdup(root->token->cmd->args[i + 1]);
-		i++;
+		close(cmd->exec.pipe_fd[1]);
+		if (cmd->next->redir && (cmd->next->redir->type == REDIR_HEREDOC || cmd->next->redir->type == REDIR_INPUT))
+		{
+			printf("here\n\n");
+			close(cmd->exec.pipe_fd[0]);
+			cmd->next->exec.prev_fd = cmd->next->exec.redir_in;
+		}
+		else
+			cmd->next->exec.prev_fd = cmd->exec.pipe_fd[0];
 	}
-	free(root->token->cmd->args[i]);
-	root->token->cmd->args[i] = NULL;
 }
 
-void	handle_expand(t_ast *root, t_mini *last)
-{
-	int	i;
-
-	i = 0;
-	while (root->token->cmd->args[i])
-	{
-		root->token->cmd->args[i] = ft_verif_arg(root->token->cmd->args,
-				&last->env, root->token->cmd, i);
-		i++;
-	}
-	root->token->cmd->args = ft_trim_quote_args(root->token->cmd->args);
-	if (root->token->cmd->args && root->token->cmd->args[0])
-	{
-		if (root->token->cmd->cmd)
-			free(root->token->cmd->cmd);
-		root->token->cmd->cmd = ft_strdup(root->token->cmd->args[0]);
-	}
-	if (root->token->cmd->args && !*root->token->cmd->args[0]
-		&& root->token->cmd->args[1])
-		ft_handle_empty_first_arg(root);
-}
-
-int	ft_exec_cmd(t_ast *root, t_ast *granny, t_mini **mini, char *prompt)
+int	ft_exec_multi_lst_cmd(t_exec_utils *e_utils, t_cmd *cmd, int i, int len_cmd)
 {
 	t_mini	*last;
-	t_env	*e_status;
-	t_exec	*exec;
-	t_cmd	*cmd;
-	t_redir	*tmp;
-	char	**envp;
 
-	tmp = NULL;
-	e_status = NULL;
-	cmd = root->token->cmd;
-	exec = cmd->exec;
-	if (cmd->redir)
-		tmp = cmd->redir;
-	last = ft_minilast(*mini);
-	envp = ft_get_envp(&last->env);
-	// gestion des quotes et expand
-	if (root->token->type == T_CMD && root->token->cmd)
+	last = ft_minilast(*e_utils->mini);
+	cmd->exec.pid = fork();
+	if (cmd->exec.pid < 0)
+		return (ft_putendl_fd("minishell: fork failed", 2), 1);
+	if (cmd->exec.pid == 0)
 	{
-		if ((root->token->cmd->cmd && root->token->cmd->args)
-			|| (!root->token->cmd->cmd && *root->token->cmd->args))
-			handle_expand(root, last);
-		// premier appel de la fonction pour verifier les file
-		if (root->token->cmd->redir)
-			handle_redir(root, mini, e_status);
-		ft_set_var_underscore(root->token->cmd->args, &last->env, envp);
-		// si pas d'erreur, on execute la commande
-		if (!exec->error_ex)
-		{
-			//FAIRE MODIFICTION SUR LES FICHIER DE REDICTION POUR LES BUILTINS
-			if (ft_is_builtin(root->token->cmd->cmd))
-				handle_builtin(root, last, tmp, exec);
-			else if (!ft_strcmp(root->token->cmd->cmd, "exit"))
-				handle_exit(root, mini, e_status, prompt);
-			else
-			{
-				ft_get_signal_cmd();
-				reset_fd(exec);
-				exec->pid = fork();
-				if (exec->pid < 0)
-					return (ft_putendl_fd("minishell: fork failed", 2), 1);
-				if (exec->pid == 0)
-				{
-					// deuxieme appel de la fonction pour verifier les file et here_doc
-					if (root->token->cmd->redir)
-						handle_redir_dup(root, exec, cmd);
-					reset_fd(exec);
-					ft_free_tab(envp);
-					// execution de la commande
-					exec_command(root, granny, mini, prompt);
-					exit(EXIT_SUCCESS);
-				}
-				else
-				{
-					if (envp)
-						ft_free_tab(envp);
-					reset_fd(exec);
-					waitpid(exec->pid, &exec->status, 0);
-					return (handle_sigint(exec, last, e_status));
-				}
-			}
-		}
+		if (cmd->redir)
+			handle_redir_dup(&cmd->exec, cmd, last);
+		e_utils->envp = ft_free_envp(e_utils);
+		process_child(cmd, i, len_cmd);
+		reset_fd(&cmd->exec);
+		exec_command(cmd, e_utils);
+		exit(EXIT_SUCCESS);
 	}
-	e_status = ft_get_exit_status(&last->env);
-	handle_sigquit(envp, exec, e_status);
-	if (envp)
-		ft_free_tab(envp);
-	return (exec->status);
+	else
+	{
+		ft_close_pipe(cmd);
+		return (0);
+	}
+}
+
+void	ft_exec_builtins(t_ast *root, t_cmd *cmd, t_exec_utils *e_utils)
+{
+	t_mini	*last;
+
+	last = ft_minilast(*e_utils->mini);
+	if (ft_is_builtin(cmd->cmd))
+	{
+		handle_builtin(cmd, last, cmd->redir, &cmd->exec);
+		ft_close_pipe(cmd);
+	}
+	else if (!ft_strcmp(cmd->cmd, "exit"))
+	{
+		e_utils->envp = ft_free_envp(e_utils);
+		handle_exit(root, e_utils->mini, e_utils->prompt);
+	}
+}
+
+//QUAND J'APPELL LA FOCNTION D'EXPAND LES HEREDOC NE FONCTION PLUS AVEC LES PIPE
+// << li | cat << li | cat (UN FD RESTE OUVERT)
+
+int	ft_exec_lst_cmd(t_ast *root, t_exec_utils *e_utils)
+{
+	int		len_cmd;
+	int		i;
+	t_mini	*last;
+	t_cmd	*cmd;
+
+	i = -1;
+	last = ft_minilast(*e_utils->mini);
+	cmd = root->token->cmd;
+	len_cmd = ft_cmdsize(cmd);
+	ft_get_signal_cmd();
+	reset_fd(&cmd->exec);
+	while (++i < len_cmd)
+	{
+		// if ((cmd->cmd && cmd->args) || (!cmd->cmd && *cmd->args))
+		// 	handle_expand(cmd, last);
+		if (pipe(cmd->exec.pipe_fd) < 0)
+			return (ft_putendl_fd("minishell: pipe failed", 2), 1);
+		ft_exec_builtins(root, cmd, e_utils);
+		if (!ft_is_builtin(cmd->cmd) && ft_strcmp(cmd->cmd, "exit"))
+			cmd->exec.status = ft_exec_multi_lst_cmd(e_utils, cmd, i, len_cmd);
+		reset_fd(&cmd->exec);
+		if (cmd->next)
+			cmd = cmd->next;
+	}
+	e_utils->envp = ft_free_envp(e_utils);
+	return (ft_waitpid(root->token->cmd, last, len_cmd));
 }

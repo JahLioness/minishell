@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 18:55:12 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/06/26 13:18:34 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/08/26 14:04:07 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,8 @@ int	ft_check_star(char *arg)
 	int		i;
 	char	quote;
 
+	if (!arg)
+		return (0);
 	i = 0;
 	while (arg[i])
 	{
@@ -72,4 +74,10 @@ int	ft_check_star(char *arg)
 			i++;
 	}
 	return (0);
+}
+
+void	ft_skip_m_s_idx(int *i, int j, int *s_idx, int *m_idx)
+{
+	*s_idx = (*i)++;
+	*m_idx = j;
 }

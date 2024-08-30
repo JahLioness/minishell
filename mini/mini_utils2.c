@@ -6,11 +6,24 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/20 10:48:22 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/06/21 13:47:50 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/08/29 12:17:11 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+int	ft_check_operator(t_token *token)
+{
+	if (token->type == T_AND)
+		ft_putendl_fd("minishell: syntax error near unexpected token `&&'", 2);
+	else if (token->type == T_AND_E)
+		ft_putendl_fd("minishell: syntax error near unexpected token `&'", 2);
+	else if (token->type == T_OR)
+		ft_putendl_fd("minishell: syntax error near unexpected token `||'", 2);
+	else if (token->type == T_CMD)
+		ft_cmd_syntax_error(token);
+	return (0);
+}
 
 int	ft_verif_brack_f_line(t_token *token)
 {
@@ -52,16 +65,46 @@ int	ft_verif_line(t_token *token)
 void	ft_is_heredoc(t_mini *mini)
 {
 	t_token	*tmp;
+	t_cmd	*tmp_cmd;
 
 	tmp = mini->tokens;
 	while (tmp)
 	{
-		if (tmp->type == T_CMD && tmp->cmd && tmp->cmd->redir
-			&& tmp->cmd->redir->type == REDIR_HEREDOC)
+		if (tmp->type == T_CMD)
 		{
-			mini->is_heredoc = 1;
-			return ;
+			tmp_cmd = tmp->cmd;
+			while (tmp_cmd)
+			{
+				ft_set_heredoc_node(tmp_cmd, mini);
+				tmp_cmd = tmp_cmd->next;
+			}
 		}
 		tmp = tmp->next;
 	}
+}
+
+int	ft_check_redir_file(t_token *token)
+{
+	t_token	*tmp;
+	t_cmd	*tmp_cmd;
+	t_redir	*tmp_redir;
+
+	tmp = token;
+	while (tmp)
+	{
+		tmp_cmd = tmp->cmd;
+		while (tmp_cmd)
+		{
+			tmp_redir = tmp_cmd->redir;
+			while (tmp_redir)
+			{
+				if (!tmp_redir->file || !*tmp_redir->file)
+					return (1);
+				tmp_redir = tmp_redir->next;
+			}
+			tmp_cmd = tmp_cmd->next;
+		}
+		tmp = tmp->next;
+	}
+	return (0);
 }

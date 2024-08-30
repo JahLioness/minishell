@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_error.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 13:07:14 by andjenna          #+#    #+#             */
-/*   Updated: 2024/08/21 15:19:38 by andjenna         ###   ########.fr       */
+/*   Updated: 2024/08/27 16:04:11 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,14 +22,14 @@
 // ft_putstr_fd(": command not found\n", 2);
 // free(underscore);
 
-void	ft_exec_cmd_error(t_ast *root, t_mini **mini, char **envp, char *prompt)
+void	ft_exec_cmd_error(t_exec_utils *e_utils, char **envp)
 {
 	if (envp)
 		ft_free_tab(envp);
-	if (root)
-		ft_clear_ast(root);
-	ft_clear_lst(mini);
-	free(prompt);
+	if (e_utils->granny)
+		ft_clear_ast(e_utils->granny);
+	ft_clear_lst(e_utils->mini);
+	free(e_utils->prompt);
 }
 
 void	msg_error(char *msg, char *cmd, char *strerror)

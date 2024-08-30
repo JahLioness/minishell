@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir_utils2.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 14:35:49 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/08/21 14:38:56 by andjenna         ###   ########.fr       */
+/*   Updated: 2024/08/22 19:24:49 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,6 @@ void	ft_redir_addback(t_redir **redir, t_redir *new)
 	{
 		last = ft_redirlast(*redir);
 		last->next = new;
-		last->next->prev = last;
+		new->prev = last;
 	}
 }

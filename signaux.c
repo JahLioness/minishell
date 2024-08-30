@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signaux.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
+/*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 16:06:44 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/07/16 12:18:37 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/08/24 19:42:02 by andjenna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,22 +52,4 @@ void	ft_handler_sigquit(int signum)
 void	ft_get_signal_cmd(void)
 {
 	signal(SIGQUIT, ft_handler_sigquit);
-}
-
-void	ft_handler_heredoc(int signum, siginfo_t *info, void *context)
-{
-	(void)context;
-	g_sig = signum;
-	kill(info->si_pid, SIGINT);
-}
-
-void	ft_get_signal_heredoc(void)
-{
-	struct sigaction act;
-
-	ft_bzero(&act, sizeof(act));
-	act.sa_flags = SA_SIGINFO | SA_RESTART;
-	act.sa_sigaction = &ft_handler_heredoc;
-	signal(SIGQUIT, SIG_IGN);
-	sigaction(SIGINT, &act, NULL);
 }

@@ -1,40 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pwd.c                                              :+:      :+:    :+:   */
+/*   ft_strdup_free.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/04 15:58:35 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/08/28 14:09:18 by ede-cola         ###   ########.fr       */
+/*   Created: 2024/08/30 14:00:48 by ede-cola          #+#    #+#             */
+/*   Updated: 2024/08/30 14:01:03 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "libft.h"
 
-int	ft_pwd(int fd, t_env **env)
+char	*ft_strdup_free(const char *s)
 {
-	char	*pwd;
-	t_env	*tmp;
 	int		i;
+	char	*ret;
 
-	tmp = *env;
+	if (!s)
+		return (NULL);
+	ret = ft_calloc(ft_strlen(s) + 1, sizeof(char));
+	if (!ret)
+		return (NULL);
 	i = 0;
-	while (tmp)
+	while (s[i])
 	{
-		if (!ft_strcmp(tmp->key, "PWD"))
-		{
-			ft_putendl_fd(tmp->value, fd);
-			i++;
-			break ;
-		}
-		tmp = tmp->next;
+		ret[i] = s[i];
+		i++;
 	}
-	if (!i)
-	{
-		pwd = getcwd(NULL, 0);
-		ft_putendl_fd(pwd, fd);
-		free(pwd);
-	}
-	return (0);
+	ret[i] = '\0';
+	free((char *)s);
+	return (ret);
 }

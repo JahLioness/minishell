@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 16:22:24 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/07/24 13:51:23 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/08/28 12:31:44 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,5 +36,17 @@ char	**ft_trim_quote_args(char **args)
 	}
 	ret[i] = NULL;
 	ft_free_tab(args);
+	return (ret);
+}
+
+char	*ft_get_value_from_varu(t_env *env, char *str, int i, char *ret)
+{
+	if (ft_strrchr(env->value, '/'))
+	{
+		ret = ft_strjoin_free(ret, ft_strrchr(env->value, '/') + 1);
+		ret = ft_strjoin_free(ret, str + i + ft_strlen(env->key));
+	}
+	else
+		ret = ft_strjoin_free(ret, env->value);
 	return (ret);
 }
