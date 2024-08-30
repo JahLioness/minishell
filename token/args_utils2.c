@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 16:22:24 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/08/28 12:31:44 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/08/30 19:38:57 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,4 +49,25 @@ char	*ft_get_value_from_varu(t_env *env, char *str, int i, char *ret)
 	else
 		ret = ft_strjoin_free(ret, env->value);
 	return (ret);
+}
+
+int	ft_check_len(char *str, int i, char *key)
+{
+	int	len;
+
+	len = ft_strlen(str + i);
+	if (!ft_strncmp(str + i, key, len))
+		return (1);
+	else if (ft_strlen(key) == ft_strlen(str + i))
+		return (1);
+	else
+	{
+		while (str[len] && ft_is_whitespaces(str[len]))
+			len++;
+		if (str[len] == '\0' || ((str[len] == '"' || str[len] == '\'')
+				&& str[len + 1] == '\0'))
+			return (1);
+		else
+			return (0);
+	}
 }

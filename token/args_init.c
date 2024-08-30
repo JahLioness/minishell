@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 13:08:17 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/08/30 19:17:48 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/08/30 19:39:12 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,6 @@ int	ft_get_index_arg_utils(char *str, int *i)
 
 int	ft_get_index_ba_var(char *str, int i)
 {
-	while (str[i] && ft_is_whitespaces(str[i]))
-		i++;
 	while (str[i])
 	{
 		if (str[i] == '$')
@@ -69,8 +67,8 @@ char	*ft_search_value(char *ret, t_env **env, int i, char *str)
 	tmp = *env;
 	while (tmp)
 	{
-		if (!ft_strncmp(tmp->key, str + i, ft_strlen(str) - i)
-			&& ft_strlen(tmp->key) == ft_strlen(str + i))
+		if (!ft_strncmp(tmp->key, str + i, ft_strlen(tmp->key))
+			&& ft_check_len(str, i, tmp->key))
 		{
 			if (tmp->value)
 			{
@@ -96,11 +94,11 @@ char	*ft_check_expand(char *str, t_env **env, int j)
 	int		i;
 	char	*ret;
 
+	i = ft_get_index_ba_var(str, 0);
 	if (!ft_strchr(str, '$') || !ft_is_expandable(str))
 		return (ft_strdup(str));
-	i = ft_get_index_ba_var(str, 0);
-	if (str[i] == '$' && ((!ft_isalnum(str[i + 1]) && str[i + 1] != '?'
-				&& str[i + 1] != '_') || (j == 0 && str[i + 1] == '_')))
+	if (str[i] == '$' && ((!ft_isalnum(str[i + 1]) && str[i + 1] != '?' && str[i
+					+ 1] != '_') || (j == 0 && str[i + 1] == '_')))
 	{
 		ret = ft_strdup(str);
 		if (!ret)
