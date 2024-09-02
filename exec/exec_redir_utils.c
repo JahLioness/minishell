@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_redir_utils.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 13:01:09 by andjenna          #+#    #+#             */
-/*   Updated: 2024/08/30 18:41:17 by andjenna         ###   ########.fr       */
+/*   Updated: 2024/09/02 12:29:25 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ void	handle_redir(t_cmd *cmd, t_mini **mini)
 
 void	handle_redir_dup(t_exec *exec, t_cmd *cmd, t_mini *last)
 {
+	(void)last;
 	if (cmd->redir)
 		ft_handle_redir_file(cmd, last);
 	if (cmd->redir && cmd->exec.redir_out != -1 && cmd->exec.redir_out != STDOUT_FILENO)
@@ -92,6 +93,32 @@ void	handle_redir_dup(t_exec *exec, t_cmd *cmd, t_mini *last)
 	}
 }
 
+// void	ft_handle_redir_file(t_cmd *cmd, t_mini *last)
+// {
+// 	t_redir	*current;
+// 	t_exec	*exec;
+// 	char	*file;
+
+// 	current = cmd->redir;
+// 	exec = &cmd->exec;
+// 	if (ft_is_expandable(current->file))
+// 		file = handle_expand_heredoc(cmd, last, current->file);
+// 	else
+// 		file = ft_trim_quote(current->file, 0, 0);
+// 	if (cmd->heredoc)
+// 		free(current->file);
+// 	current->file = file;
+// 	if (!ft_strcmp(current->file, "*"))
+// 	{
+// 		ft_putstr_fd("minishell: ", 2);
+// 		ft_putstr_fd(current->file, 2);
+// 		ft_putendl_fd(": ambiguous redirect", 2);
+// 		exec->error_ex = 1;
+// 		return ;
+// 	}
+// 	set_redir(current, exec, cmd);
+// }
+
 void	ft_handle_redir_file(t_cmd *cmd, t_mini *last)
 {
 	t_redir	*current;
@@ -100,19 +127,25 @@ void	ft_handle_redir_file(t_cmd *cmd, t_mini *last)
 
 	current = cmd->redir;
 	exec = &cmd->exec;
-	if (ft_is_expandable(current->file))
-		file = handle_expand_heredoc(cmd, last, current->file);
-	else
-		file = ft_trim_quote(current->file, 0, 0);
-	free(current->file);
-	current->file = file;
-	if (!ft_strcmp(current->file, "*"))
+	while (current)
 	{
-		ft_putstr_fd("minishell: ", 2);
-		ft_putstr_fd(current->file, 2);
-		ft_putendl_fd(": ambiguous redirect", 2);
-		exec->error_ex = 1;
-		return ;
+		if (ft_is_expandable(current->file) && current->type != REDIR_HEREDOC)
+			file = handle_expand_heredoc(cmd, last, current->file);
+		else
+		{
+			file = ft_trim_quote(current->file, 0, 0);
+			free(current->file);
+		}
+		current->file = file;
+		if (!ft_strcmp(current->file, "*"))
+		{
+			ft_putstr_fd("minishell: ", 2);
+			ft_putstr_fd(current->file, 2);
+			ft_putendl_fd(": ambiguous redirect", 2);
+			exec->error_ex = 1;
+			return ;
+		}
+		set_redir(current, exec, cmd);
+		current = current->next;
 	}
-	set_redir(current, exec, cmd);
 }

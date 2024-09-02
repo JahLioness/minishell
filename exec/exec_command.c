@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 13:14:38 by andjenna          #+#    #+#             */
-/*   Updated: 2024/08/29 17:40:36 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/02 12:33:34 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,14 +90,16 @@ int	exec_command(t_cmd *cmd, t_exec_utils *e_utils)
 	full_path = NULL;
 	last = ft_minilast(*e_utils->mini);
 	envp = ft_get_envp(&last->env);
-	if (cmd->redir)
-		unlink_files(cmd);
+	// if (cmd->redir)
+	// 	unlink_files(cmd);
 	if (!cmd->cmd || !*cmd->cmd)
 		return (ft_exec_cmd_error(e_utils, envp), 1);
 	full_path = get_full_path(cmd, envp);
 	exit_status = check_access(full_path, cmd);
 	if (exit_status != 0)
 	{
+		// if (cmd->redir)
+		// 	unlink_files(cmd);
 		free(full_path);
 		ft_exec_cmd_error(e_utils, envp);
 		exit(exit_status);

@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/24 18:35:55 by andjenna          #+#    #+#             */
-/*   Updated: 2024/08/30 19:13:29 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/08/30 19:45:09 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,7 @@ void	handle_expand(t_cmd *cmd, t_mini *last)
 	i = 0;
 	while (cmd->args[i])
 	{
-		cmd->args[i] = ft_verif_arg(cmd->args,
-				&last->env, cmd, i);
+		cmd->args[i] = ft_verif_arg(cmd->args, &last->env, cmd, i);
 		i++;
 	}
 	cmd->args = ft_trim_quote_args(cmd->args);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_cmd.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 16:45:28 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/08/30 19:06:11 by andjenna         ###   ########.fr       */
+/*   Updated: 2024/09/02 12:36:50 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,13 +88,21 @@ int	ft_exec_lst_cmd(t_ast *root, t_exec_utils *e_utils)
 	{
 		if ((cmd->cmd && cmd->args) || (!cmd->cmd && *cmd->args))
 			handle_expand(cmd, last);
-		if (pipe(cmd->exec.pipe_fd) < 0)
-			return (ft_putendl_fd("minishell: pipe failed", 2), 1);
-		if (ft_is_builtin(cmd->cmd))
-			ft_exec_builtins(root, cmd, e_utils);
-		if (!ft_is_builtin(cmd->cmd) && ft_strcmp(cmd->cmd, "exit"))
-			cmd->exec.status = ft_exec_multi_lst_cmd(e_utils, cmd, i, len_cmd);
-		reset_fd(&cmd->exec);
+		if (cmd->redir)
+			handle_redir(cmd, e_utils->mini);
+		ft_set_var_underscore(cmd->args, &last->env, e_utils->envp);
+		if (cmd->exec.error_ex)
+			unlink_files(cmd);
+		else if (!cmd->exec.error_ex)
+		{
+			if (pipe(cmd->exec.pipe_fd) < 0)
+				return (ft_putendl_fd("minishell: pipe failed", 2), 1);
+			if (ft_is_builtin(cmd->cmd))
+				ft_exec_builtins(root, cmd, e_utils);
+			if (!ft_is_builtin(cmd->cmd) && ft_strcmp(cmd->cmd, "exit"))
+				cmd->exec.status = ft_exec_multi_lst_cmd(e_utils, cmd, i, len_cmd);
+			reset_fd(&cmd->exec);
+		}
 		if (cmd->next)
 			cmd = cmd->next;
 	}

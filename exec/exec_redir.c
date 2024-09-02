@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 15:13:29 by andjenna          #+#    #+#             */
-/*   Updated: 2024/08/29 18:16:57 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/02 12:28:23 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,10 +34,10 @@ void	set_redir_output(t_redir *current, t_exec *exec)
 	if (exec->redir_out != -1)
 		close(exec->redir_out);
 	exec->redir_out = open(current->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (exec->redir_out < 0)
+	if (exec->redir_out == -1)
 	{
 		exec->error_ex = 1;
-		if (access(current->file, F_OK) == -1)
+		if (access(current->file, F_OK) == -1 || ft_strchr(current->file, '/'))
 			return (msg_error("minishell: ", current->file,
 					"No such file or directory"));
 		else if (access(current->file, R_OK | W_OK | X_OK) == -1)
@@ -54,7 +54,7 @@ void	set_redir_append(t_redir *current, t_exec *exec)
 	if (exec->redir_out < 0)
 	{
 		exec->error_ex = 1;
-		if (access(current->file, F_OK) == -1)
+		if (access(current->file, F_OK) == -1 || ft_strchr(current->file, '/'))
 			return (msg_error("minishell: ", current->file,
 					"No such file or directory"));
 		else if (access(current->file, R_OK | W_OK | X_OK) == -1)
@@ -68,6 +68,8 @@ static void	set_redir_heredoc(t_redir *current, t_exec *exec)
 	if (exec->redir_in != -1)
 		close(exec->redir_in);
 	exec->redir_in = open(current->file_heredoc, O_RDONLY);
+	printf("file_heredoc: %s\n", current->file_heredoc);
+	printf("exec->redir_in: %d\n", exec->redir_in);
 	if (exec->redir_in < 0)
 	{
 		exec->error_ex = 1;
@@ -82,16 +84,16 @@ static void	set_redir_heredoc(t_redir *current, t_exec *exec)
 
 void	set_redir(t_redir *current, t_exec *exec, t_cmd *cmd)
 {
-	while (current)
-	{
-		if (current->type == REDIR_INPUT)
-			set_redir_input(current, exec);
-		else if (current->type == REDIR_OUTPUT)
-			set_redir_output(current, exec);
-		else if (current->type == REDIR_APPEND)
-			set_redir_append(current, exec);
-		else if (current->type == REDIR_HEREDOC && cmd->cmd)
-			set_redir_heredoc(current, exec);
-		current = current->next;
-	}
+	// while (current)
+	// {
+	if (current->type == REDIR_INPUT)
+		set_redir_input(current, exec);
+	else if (current->type == REDIR_OUTPUT)
+		set_redir_output(current, exec);
+	else if (current->type == REDIR_APPEND)
+		set_redir_append(current, exec);
+	else if (current->type == REDIR_HEREDOC && cmd->cmd)
+		set_redir_heredoc(current, exec);
+		// current = current->next;
+	// }
 }
