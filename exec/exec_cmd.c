@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 16:45:28 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/09/05 11:39:16 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/05 14:55:24 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,13 +94,13 @@ int	ft_exec_lst_cmd(t_ast *root, t_exec_utils *e_utils)
 		if (cmd->redir)
 			handle_redir(cmd, e_utils->mini);
 		ft_set_var_underscore(cmd->args, &last->env, e_utils->envp);
+		if (pipe(cmd->exec.pipe_fd) < 0)
+			return (ft_putendl_fd("minishell: pipe failed", 2), 1);
 		if (cmd->exec.error_ex)
 			unlink_files(cmd);
 		else if (!cmd->exec.error_ex)
 		{
 			// printf("file: %s\n", cmd->redir->file);
-			if (pipe(cmd->exec.pipe_fd) < 0)
-				return (ft_putendl_fd("minishell: pipe failed", 2), 1);
 			if (ft_is_builtin(cmd->cmd))
 			{
 				// printf("prev_fd: %d\n", cmd->exec.prev_fd);
