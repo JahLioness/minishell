@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 12:18:04 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/08/29 12:12:05 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/02 12:53:52 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	ft_print_token_lst(t_token *token)
 	i = 0;
 	while (tmp)
 	{
-		printf("TOKEN: %d\n", i);
+		printf("\nTOKEN: %d\n", i);
 		printf("type: ");
 		switch (tmp->type)
 		{
@@ -57,7 +57,7 @@ void	ft_print_token_lst(t_token *token)
 			k = 0;
 			while (tmp_cmd)
 			{
-				printf("CMD: %d\n\n", k);
+				printf("CMD: %d\n", k);
 				if (tmp_cmd->cmd && *(tmp_cmd->cmd))
 					printf("CMD: %s\n", tmp_cmd->cmd);
 				if (tmp_cmd->args)

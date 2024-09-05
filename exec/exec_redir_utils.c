@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 13:01:09 by andjenna          #+#    #+#             */
-/*   Updated: 2024/09/02 12:29:25 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/05 11:13:39 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,15 +72,17 @@ void	handle_redir(t_cmd *cmd, t_mini **mini)
 
 void	handle_redir_dup(t_exec *exec, t_cmd *cmd, t_mini *last)
 {
-	(void)last;
+	// (void)last;
 	if (cmd->redir)
 		ft_handle_redir_file(cmd, last);
-	if (cmd->redir && cmd->exec.redir_out != -1 && cmd->exec.redir_out != STDOUT_FILENO)
+	if (cmd->redir && cmd->exec.redir_out != -1
+		&& cmd->exec.redir_out != STDOUT_FILENO)
 	{
 		dup2(cmd->exec.redir_out, STDOUT_FILENO);
 		// close(cmd->exec.redir_out);
 	}
-	if (cmd->redir && cmd->exec.redir_in != -1 && cmd->exec.redir_in != STDIN_FILENO)
+	if (cmd->redir && cmd->exec.redir_in != -1
+		&& cmd->exec.redir_in != STDIN_FILENO)
 	{
 		dup2(cmd->exec.redir_in, STDIN_FILENO);
 		// close(cmd->exec.redir_in);

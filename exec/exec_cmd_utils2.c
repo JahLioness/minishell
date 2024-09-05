@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 17:05:12 by andjenna          #+#    #+#             */
-/*   Updated: 2024/09/02 12:47:51 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/05 11:41:46 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,9 +81,8 @@ int	ft_waitpid(t_cmd *cmd, t_mini *last, int len_cmd)
 	int	i;
 
 	i = 0;
-	while (i <= len_cmd)
+	while (i < len_cmd)
 	{
-		
 		close_fd(cmd->exec.pipe_fd, cmd->exec.prev_fd);
 		waitpid(cmd->exec.pid, &cmd->exec.status, 0);
 		if (cmd->redir)

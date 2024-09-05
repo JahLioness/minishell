@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 16:45:28 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/09/02 12:36:50 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/05 11:39:16 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,16 @@
 
 void	ft_close_pipe(t_cmd *cmd)
 {
-	if (cmd->exec.prev_fd != -1)
+	if (cmd->exec.prev_fd != -1 && cmd->exec.prev_fd != STDIN_FILENO)
 		close(cmd->exec.prev_fd);
 	if (cmd->next)
 	{
-		close(cmd->exec.pipe_fd[1]);
+		if (cmd->exec.pipe_fd[1] != -1 && cmd->exec.pipe_fd[1] != STDOUT_FILENO)
+			close(cmd->exec.pipe_fd[1]);
 		if (cmd->next->redir && (cmd->next->redir->type == REDIR_HEREDOC || cmd->next->redir->type == REDIR_INPUT))
 		{
-			close(cmd->exec.pipe_fd[0]);
+			if (cmd->exec.pipe_fd[0] != -1 && cmd->exec.pipe_fd[0] != STDIN_FILENO)
+				close(cmd->exec.pipe_fd[0]);
 			cmd->next->exec.prev_fd = cmd->next->exec.redir_in;
 		}
 		else
@@ -44,6 +46,7 @@ int	ft_exec_multi_lst_cmd(t_exec_utils *e_utils, t_cmd *cmd, int i, int len_cmd)
 		e_utils->envp = ft_free_envp(e_utils);
 		process_child(cmd, i, len_cmd);
 		reset_fd(&cmd->exec);
+		ft_close_pipe(cmd);
 		exec_command(cmd, e_utils);
 		exit(EXIT_SUCCESS);
 	}
@@ -95,10 +98,16 @@ int	ft_exec_lst_cmd(t_ast *root, t_exec_utils *e_utils)
 			unlink_files(cmd);
 		else if (!cmd->exec.error_ex)
 		{
+			// printf("file: %s\n", cmd->redir->file);
 			if (pipe(cmd->exec.pipe_fd) < 0)
 				return (ft_putendl_fd("minishell: pipe failed", 2), 1);
 			if (ft_is_builtin(cmd->cmd))
+			{
+				// printf("prev_fd: %d\n", cmd->exec.prev_fd);
+				// printf("pipe_fd[0]: %d\n", cmd->exec.pipe_fd[0]);
+				// printf("pipe_fd[1]: %d\n", cmd->exec.pipe_fd[1]);
 				ft_exec_builtins(root, cmd, e_utils);
+			}
 			if (!ft_is_builtin(cmd->cmd) && ft_strcmp(cmd->cmd, "exit"))
 				cmd->exec.status = ft_exec_multi_lst_cmd(e_utils, cmd, i, len_cmd);
 			reset_fd(&cmd->exec);

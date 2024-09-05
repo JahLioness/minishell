@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 15:13:36 by andjenna          #+#    #+#             */
-/*   Updated: 2024/08/26 17:01:15 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/05 11:14:09 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ static void	ft_redir_in(t_redir *tmp_redir, t_exec *exec)
 	}
 	else
 	{
-		if (exec->redir_in != -1)
+		if (exec->redir_in != -1 && exec->redir_in != STDIN_FILENO)
 			close(exec->redir_in);
 		if (exec->redir_out == -1 && !tmp_redir->prev)
 			exec->redir_out = STDOUT_FILENO;

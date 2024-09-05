@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   process_child.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/24 18:36:42 by andjenna          #+#    #+#             */
-/*   Updated: 2024/08/30 18:41:31 by andjenna         ###   ########.fr       */
+/*   Updated: 2024/09/05 11:48:26 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,23 +14,26 @@
 
 void	close_fd(int *fd, int prev_fd)
 {
-	(void)fd;
-	if (prev_fd != -1)
+	if (prev_fd != -1 && prev_fd != STDIN_FILENO)
 		close(prev_fd);
-	if (fd[0] != -1)
+	if (fd[0] != -1 && fd[0] != STDIN_FILENO)
 		close(fd[0]);
-	if (fd[1] != -1)
+	if (fd[1] != -1 && fd[1] != STDOUT_FILENO)
 		close(fd[1]);
 }
 
 int	first_child(t_cmd *cmd)
 {
-	if (!cmd->next->redir || (cmd->next->redir->type != REDIR_HEREDOC
-			&& cmd->next->redir->type != REDIR_INPUT))
+	if ((!cmd->next->redir || (cmd->next->redir->type != REDIR_HEREDOC
+				&& cmd->next->redir->type != REDIR_INPUT))
+		&& cmd->exec.pipe_fd[0] != -1 && cmd->exec.pipe_fd[0] != STDIN_FILENO)
 		close(cmd->exec.pipe_fd[0]);
-	dup2(cmd->exec.pipe_fd[1], STDOUT_FILENO);
-	close(cmd->exec.pipe_fd[1]);
-	if (cmd->exec.redir_in != -1)
+	if (cmd->exec.pipe_fd[1] != -1 && cmd->exec.pipe_fd[1] != STDOUT_FILENO)
+	{
+		dup2(cmd->exec.pipe_fd[1], STDOUT_FILENO);
+		close(cmd->exec.pipe_fd[1]);
+	}
+	if (cmd->exec.redir_in != -1 && cmd->exec.redir_in != STDIN_FILENO)
 	{
 		dup2(cmd->exec.redir_in, STDIN_FILENO);
 		close(cmd->exec.redir_in);
@@ -56,11 +59,18 @@ int	last_child(t_cmd *cmd)
 
 int	middle_child(t_cmd *cmd)
 {
-	close(cmd->exec.pipe_fd[0]);
-	dup2(cmd->exec.prev_fd, STDIN_FILENO);
-	close(cmd->exec.prev_fd);
-	dup2(cmd->exec.pipe_fd[1], STDOUT_FILENO);
-	close(cmd->exec.pipe_fd[1]);
+	if (cmd->exec.pipe_fd[0] != -1 && cmd->exec.pipe_fd[0] != STDIN_FILENO)
+		close(cmd->exec.pipe_fd[0]);
+	if (cmd->exec.prev_fd != STDIN_FILENO && cmd->exec.prev_fd != -1)
+	{
+		dup2(cmd->exec.prev_fd, STDIN_FILENO);
+		close(cmd->exec.prev_fd);
+	}
+	if (cmd->exec.pipe_fd[1] != -1 && cmd->exec.pipe_fd[1] != STDOUT_FILENO)
+	{
+		dup2(cmd->exec.pipe_fd[1], STDOUT_FILENO);
+		close(cmd->exec.pipe_fd[1]);
+	}
 	return (0);
 }
 

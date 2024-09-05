@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 11:03:48 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/09/02 11:13:33 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/05 11:48:45 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,8 +75,9 @@ void	ft_prompt(t_mini **mini_lst, char **envp)
 	{
 		ft_get_signal();
 		line = readline(prompt);
-		ft_check_signal(mini_lst);
 		printf("line: %s\n", line);
+		ft_check_signal(mini_lst);
+		// printf("line: %s\n", line);
 		if (!line)
 		{
 			write(1, "exit\n", 5);
