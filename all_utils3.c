@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 15:32:12 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/08/28 17:33:04 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/06 16:12:18 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,9 @@ int	ft_skip_spaces(char *str, int *i)
 	return (*i);
 }
 
-char	**ft_free_envp(t_exec_utils *e_utils)
+void	ft_free_envp(t_exec_utils *e_utils)
 {
 	if (e_utils->envp)
 		ft_free_tab(e_utils->envp);
-	return (NULL);
+	e_utils->envp = NULL;
 }

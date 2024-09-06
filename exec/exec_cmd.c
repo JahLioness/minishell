@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 16:45:28 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/09/05 14:55:24 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/06 16:12:38 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,11 @@ void	ft_close_pipe(t_cmd *cmd)
 	{
 		if (cmd->exec.pipe_fd[1] != -1 && cmd->exec.pipe_fd[1] != STDOUT_FILENO)
 			close(cmd->exec.pipe_fd[1]);
-		if (cmd->next->redir && (cmd->next->redir->type == REDIR_HEREDOC || cmd->next->redir->type == REDIR_INPUT))
+		if (cmd->next->redir && (cmd->next->redir->type == REDIR_HEREDOC
+				|| cmd->next->redir->type == REDIR_INPUT))
 		{
-			if (cmd->exec.pipe_fd[0] != -1 && cmd->exec.pipe_fd[0] != STDIN_FILENO)
+			if (cmd->exec.pipe_fd[0] != -1
+				&& cmd->exec.pipe_fd[0] != STDIN_FILENO)
 				close(cmd->exec.pipe_fd[0]);
 			cmd->next->exec.prev_fd = cmd->next->exec.redir_in;
 		}
@@ -74,6 +76,24 @@ void	ft_exec_builtins(t_ast *root, t_cmd *cmd, t_exec_utils *e_utils)
 	}
 }
 
+static void	ft_check_exec_error(t_cmd *cmd, t_ast *root, t_exec_utils *e_utils,
+		int i)
+{
+	int	len_cmd;
+
+	len_cmd = ft_cmdsize(cmd);
+	if (cmd->exec.error_ex)
+		unlink_files(cmd);
+	else if (!cmd->exec.error_ex)
+	{
+		if (ft_is_builtin(cmd->cmd))
+			ft_exec_builtins(root, cmd, e_utils);
+		if (!ft_is_builtin(cmd->cmd) && ft_strcmp(cmd->cmd, "exit"))
+			cmd->exec.status = ft_exec_multi_lst_cmd(e_utils, cmd, i, len_cmd);
+		reset_fd(&cmd->exec);
+	}
+}
+
 int	ft_exec_lst_cmd(t_ast *root, t_exec_utils *e_utils)
 {
 	int		len_cmd;
@@ -96,25 +116,9 @@ int	ft_exec_lst_cmd(t_ast *root, t_exec_utils *e_utils)
 		ft_set_var_underscore(cmd->args, &last->env, e_utils->envp);
 		if (pipe(cmd->exec.pipe_fd) < 0)
 			return (ft_putendl_fd("minishell: pipe failed", 2), 1);
-		if (cmd->exec.error_ex)
-			unlink_files(cmd);
-		else if (!cmd->exec.error_ex)
-		{
-			// printf("file: %s\n", cmd->redir->file);
-			if (ft_is_builtin(cmd->cmd))
-			{
-				// printf("prev_fd: %d\n", cmd->exec.prev_fd);
-				// printf("pipe_fd[0]: %d\n", cmd->exec.pipe_fd[0]);
-				// printf("pipe_fd[1]: %d\n", cmd->exec.pipe_fd[1]);
-				ft_exec_builtins(root, cmd, e_utils);
-			}
-			if (!ft_is_builtin(cmd->cmd) && ft_strcmp(cmd->cmd, "exit"))
-				cmd->exec.status = ft_exec_multi_lst_cmd(e_utils, cmd, i, len_cmd);
-			reset_fd(&cmd->exec);
-		}
+		ft_check_exec_error(cmd, root, e_utils, i);
 		if (cmd->next)
 			cmd = cmd->next;
 	}
-	e_utils->envp = ft_free_envp(e_utils);
-	return (ft_waitpid(root->token->cmd, last, len_cmd));
+	return (ft_free_envp(e_utils), ft_waitpid(root->token->cmd, last, len_cmd));
 }

@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 15:13:29 by andjenna          #+#    #+#             */
-/*   Updated: 2024/09/05 11:23:41 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/06 16:04:37 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static void	set_redir_input(t_redir *current, t_exec *exec)
 {
-	struct stat statbuf;
+	struct stat	statbuf;
 
 	if (exec->redir_in != -1 && exec->redir_in != STDIN_FILENO)
 		close(exec->redir_in);
@@ -23,8 +23,7 @@ static void	set_redir_input(t_redir *current, t_exec *exec)
 	{
 		exec->error_ex = 1;
 		if (stat(current->file, &statbuf) == 0)
-			return (msg_error("minishell: ", current->file,
-					"Is a directory"));
+			return (msg_error("minishell: ", current->file, "Is a directory"));
 		else if (access(current->file, F_OK) == -1)
 			return (msg_error("minishell: ", current->file,
 					"No such file or directory"));
@@ -36,7 +35,7 @@ static void	set_redir_input(t_redir *current, t_exec *exec)
 
 void	set_redir_output(t_redir *current, t_exec *exec)
 {
-	struct stat statbuf;
+	struct stat	statbuf;
 
 	if (exec->redir_out != -1 && exec->redir_out != STDOUT_FILENO)
 		close(exec->redir_out);
@@ -45,8 +44,7 @@ void	set_redir_output(t_redir *current, t_exec *exec)
 	{
 		exec->error_ex = 1;
 		if (stat(current->file, &statbuf) == 0)
-			return (msg_error("minishell: ", current->file,
-					"Is a directory"));
+			return (msg_error("minishell: ", current->file, "Is a directory"));
 		else if (access(current->file, F_OK) == -1)
 			return (msg_error("minishell: ", current->file,
 					"No such file or directory"));
@@ -58,7 +56,7 @@ void	set_redir_output(t_redir *current, t_exec *exec)
 
 void	set_redir_append(t_redir *current, t_exec *exec)
 {
-	struct stat statbuf;
+	struct stat	statbuf;
 
 	if (exec->redir_out != -1 && exec->redir_out != STDOUT_FILENO)
 		close(exec->redir_out);
@@ -67,8 +65,7 @@ void	set_redir_append(t_redir *current, t_exec *exec)
 	{
 		exec->error_ex = 1;
 		if (stat(current->file, &statbuf) == 0)
-			return (msg_error("minishell: ", current->file,
-					"Is a directory"));
+			return (msg_error("minishell: ", current->file, "Is a directory"));
 		else if (access(current->file, F_OK) == -1)
 			return (msg_error("minishell: ", current->file,
 					"No such file or directory"));
@@ -99,8 +96,6 @@ static void	set_redir_heredoc(t_redir *current, t_exec *exec)
 
 void	set_redir(t_redir *current, t_exec *exec, t_cmd *cmd)
 {
-	// while (current)
-	// {
 	if (current->type == REDIR_INPUT)
 		set_redir_input(current, exec);
 	else if (current->type == REDIR_OUTPUT)
@@ -109,6 +104,4 @@ void	set_redir(t_redir *current, t_exec *exec, t_cmd *cmd)
 		set_redir_append(current, exec);
 	else if (current->type == REDIR_HEREDOC && cmd->cmd)
 		set_redir_heredoc(current, exec);
-		// current = current->next;
-	// }
 }

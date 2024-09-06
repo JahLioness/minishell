@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 10:41:30 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/08/29 17:05:23 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/06 16:04:49 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,30 +68,6 @@ t_cmd	*ft_return_heredoc(t_cmd *cmd, t_redir *redir)
 	}
 	return (heredoc);
 }
-
-// t_cmd	*get_heredoc_node(t_mini *last)
-// {
-// 	t_token	*tmp_token;
-// 	t_redir	*tmp_redir;
-// 	t_cmd	*tmp_cmd;
-// 	t_cmd	*node_heredoc;
-
-// 	if (!last)
-// 		return (NULL);
-// 	node_heredoc = NULL;
-// 	tmp_token = last->tokens;
-// 	while (tmp_token)
-// 	{
-// 		tmp_cmd = tmp_token->cmd;
-// 		if (tmp_cmd && tmp_cmd->redir)
-// 		{
-// 			tmp_redir = tmp_cmd->redir;
-// 			node_heredoc = ft_return_heredoc(tmp_cmd, tmp_redir);
-// 		}
-// 		tmp_token = tmp_token->next;
-// 	}
-// 	return (node_heredoc);
-// }
 
 t_cmd	*get_heredoc_node(t_cmd *cmd)
 {
