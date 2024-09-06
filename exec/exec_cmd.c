@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 16:45:28 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/09/06 16:12:38 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/06 16:19:17 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int	ft_exec_multi_lst_cmd(t_exec_utils *e_utils, t_cmd *cmd, int i, int len_cmd)
 	{
 		if (cmd->redir)
 			handle_redir_dup(&cmd->exec, cmd, last);
-		e_utils->envp = ft_free_envp(e_utils);
+		ft_free_envp(e_utils);
 		process_child(cmd, i, len_cmd);
 		reset_fd(&cmd->exec);
 		ft_close_pipe(cmd);
@@ -71,7 +71,7 @@ void	ft_exec_builtins(t_ast *root, t_cmd *cmd, t_exec_utils *e_utils)
 	}
 	else if (!ft_strcmp(cmd->cmd, "exit"))
 	{
-		e_utils->envp = ft_free_envp(e_utils);
+		ft_free_envp(e_utils);
 		handle_exit(root, e_utils->mini, e_utils->prompt);
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 13:01:09 by andjenna          #+#    #+#             */
-/*   Updated: 2024/09/06 16:16:42 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/06 16:20:03 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,6 @@ void	ft_handle_redir_file(t_cmd *cmd, t_mini *last)
 {
 	t_redir	*current;
 	t_exec	*exec;
-	char	*file;
 
 	current = cmd->redir;
 	exec = &cmd->exec;

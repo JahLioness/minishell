@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 13:14:38 by andjenna          #+#    #+#             */
-/*   Updated: 2024/09/06 16:04:15 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/06 16:19:49 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ int	check_path(char *path)
 
 int	check_access(char *path, t_cmd *cmd)
 {
-	char	*tmp_path;
 	int		exit_status;
 
 	if (!path || !*path)
