@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 16:45:28 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/09/06 16:19:17 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/11 11:34:34 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ int	ft_exec_multi_lst_cmd(t_exec_utils *e_utils, t_cmd *cmd, int i, int len_cmd)
 	else
 	{
 		ft_close_pipe(cmd);
-		return (0);
+		return (cmd->exec.status);
 	}
 }
 
@@ -79,9 +79,6 @@ void	ft_exec_builtins(t_ast *root, t_cmd *cmd, t_exec_utils *e_utils)
 static void	ft_check_exec_error(t_cmd *cmd, t_ast *root, t_exec_utils *e_utils,
 		int i)
 {
-	int	len_cmd;
-
-	len_cmd = ft_cmdsize(cmd);
 	if (cmd->exec.error_ex)
 		unlink_files(cmd);
 	else if (!cmd->exec.error_ex)
@@ -89,14 +86,14 @@ static void	ft_check_exec_error(t_cmd *cmd, t_ast *root, t_exec_utils *e_utils,
 		if (ft_is_builtin(cmd->cmd))
 			ft_exec_builtins(root, cmd, e_utils);
 		if (!ft_is_builtin(cmd->cmd) && ft_strcmp(cmd->cmd, "exit"))
-			cmd->exec.status = ft_exec_multi_lst_cmd(e_utils, cmd, i, len_cmd);
+			cmd->exec.status = ft_exec_multi_lst_cmd(e_utils, cmd, i,
+					e_utils->len_cmd);
 		reset_fd(&cmd->exec);
 	}
 }
 
 int	ft_exec_lst_cmd(t_ast *root, t_exec_utils *e_utils)
 {
-	int		len_cmd;
 	int		i;
 	t_mini	*last;
 	t_cmd	*cmd;
@@ -104,10 +101,10 @@ int	ft_exec_lst_cmd(t_ast *root, t_exec_utils *e_utils)
 	i = -1;
 	last = ft_minilast(*e_utils->mini);
 	cmd = root->token->cmd;
-	len_cmd = ft_cmdsize(cmd);
+	e_utils->len_cmd = ft_cmdsize(cmd);
 	ft_get_signal_cmd();
 	reset_fd(&cmd->exec);
-	while (++i < len_cmd)
+	while (++i < e_utils->len_cmd)
 	{
 		if ((cmd->cmd && cmd->args) || (!cmd->cmd && *cmd->args))
 			handle_expand(cmd, last);
@@ -120,5 +117,6 @@ int	ft_exec_lst_cmd(t_ast *root, t_exec_utils *e_utils)
 		if (cmd->next)
 			cmd = cmd->next;
 	}
-	return (ft_free_envp(e_utils), ft_waitpid(root->token->cmd, last, len_cmd));
+	return (ft_free_envp(e_utils), ft_waitpid(root->token->cmd, last,
+			e_utils->len_cmd));
 }

@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 18:59:46 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/08/30 19:13:21 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/10 16:33:17 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ char	**ft_trim_quote_echo(char **args)
 
 	i = 0;
 	if (!args || !*args)
-		return (ft_free_tab(args), NULL);
+		return (NULL);
 	ret = ft_calloc((ft_tab_len(args) + 1), sizeof(char *));
 	if (!ret)
 		return (NULL);
@@ -30,7 +30,7 @@ char	**ft_trim_quote_echo(char **args)
 		else
 			ret[i] = ft_trim_quote(args[i], 0, 0);
 		if (!ret[i])
-			return (ft_free_tab(args), ft_free_split(i, ret), NULL);
+			return (ft_free_split(i - 1, ret), NULL);
 		if (args[i])
 			i++;
 	}
@@ -120,7 +120,7 @@ char	**ft_get_args_echo(char **args, t_env **env)
 		{
 			arg[j] = ft_strdup(args[i]);
 			if (!arg[j])
-				return (ft_free_split(j, arg), NULL);
+				return (ft_free_split(j - 1, arg), NULL);
 			j++;
 		}
 	}

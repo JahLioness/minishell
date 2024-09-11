@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 13:14:38 by andjenna          #+#    #+#             */
-/*   Updated: 2024/09/06 16:19:49 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/11 11:37:35 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,5 +96,5 @@ int	exec_command(t_cmd *cmd, t_exec_utils *e_utils)
 	}
 	else if (execve(full_path, cmd->args, envp) == -1)
 		return (free(full_path), ft_exec_cmd_error(e_utils, envp), 1);
-	return (free(full_path), ft_free_tab(envp), 0);
+	return (free(full_path), ft_free_tab(envp), cmd->exec.status);
 }

@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/24 18:34:53 by andjenna          #+#    #+#             */
-/*   Updated: 2024/08/28 14:14:16 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/11 10:49:01 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	ft_exec_builtin(t_cmd *cmd, t_env **env, int fd)
 	else if (!ft_strcmp(cmd->cmd, "export"))
 		exit_status = ft_exec_export(cmd, env, fd);
 	else if (!ft_strcmp(cmd->cmd, "unset"))
-		exit_status = ft_exec_unset(cmd, env);
+		exit_status = ft_exec_unset(cmd, env, fd);
 	else if (!ft_strcmp(cmd->cmd, "env"))
 		exit_status = ft_print_env(env, fd);
 	status = ft_get_exit_status(env);

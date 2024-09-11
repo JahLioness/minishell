@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 13:12:04 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/08/28 12:30:28 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/10 16:32:50 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ char	*ft_trim_quote(char *line, int i, int j)
 				ret[j++] = line[i++];
 		}
 		if (!line[i] && quote != 0)
-			return (NULL);
+			return (free(ret), NULL);
 		else if (line[i] != 34 && line[i] != 39)
 			ret[j++] = line[i];
 		i++;

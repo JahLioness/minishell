@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 17:05:12 by andjenna          #+#    #+#             */
-/*   Updated: 2024/09/05 11:41:46 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/11 10:52:52 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,11 @@ void	handle_builtin(t_cmd *cmd, t_mini *last, t_redir *tmp, t_exec *exec)
 		else
 			exec->redir_out = STDOUT_FILENO;
 	}
-	exec->status = ft_exec_builtin(cmd, &last->env, exec->redir_out);
+	if (((!ft_strcmp(cmd->cmd, "export") && cmd->args && cmd->args[1])
+		|| !ft_strcmp(cmd->cmd, "unset")) && cmd->next)
+		exec->status = ft_exec_builtin(cmd, &last->env, -1);
+	else
+		exec->status = ft_exec_builtin(cmd, &last->env, exec->redir_out);
 	reset_fd(exec);
 	ft_free_tab(envp);
 	envp = NULL;

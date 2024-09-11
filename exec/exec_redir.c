@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 15:13:29 by andjenna          #+#    #+#             */
-/*   Updated: 2024/09/06 16:04:37 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/10 16:58:04 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,14 +22,16 @@ static void	set_redir_input(t_redir *current, t_exec *exec)
 	if (exec->redir_in == -1)
 	{
 		exec->error_ex = 1;
-		if (stat(current->file, &statbuf) == 0)
+		if (access(current->file, R_OK | W_OK | X_OK) == -1
+			&& stat(current->file, &statbuf) != 0 && access(current->file,
+				F_OK) != -1)
+			return (msg_error("minishell: ", current->file,
+					"Permission denied"));
+		else if (stat(current->file, &statbuf) == 0)
 			return (msg_error("minishell: ", current->file, "Is a directory"));
 		else if (access(current->file, F_OK) == -1)
 			return (msg_error("minishell: ", current->file,
 					"No such file or directory"));
-		else if (access(current->file, R_OK | W_OK | X_OK) == -1)
-			return (msg_error("minishell: ", current->file,
-					"Permission denied"));
 	}
 }
 
@@ -43,14 +45,16 @@ void	set_redir_output(t_redir *current, t_exec *exec)
 	if (exec->redir_out == -1)
 	{
 		exec->error_ex = 1;
-		if (stat(current->file, &statbuf) == 0)
+		if (access(current->file, R_OK | W_OK | X_OK) == -1
+			&& stat(current->file, &statbuf) != 0 && access(current->file,
+				F_OK) != -1)
+			return (msg_error("minishell: ", current->file,
+					"Permission denied"));
+		else if (stat(current->file, &statbuf) == 0)
 			return (msg_error("minishell: ", current->file, "Is a directory"));
 		else if (access(current->file, F_OK) == -1)
 			return (msg_error("minishell: ", current->file,
 					"No such file or directory"));
-		else if (access(current->file, R_OK | W_OK | X_OK) == -1)
-			return (msg_error("minishell: ", current->file,
-					"Permission denied"));
 	}
 }
 
@@ -64,14 +68,16 @@ void	set_redir_append(t_redir *current, t_exec *exec)
 	if (exec->redir_out == -1)
 	{
 		exec->error_ex = 1;
-		if (stat(current->file, &statbuf) == 0)
+		if (access(current->file, R_OK | W_OK | X_OK) == -1
+			&& stat(current->file, &statbuf) != 0 && access(current->file,
+				F_OK) != -1)
+			return (msg_error("minishell: ", current->file,
+					"Permission denied"));
+		else if (stat(current->file, &statbuf) == 0)
 			return (msg_error("minishell: ", current->file, "Is a directory"));
 		else if (access(current->file, F_OK) == -1)
 			return (msg_error("minishell: ", current->file,
 					"No such file or directory"));
-		else if (access(current->file, R_OK | W_OK | X_OK) == -1)
-			return (msg_error("minishell: ", current->file,
-					"Permission denied"));
 	}
 }
 
@@ -80,8 +86,6 @@ static void	set_redir_heredoc(t_redir *current, t_exec *exec)
 	if (exec->redir_in != -1)
 		close(exec->redir_in);
 	exec->redir_in = open(current->file_heredoc, O_RDONLY);
-	printf("file_heredoc: %s\n", current->file_heredoc);
-	printf("exec->redir_in: %d\n", exec->redir_in);
 	if (exec->redir_in < 0)
 	{
 		exec->error_ex = 1;

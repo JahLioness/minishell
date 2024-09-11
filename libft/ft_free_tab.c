@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 14:38:11 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/08/27 18:01:55 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/10 16:34:14 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,10 @@ void	ft_free_tab(char **tab)
 	i = 0;
 	if (!tab)
 		return ;
-	else if (!*tab)
-		return (free(tab));
 	while (tab[i])
 	{
 		free(tab[i]);
 		i++;
 	}
 	free(tab);
-	tab = NULL;
 }

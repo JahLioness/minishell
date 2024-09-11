@@ -1,25 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_tab_len.c                                       :+:      :+:    :+:   */
+/*   ft_is_upper.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/01 17:49:05 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/09/10 16:28:10 by ede-cola         ###   ########.fr       */
+/*   Created: 2024/09/10 16:41:16 by ede-cola          #+#    #+#             */
+/*   Updated: 2024/09/10 16:41:30 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-size_t	ft_tab_len(char **tab)
+int	ft_is_upper(int c)
 {
-	size_t	i;
-
-	i = 0;
-	if (!tab || !tab[0])
-		return (0);
-	while (tab[i])
-		i++;
-	return (i);
+	if (c >= 'A' && c <= 'Z')
+		return (1);
+	return (0);
 }

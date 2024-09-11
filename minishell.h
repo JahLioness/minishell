@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 10:44:59 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/09/06 16:17:04 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/11 10:48:56 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,6 +134,7 @@ typedef struct s_exec_utils
 	t_mini			**mini;
 	char			*prompt;
 	char			**envp;
+	int				len_cmd;
 }					t_exec_utils;
 
 /*			UTILS           */
@@ -277,7 +278,7 @@ void				ft_exec_builtins(t_ast *root, t_cmd *cmd,
 
 /*			EXEC BUILTINS	*/
 int					ft_exec_builtin(t_cmd *cmd, t_env **env, int fd);
-int					ft_exec_unset(t_cmd *cmd, t_env **env);
+int					ft_exec_unset(t_cmd *cmd, t_env **env, int fd);
 int					ft_exec_export_utils(char *arg, t_export_utils *utils);
 int					ft_exec_export(t_cmd *cmd, t_env **env, int fd);
 char				**ft_get_args_echo(char **args, t_env **env);

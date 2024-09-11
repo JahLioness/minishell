@@ -6,21 +6,21 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 15:33:02 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/08/30 14:01:20 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/10 16:41:43 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LIBFT_H
 # define LIBFT_H
 
+# include <fcntl.h>
+# include <limits.h>
 # include <stdarg.h>
 # include <stdint.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
 # include <unistd.h>
-# include <fcntl.h>
-# include <limits.h>
 
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 1
@@ -36,6 +36,7 @@ int		ft_isalpha(int c);
 int		ft_isascii(int c);
 int		ft_isdigit(int c);
 int		ft_isprint(int c);
+int		ft_is_upper(int c);
 void	ft_free_tab(char **tab);
 char	*ft_strchr(const char *s, int c);
 char	*ft_strdup(const char *s);
