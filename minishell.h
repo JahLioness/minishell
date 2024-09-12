@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 10:44:59 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/09/11 10:48:56 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/11 16:15:25 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,6 +130,7 @@ typedef struct s_ast
 typedef struct s_exec_utils
 {
 	t_ast			*granny;
+	t_ast			*current;
 	t_ast			*parent;
 	t_mini			**mini;
 	char			*prompt;
@@ -314,6 +315,10 @@ void				reset_fd(t_exec *exec);
 void				handle_expand(t_cmd *cmd, t_mini *last);
 void				close_fd(int *fd, int prev_fd);
 int					ft_waitpid(t_cmd *cmd, t_mini *last, int len_cmd);
+int					ft_exec_multi_lst_cmd(t_exec_utils *e_utils, t_cmd *cmd,
+						int i, int len_cmd);
+void				ft_check_exec_error(t_cmd *cmd, t_ast *root,
+						t_exec_utils *e_utils, int i);
 
 /*			EXEC_REDIR		*/
 void				handle_redir(t_cmd *cmd, t_mini **mini);

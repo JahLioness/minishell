@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 11:46:31 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/09/11 10:55:05 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/11 14:59:33 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,9 @@ int	ft_exec_unset(t_cmd *cmd, t_env **env, int fd)
 	int		i;
 
 	i = 1;
-	if (fd == -1)
-		return (1);
+	(void)fd;
+	// if (fd == -1)
+	// 	return (1);
 	args = cmd->args;
 	if (!args[i])
 		return (0);

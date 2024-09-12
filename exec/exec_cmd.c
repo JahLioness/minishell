@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 16:45:28 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/09/11 11:34:34 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/11 16:14:44 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,8 @@ int	ft_exec_multi_lst_cmd(t_exec_utils *e_utils, t_cmd *cmd, int i, int len_cmd)
 		return (ft_putendl_fd("minishell: fork failed", 2), 1);
 	if (cmd->exec.pid == 0)
 	{
+		if (ft_is_builtin(cmd->cmd))
+			ft_exec_builtins(e_utils->current, cmd, e_utils);
 		if (cmd->redir)
 			handle_redir_dup(&cmd->exec, cmd, last);
 		ft_free_envp(e_utils);
@@ -50,7 +52,7 @@ int	ft_exec_multi_lst_cmd(t_exec_utils *e_utils, t_cmd *cmd, int i, int len_cmd)
 		reset_fd(&cmd->exec);
 		ft_close_pipe(cmd);
 		exec_command(cmd, e_utils);
-		exit(EXIT_SUCCESS);
+		exit(EXIT_FAILURE);
 	}
 	else
 	{
@@ -76,15 +78,16 @@ void	ft_exec_builtins(t_ast *root, t_cmd *cmd, t_exec_utils *e_utils)
 	}
 }
 
-static void	ft_check_exec_error(t_cmd *cmd, t_ast *root, t_exec_utils *e_utils,
+void	ft_check_exec_error(t_cmd *cmd, t_ast *root, t_exec_utils *e_utils,
 		int i)
 {
+	(void)root;
 	if (cmd->exec.error_ex)
 		unlink_files(cmd);
 	else if (!cmd->exec.error_ex)
 	{
-		if (ft_is_builtin(cmd->cmd))
-			ft_exec_builtins(root, cmd, e_utils);
+		// if (ft_is_builtin(cmd->cmd))
+		// 	ft_exec_builtins(root, cmd, e_utils);
 		if (!ft_is_builtin(cmd->cmd) && ft_strcmp(cmd->cmd, "exit"))
 			cmd->exec.status = ft_exec_multi_lst_cmd(e_utils, cmd, i,
 					e_utils->len_cmd);
@@ -104,6 +107,7 @@ int	ft_exec_lst_cmd(t_ast *root, t_exec_utils *e_utils)
 	e_utils->len_cmd = ft_cmdsize(cmd);
 	ft_get_signal_cmd();
 	reset_fd(&cmd->exec);
+	e_utils->current = root;
 	while (++i < e_utils->len_cmd)
 	{
 		if ((cmd->cmd && cmd->args) || (!cmd->cmd && *cmd->args))
@@ -113,7 +117,7 @@ int	ft_exec_lst_cmd(t_ast *root, t_exec_utils *e_utils)
 		ft_set_var_underscore(cmd->args, &last->env, e_utils->envp);
 		if (pipe(cmd->exec.pipe_fd) < 0)
 			return (ft_putendl_fd("minishell: pipe failed", 2), 1);
-		ft_check_exec_error(cmd, root, e_utils, i);
+		// ft_check_exec_error(cmd, root, e_utils, i);
 		if (cmd->next)
 			cmd = cmd->next;
 	}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_export_utils.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 18:09:22 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/08/23 18:35:16 by andjenna         ###   ########.fr       */
+/*   Updated: 2024/09/11 15:41:26 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,11 @@ int	ft_exec_export(t_cmd *cmd, t_env **env, int fd)
 	t_export_utils	utils;
 
 	i = 1;
+	if (fd == -1)
+	{
+		exit_status = 1;
+		return (exit_status);
+	}
 	utils = ft_init_export_utils();
 	args = cmd->args;
 	if (!args[i])

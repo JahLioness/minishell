@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 17:05:12 by andjenna          #+#    #+#             */
-/*   Updated: 2024/09/11 10:52:52 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/11 16:17:14 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,7 @@ void	handle_builtin(t_cmd *cmd, t_mini *last, t_redir *tmp, t_exec *exec)
 		else
 			exec->redir_out = STDOUT_FILENO;
 	}
-	if (((!ft_strcmp(cmd->cmd, "export") && cmd->args && cmd->args[1])
-		|| !ft_strcmp(cmd->cmd, "unset")) && cmd->next)
-		exec->status = ft_exec_builtin(cmd, &last->env, -1);
-	else
-		exec->status = ft_exec_builtin(cmd, &last->env, exec->redir_out);
+	exec->status = ft_exec_builtin(cmd, &last->env, exec->redir_out);
 	reset_fd(exec);
 	ft_free_tab(envp);
 	envp = NULL;
@@ -66,6 +62,7 @@ int	handle_sigint(t_exec *exec, t_mini *last)
 		g_sig = 0;
 		return (130);
 	}
+	// printf("status: %d\n",exec->status);
 	return (set_e_status(exec->status, last));
 }
 
@@ -96,6 +93,12 @@ int	ft_waitpid(t_cmd *cmd, t_mini *last, int len_cmd)
 		i++;
 	}
 	if (WIFEXITED(cmd->exec.status))
+	{
+		// printf("status: %d\n", WIFEXITED(cmd->exec.status));
+		// cmd->exec.status = WIFEXITED(cmd->exec.status);
+		set_e_status(WIFEXITED(cmd->exec.status), last);
 		return (handle_sigint(&cmd->exec, last));
+	}
+	// printf("status: %d\n", cmd->exec.status);
 	return (cmd->exec.status);
 }

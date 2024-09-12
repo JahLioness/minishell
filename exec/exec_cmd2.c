@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 17:02:14 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/09/06 16:19:35 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/11 16:11:28 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ void	ft_execution(t_ast *root, t_exec_utils *e_utils, t_cmd *cmd,
 				exec->status = ft_exec_single_cmd(e_utils, cmd, exec, last);
 		}
 	}
+	printf("status: %d\n", WIFEXITED(exec->status));
 }
 
 int	ft_exec_cmd(t_ast *root, t_exec_utils *e_utils)
