@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 15:43:26 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/09/11 15:03:18 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/12 13:18:58 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,15 +92,6 @@ int	ft_export(t_export_utils *utils, t_env **env, int fd)
 			ft_envadd_back(env, ft_envnew(ft_strdup("?"), ft_itoa(1)));
 		return (1);
 	}
-	// else if (fd == -1)
-	// {
-	// 	status = ft_get_exit_status(env);
-	// 	if (status)
-	// 		ft_change_exit_status(status, ft_itoa(0));
-	// 	else
-	// 		ft_envadd_back(env, ft_envnew(ft_strdup("?"), ft_itoa(0)));
-	// 	return (0);
-	// }
 	else if (ft_check_key(utils->key) && ft_strcmp(ft_check_key(utils->key),
 			"error"))
 		return (ft_check_value(env, utils->key, utils->op, utils->value));

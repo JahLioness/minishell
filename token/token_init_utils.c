@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 14:10:24 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/08/30 18:14:21 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/12 13:39:09 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,12 +56,21 @@ void	ft_init_cmd_redir(t_cmd *new, char *cell, int *i)
 		redir->file_heredoc = NULL;
 }
 
-void	ft_get_wildcard(t_token *new, int j)
+// void	ft_get_wildcard(t_token *new, int j)
+// {
+// 	printf("new->cmd->args[j]: %s\n", new->cmd->args[j]);
+// 	if (ft_check_star(new->cmd->args[j]))
+// 		new->cmd->args = ft_wildcard_check(new->cmd->args, j);
+// 	if (!ft_strncmp(new->cmd->args[j], "minishell:", 10))
+// 		new->cmd->error = 1;
+// }
+
+void	ft_get_wildcard(t_cmd *cmd, int j)
 {
-	if (ft_check_star(new->cmd->args[j]))
-		new->cmd->args = ft_wildcard_check(new->cmd->args, j);
-	if (!ft_strncmp(new->cmd->args[j], "minishell:", 10))
-		new->cmd->error = 1;
+	if (ft_check_star(cmd->args[j]))
+		cmd->args = ft_wildcard_check(cmd->args, j);
+	if (!ft_strncmp(cmd->args[j], "minishell:", 10))
+		cmd->error = 1;
 }
 
 void	init_exec(t_cmd *cmd)
@@ -90,7 +99,7 @@ void	ft_init_token_cmd(t_token *new, char *cell, int *i)
 	new->cmd->args = args;
 	j = 0;
 	while (new->cmd->args && new->cmd->args[j])
-		ft_get_wildcard(new, j++);
+		ft_get_wildcard(new->cmd, j++);
 	if (new->cmd->args && *new->cmd->args)
 		new->cmd->cmd = ft_strdup(new->cmd->args[0]);
 	if (ft_is_redir(cell, i))

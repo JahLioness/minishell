@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 10:44:59 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/09/12 12:04:29 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/12 15:07:53 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -201,7 +201,7 @@ void				ft_token_delone(t_token *token);
 void				ft_token_delone_utils(t_token *token);
 void				ft_init_token_cmd_pipe(t_token *new, t_cmd *cmd, char *cell,
 						int *i);
-void				ft_get_wildcard(t_token *new, int j);
+void				ft_get_wildcard(t_cmd *cmd, int j);
 void				ft_init_cmd_redir(t_cmd *new, char *cell, int *i);
 t_token				*ft_token_init(void);
 t_token				*ft_tokenlast(t_token *token);
@@ -316,14 +316,17 @@ void				close_fd(int *fd, int prev_fd);
 int					ft_waitpid(t_cmd *cmd, t_mini *last, int len_cmd);
 int					ft_exec_multi_lst_cmd(t_exec_utils *e_utils, t_cmd *cmd,
 						int i, int len_cmd);
-void				ft_check_exec_error(t_cmd *cmd, t_ast *root,
-						t_exec_utils *e_utils, int i);
+void				ft_close_pipe(t_cmd *cmd);
+void				ft_check_builtin(t_cmd *cmd, t_exec_utils *e_utils,
+						t_mini *last);
+void				ft_expand_redir_gestion(t_cmd *cmd, t_exec_utils *e_utils,
+						t_mini *last);
 
 /*			EXEC_REDIR		*/
 void				handle_redir(t_cmd *cmd, t_mini **mini);
 void				ft_handle_redir_file(t_cmd *cmd, t_mini *last);
 void				cat_wt_symbole(t_cmd *cmd, t_exec *exec);
-void				builtin_w_redir(t_redir *tmp_redir, t_exec *exec);
+void				builtin_w_redir(t_redir *tmp_redir, t_exec *exec, t_cmd *cmd);
 void				handle_redir_dup(t_exec *exec, t_cmd *cmd, t_mini *last);
 void				set_redir(t_redir *current, t_exec *exec, t_cmd *cmd);
 void				ft_handle_redir_file_loop(t_redir *redir, t_exec *exec,

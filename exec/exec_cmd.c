@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 16:45:28 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/09/12 12:25:33 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/12 17:36:48 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,12 +31,14 @@ void	ft_close_pipe(t_cmd *cmd)
 		else
 			cmd->next->exec.prev_fd = cmd->exec.pipe_fd[0];
 	}
+	// printf("cmd = %s\n pipe_fd[0] %d\n pipe_fd[1] %d\n prev_fd %d\n redir_in %d\n", cmd->cmd, cmd->exec.pipe_fd[0], cmd->exec.pipe_fd[1], cmd->exec.prev_fd, cmd->exec.redir_in);
+	// if (cmd->next)
+	// 	printf("next prev_fd = %d\n", cmd->next->exec.prev_fd);
 }
 
 int	ft_exec_multi_lst_cmd(t_exec_utils *e_utils, t_cmd *cmd, int i, int len_cmd)
 {
 	t_mini	*last;
-	int		status;
 
 	last = ft_minilast(*e_utils->mini);
 	cmd->exec.pid = fork();
@@ -44,27 +46,19 @@ int	ft_exec_multi_lst_cmd(t_exec_utils *e_utils, t_cmd *cmd, int i, int len_cmd)
 		return (ft_putendl_fd("minishell: fork failed", 2), 1);
 	if (cmd->exec.pid == 0)
 	{
-		process_child(cmd, i, len_cmd);
-		if (ft_is_builtin(cmd->cmd) && ft_strcmp(cmd->cmd, "exit"))
-		{
-			handle_builtin(cmd, last, cmd->redir, &cmd->exec);
-			status = cmd->exec.status;
-			reset_fd(&cmd->exec);
-			ft_close_pipe(cmd);
-			ft_exec_cmd_error(e_utils, e_utils->envp);
-			exit(status);
-		}
-		else if (!ft_strcmp(cmd->cmd, "exit"))
-		{
-			ft_free_envp(e_utils);
-			handle_exit(e_utils, cmd);
-			exit(EXIT_SUCCESS);
-		}
+		ft_check_builtin(cmd, e_utils, last);
 		if (cmd->redir)
 			handle_redir_dup(&cmd->exec, cmd, last);
 		ft_free_envp(e_utils);
-		reset_fd(&cmd->exec);
-		ft_close_pipe(cmd);
+		process_child(cmd, i, len_cmd);
+		// reset_fd(&cmd->exec);
+		// ft_close_pipe(cmd);
+		// if (cmd->redir)
+		// 	printf("redir in = %s\n", cmd->redir->file);
+		// printf("exec_cmd->redir_in = %d\n", cmd->exec.redir_in);
+		// printf("exec_cmd->pipe_fd[0] = %d\n", cmd->exec.pipe_fd[0]);
+		// printf("exec_cmd->pipe_fd[1] = %d\n", cmd->exec.pipe_fd[1]);
+		// printf("prev_fd = %d\n", cmd->exec.prev_fd);
 		exec_command(cmd, e_utils);
 		exit(EXIT_FAILURE);
 	}
@@ -93,22 +87,6 @@ void	ft_exec_builtins(t_ast *root, t_cmd *cmd, t_exec_utils *e_utils)
 	}
 }
 
-// static void	ft_check_exec_error(t_cmd *cmd, t_ast *root, t_exec_utils *e_utils,
-// 		int i)
-// {
-// 	if (cmd->exec.error_ex)
-// 		unlink_files(cmd);
-// 	else if (!cmd->exec.error_ex)
-// 	{
-// 		if (ft_is_builtin(cmd->cmd))
-// 			ft_exec_builtins(root, cmd, e_utils);
-// 		if (!ft_is_builtin(cmd->cmd) && ft_strcmp(cmd->cmd, "exit"))
-// 			cmd->exec.status = ft_exec_multi_lst_cmd(e_utils, cmd, i,
-// 					e_utils->len_cmd);
-// 		reset_fd(&cmd->exec);
-// 	}
-// }
-
 int	ft_exec_lst_cmd(t_ast *root, t_exec_utils *e_utils)
 {
 	int		i;
@@ -123,10 +101,7 @@ int	ft_exec_lst_cmd(t_ast *root, t_exec_utils *e_utils)
 	reset_fd(&cmd->exec);
 	while (++i < e_utils->len_cmd)
 	{
-		if ((cmd->cmd && cmd->args) || (!cmd->cmd && *cmd->args))
-			handle_expand(cmd, last);
-		if (cmd->redir)
-			handle_redir(cmd, e_utils->mini);
+		ft_expand_redir_gestion(cmd, e_utils, last);
 		ft_set_var_underscore(cmd->args, &last->env, e_utils->envp);
 		if (pipe(cmd->exec.pipe_fd) < 0)
 			return (ft_putendl_fd("minishell: pipe failed", 2), 1);
@@ -134,7 +109,6 @@ int	ft_exec_lst_cmd(t_ast *root, t_exec_utils *e_utils)
 			unlink_files(cmd);
 		else if (!cmd->exec.error_ex)
 			ft_exec_multi_lst_cmd(e_utils, cmd, i, e_utils->len_cmd);
-		// ft_check_exec_error(cmd, root, e_utils, i);
 		if (cmd->next)
 			cmd = cmd->next;
 	}

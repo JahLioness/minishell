@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 17:05:12 by andjenna          #+#    #+#             */
-/*   Updated: 2024/09/12 12:15:16 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/12 15:07:09 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	handle_builtin(t_cmd *cmd, t_mini *last, t_redir *tmp, t_exec *exec)
 	tmp = cmd->redir;
 	envp = ft_get_envp(&last->env);
 	if (tmp && tmp->type != REDIR_HEREDOC)
-		builtin_w_redir(tmp, exec);
+		builtin_w_redir(tmp, exec, cmd);
 	else
 	{
 		if (cmd->next)
@@ -32,24 +32,6 @@ void	handle_builtin(t_cmd *cmd, t_mini *last, t_redir *tmp, t_exec *exec)
 	ft_free_tab(envp);
 	envp = NULL;
 }
-
-// void	handle_exit(t_ast *root, t_mini **mini, char *prompt)
-// {
-// 	t_exec	exec;
-// 	t_mini	*last;
-// 	t_env	*e_status;
-// 	char	**envp;
-
-// 	exec = root->token->cmd->exec;
-// 	last = ft_minilast(*mini);
-// 	envp = ft_get_envp(&(*mini)->env);
-// 	exec.status = ft_exit(root, mini, prompt, envp);
-// 	printf("handle_exit status: %d\n", exec.status);
-// 	e_status = ft_get_exit_status(&last->env);
-// 	ft_change_exit_status(e_status, ft_itoa(exec.status));
-// 	ft_free_tab(envp);
-// 	envp = NULL;
-// }
 
 void	handle_exit(t_exec_utils *e_utils, t_cmd *cmd)
 {

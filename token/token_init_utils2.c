@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token_init_utils2.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 13:59:34 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/08/30 18:42:28 by andjenna         ###   ########.fr       */
+/*   Updated: 2024/09/12 13:39:05 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ void	ft_init_token_cmd_pipe(t_token *new, t_cmd *cmd, char *cell, int *i)
 	char	**args;
 	int		j;
 
+	(void)new;
 	while (ft_is_pipe_init(cell, i))
 	{
 		cmd->pipe = 1;
@@ -51,7 +52,7 @@ void	ft_init_token_cmd_pipe(t_token *new, t_cmd *cmd, char *cell, int *i)
 		cmd->next->args = args;
 		j = 0;
 		while (cmd->next->args && cmd->next->args[j])
-			ft_get_wildcard(new, j++);
+			ft_get_wildcard(cmd->next, j++);
 		if (cmd->next->args && *cmd->next->args)
 			cmd->next->cmd = ft_strdup(cmd->next->args[0]);
 		ft_set_cmd_redir(cell, i, cmd->next);

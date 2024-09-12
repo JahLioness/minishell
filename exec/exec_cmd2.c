@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 17:02:14 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/09/12 12:25:23 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/12 16:03:38 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,4 +87,35 @@ int	ft_exec_cmd(t_ast *root, t_exec_utils *e_utils)
 	if (g_sig == SIGQUIT)
 		handle_sigquit(exec, last);
 	return (exec->status);
+}
+
+void	ft_check_builtin(t_cmd *cmd, t_exec_utils *e_utils, t_mini *last)
+{
+	int	status;
+
+	if (ft_is_builtin(cmd->cmd) && ft_strcmp(cmd->cmd, "exit"))
+	{
+		handle_builtin(cmd, last, cmd->redir, &cmd->exec);
+		status = cmd->exec.status;
+		close_fd(cmd->exec.pipe_fd, -1);
+		// ft_close_pipe(cmd);
+		// reset_fd(&cmd->exec);
+		ft_exec_cmd_error(e_utils, e_utils->envp);
+		exit(status);
+	}
+	else if (!ft_strcmp(cmd->cmd, "exit"))
+	{
+		ft_free_envp(e_utils);
+		handle_exit(e_utils, cmd);
+		exit(EXIT_FAILURE);
+	}
+	
+}
+
+void	ft_expand_redir_gestion(t_cmd *cmd, t_exec_utils *e_utils, t_mini *last)
+{
+	if ((cmd->cmd && cmd->args) || (!cmd->cmd && *cmd->args))
+		handle_expand(cmd, last);
+	if (cmd->redir)
+		handle_redir(cmd, e_utils->mini);
 }
