@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 16:45:28 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/09/11 16:14:44 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/12 10:38:37 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	ft_close_pipe(t_cmd *cmd)
 	}
 }
 
-int	ft_exec_multi_lst_cmd(t_exec_utils *e_utils, t_cmd *cmd, int i, int len_cmd)
+int	ft_exec_multi_lst_cmd(t_exec_utils *e_utils, t_cmd *cmd, int i, int len_cmd, t_ast *root)
 {
 	t_mini	*last;
 
@@ -43,8 +43,18 @@ int	ft_exec_multi_lst_cmd(t_exec_utils *e_utils, t_cmd *cmd, int i, int len_cmd)
 		return (ft_putendl_fd("minishell: fork failed", 2), 1);
 	if (cmd->exec.pid == 0)
 	{
-		if (ft_is_builtin(cmd->cmd))
-			ft_exec_builtins(e_utils->current, cmd, e_utils);
+		if (ft_is_builtin(cmd->cmd) && ft_strcmp(cmd->cmd, "exit"))
+		{
+			handle_builtin(cmd, last, cmd->redir, &cmd->exec);
+			ft_close_pipe(cmd);
+			exit(EXIT_SUCCESS);
+		}
+		else if (!ft_strcmp(cmd->cmd, "exit"))
+		{
+			ft_free_envp(e_utils);
+			handle_exit(root, e_utils->mini, e_utils->prompt);
+			exit(EXIT_SUCCESS);
+		}
 		if (cmd->redir)
 			handle_redir_dup(&cmd->exec, cmd, last);
 		ft_free_envp(e_utils);
@@ -78,22 +88,21 @@ void	ft_exec_builtins(t_ast *root, t_cmd *cmd, t_exec_utils *e_utils)
 	}
 }
 
-void	ft_check_exec_error(t_cmd *cmd, t_ast *root, t_exec_utils *e_utils,
-		int i)
-{
-	(void)root;
-	if (cmd->exec.error_ex)
-		unlink_files(cmd);
-	else if (!cmd->exec.error_ex)
-	{
-		// if (ft_is_builtin(cmd->cmd))
-		// 	ft_exec_builtins(root, cmd, e_utils);
-		if (!ft_is_builtin(cmd->cmd) && ft_strcmp(cmd->cmd, "exit"))
-			cmd->exec.status = ft_exec_multi_lst_cmd(e_utils, cmd, i,
-					e_utils->len_cmd);
-		reset_fd(&cmd->exec);
-	}
-}
+// static void	ft_check_exec_error(t_cmd *cmd, t_ast *root, t_exec_utils *e_utils,
+// 		int i)
+// {
+// 	if (cmd->exec.error_ex)
+// 		unlink_files(cmd);
+// 	else if (!cmd->exec.error_ex)
+// 	{
+// 		if (ft_is_builtin(cmd->cmd))
+// 			ft_exec_builtins(root, cmd, e_utils);
+// 		if (!ft_is_builtin(cmd->cmd) && ft_strcmp(cmd->cmd, "exit"))
+// 			cmd->exec.status = ft_exec_multi_lst_cmd(e_utils, cmd, i,
+// 					e_utils->len_cmd);
+// 		reset_fd(&cmd->exec);
+// 	}
+// }
 
 int	ft_exec_lst_cmd(t_ast *root, t_exec_utils *e_utils)
 {
@@ -117,6 +126,10 @@ int	ft_exec_lst_cmd(t_ast *root, t_exec_utils *e_utils)
 		ft_set_var_underscore(cmd->args, &last->env, e_utils->envp);
 		if (pipe(cmd->exec.pipe_fd) < 0)
 			return (ft_putendl_fd("minishell: pipe failed", 2), 1);
+		if (cmd->exec.error_ex)
+			unlink_files(cmd);
+		else if (!cmd->exec.error_ex)
+			ft_exec_multi_lst_cmd(e_utils, cmd, i, e_utils->len_cmd, root);
 		// ft_check_exec_error(cmd, root, e_utils, i);
 		if (cmd->next)
 			cmd = cmd->next;
