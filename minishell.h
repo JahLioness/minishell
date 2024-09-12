@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 10:44:59 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/09/11 16:15:25 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/12 12:04:29 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -245,8 +245,7 @@ int					ft_echo(int fd, char **str, char **flag);
 int					ft_export(t_export_utils *utils, t_env **env, int fd);
 int					ft_cd(char **path, t_env **env);
 int					ft_pwd(int fd, t_env **env);
-int					ft_exit(t_ast *root, t_mini **mini, char *prompt,
-						char **envp);
+int					ft_exit(t_exec_utils *e_utils, t_cmd *cmd);
 void				ft_unset(char *key, t_env **env);
 
 /*		BUILTINS UITLS		*/
@@ -286,7 +285,7 @@ char				**ft_get_args_echo(char **args, t_env **env);
 char				**ft_get_flag_echo(char **args);
 void				handle_builtin(t_cmd *cmd, t_mini *last, t_redir *tmp,
 						t_exec *exec);
-void				handle_exit(t_ast *root, t_mini **mini, char *prompt);
+void				handle_exit(t_exec_utils *e_utils, t_cmd *cmd);
 
 /*			EXEC HEREDOC	*/
 int					handle_heredoc(t_cmd *node_heredoc, t_mini **mini,

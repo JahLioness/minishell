@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 17:05:12 by andjenna          #+#    #+#             */
-/*   Updated: 2024/09/11 16:17:14 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/12 12:15:16 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,21 +33,37 @@ void	handle_builtin(t_cmd *cmd, t_mini *last, t_redir *tmp, t_exec *exec)
 	envp = NULL;
 }
 
-void	handle_exit(t_ast *root, t_mini **mini, char *prompt)
+// void	handle_exit(t_ast *root, t_mini **mini, char *prompt)
+// {
+// 	t_exec	exec;
+// 	t_mini	*last;
+// 	t_env	*e_status;
+// 	char	**envp;
+
+// 	exec = root->token->cmd->exec;
+// 	last = ft_minilast(*mini);
+// 	envp = ft_get_envp(&(*mini)->env);
+// 	exec.status = ft_exit(root, mini, prompt, envp);
+// 	printf("handle_exit status: %d\n", exec.status);
+// 	e_status = ft_get_exit_status(&last->env);
+// 	ft_change_exit_status(e_status, ft_itoa(exec.status));
+// 	ft_free_tab(envp);
+// 	envp = NULL;
+// }
+
+void	handle_exit(t_exec_utils *e_utils, t_cmd *cmd)
 {
 	t_exec	exec;
 	t_mini	*last;
 	t_env	*e_status;
-	char	**envp;
 
-	exec = root->token->cmd->exec;
-	last = ft_minilast(*mini);
-	envp = ft_get_envp(&(*mini)->env);
-	exec.status = ft_exit(root, mini, prompt, envp);
+	exec = cmd->exec;
+	last = ft_minilast(*e_utils->mini);
+	exec.status = ft_exit(e_utils, cmd);
 	e_status = ft_get_exit_status(&last->env);
 	ft_change_exit_status(e_status, ft_itoa(exec.status));
-	ft_free_tab(envp);
-	envp = NULL;
+	ft_free_tab(e_utils->envp);
+	e_utils->envp = NULL;
 }
 
 int	handle_sigint(t_exec *exec, t_mini *last)
@@ -62,7 +78,6 @@ int	handle_sigint(t_exec *exec, t_mini *last)
 		g_sig = 0;
 		return (130);
 	}
-	// printf("status: %d\n",exec->status);
 	return (set_e_status(exec->status, last));
 }
 
@@ -94,11 +109,8 @@ int	ft_waitpid(t_cmd *cmd, t_mini *last, int len_cmd)
 	}
 	if (WIFEXITED(cmd->exec.status))
 	{
-		// printf("status: %d\n", WIFEXITED(cmd->exec.status));
-		// cmd->exec.status = WIFEXITED(cmd->exec.status);
 		set_e_status(WIFEXITED(cmd->exec.status), last);
 		return (handle_sigint(&cmd->exec, last));
 	}
-	// printf("status: %d\n", cmd->exec.status);
 	return (cmd->exec.status);
 }

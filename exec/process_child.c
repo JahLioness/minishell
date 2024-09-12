@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/24 18:36:42 by andjenna          #+#    #+#             */
-/*   Updated: 2024/09/11 15:04:43 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/12 10:51:52 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ void	close_fd(int *fd, int prev_fd)
 
 int	first_child(t_cmd *cmd)
 {
-	printf("first_child\n");
 	if ((!cmd->next->redir || (cmd->next->redir->type != REDIR_HEREDOC
 				&& cmd->next->redir->type != REDIR_INPUT))
 		&& cmd->exec.pipe_fd[0] != -1 && cmd->exec.pipe_fd[0] != STDIN_FILENO)
@@ -44,7 +43,6 @@ int	first_child(t_cmd *cmd)
 
 int	last_child(t_cmd *cmd)
 {
-	printf("last_child\n");
 	close_fd(cmd->exec.pipe_fd, -1);
 	if (cmd->exec.prev_fd != STDIN_FILENO && cmd->exec.prev_fd != -1)
 	{
@@ -61,7 +59,6 @@ int	last_child(t_cmd *cmd)
 
 int	middle_child(t_cmd *cmd)
 {
-	printf("middle_child\n");
 	if (cmd->exec.pipe_fd[0] != -1 && cmd->exec.pipe_fd[0] != STDIN_FILENO)
 		close(cmd->exec.pipe_fd[0]);
 	if (cmd->exec.prev_fd != STDIN_FILENO && cmd->exec.prev_fd != -1)
