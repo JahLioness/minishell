@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 16:45:28 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/09/12 17:54:00 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/12 18:00:06 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,6 @@ void	ft_close_pipe(t_cmd *cmd)
 		else
 			cmd->next->exec.prev_fd = cmd->exec.pipe_fd[0];
 	}
-	// printf("cmd = %s\n pipe_fd[0] %d\n pipe_fd[1] %d\n prev_fd %d\n redir_in %d\n", cmd->cmd, cmd->exec.pipe_fd[0], cmd->exec.pipe_fd[1], cmd->exec.prev_fd, cmd->exec.redir_in);
-	// if (cmd->next)
-	// 	printf("next prev_fd = %d\n", cmd->next->exec.prev_fd);
 }
 
 int	ft_exec_multi_lst_cmd(t_exec_utils *e_utils, t_cmd *cmd, int i, int len_cmd)
@@ -51,14 +48,6 @@ int	ft_exec_multi_lst_cmd(t_exec_utils *e_utils, t_cmd *cmd, int i, int len_cmd)
 			handle_redir_dup(&cmd->exec, cmd, last);
 		ft_free_envp(e_utils);
 		process_child(cmd, i, len_cmd);
-		// reset_fd(&cmd->exec);
-		// ft_close_pipe(cmd);
-		// if (cmd->redir)
-		// 	printf("redir in = %s\n", cmd->redir->file);
-		// printf("exec_cmd->redir_in = %d\n", cmd->exec.redir_in);
-		// printf("exec_cmd->pipe_fd[0] = %d\n", cmd->exec.pipe_fd[0]);
-		// printf("exec_cmd->pipe_fd[1] = %d\n", cmd->exec.pipe_fd[1]);
-		// printf("prev_fd = %d\n", cmd->exec.prev_fd);
 		exec_command(cmd, e_utils);
 		exit(EXIT_FAILURE);
 	}

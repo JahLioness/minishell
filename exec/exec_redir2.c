@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 15:13:36 by andjenna          #+#    #+#             */
-/*   Updated: 2024/09/12 15:06:51 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/12 18:01:08 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,8 +89,8 @@ static void	ft_redir_in(t_redir *tmp_redir, t_exec *exec, t_cmd *cmd)
 			close(exec->redir_in);
 		if (exec->redir_out == -1 && !tmp_redir->prev && !cmd->next)
 			exec->redir_out = STDOUT_FILENO;
-		else if (tmp_redir->prev->type == REDIR_OUTPUT
-			|| tmp_redir->prev->type == REDIR_APPEND)
+		else if (tmp_redir->prev && (tmp_redir->prev->type == REDIR_OUTPUT
+			|| tmp_redir->prev->type == REDIR_APPEND))
 		{
 			if (tmp_redir->type == REDIR_OUTPUT)
 				exec->redir_out = open(tmp_redir->file,

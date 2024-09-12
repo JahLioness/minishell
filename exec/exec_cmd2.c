@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 17:02:14 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/09/12 16:03:38 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/12 18:00:19 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,8 +98,6 @@ void	ft_check_builtin(t_cmd *cmd, t_exec_utils *e_utils, t_mini *last)
 		handle_builtin(cmd, last, cmd->redir, &cmd->exec);
 		status = cmd->exec.status;
 		close_fd(cmd->exec.pipe_fd, -1);
-		// ft_close_pipe(cmd);
-		// reset_fd(&cmd->exec);
 		ft_exec_cmd_error(e_utils, e_utils->envp);
 		exit(status);
 	}
