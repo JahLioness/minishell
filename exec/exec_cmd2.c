@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 17:02:14 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/09/12 10:50:08 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/12 12:25:23 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,7 @@ int	ft_exec_cmd(t_ast *root, t_exec_utils *e_utils)
 
 	cmd = root->token->cmd;
 	exec = &cmd->exec;
+	e_utils->current = root;
 	last = ft_minilast(*e_utils->mini);
 	e_utils->envp = ft_get_envp(&last->env);
 	if (root->token->type == T_CMD && root->token->cmd)

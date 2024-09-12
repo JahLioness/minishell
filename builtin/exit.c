@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 11:33:20 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/09/12 12:15:11 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/12 12:19:43 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@ int	ft_exit_one_ok(t_exec_utils *e_utils, t_cmd * cmd)
 
 	last = ft_minilast(*e_utils->mini);
 	compare = ft_itoa(ft_atol(cmd->args[1]));
-	ft_putendl_fd("exit", 1);
+	if (!e_utils->current->token->cmd->next)
+		ft_putendl_fd("exit", 1);
 	status = ft_get_exit_status(&last->env);
 	retour = ft_atol(cmd->args[1]);
 	if (status)

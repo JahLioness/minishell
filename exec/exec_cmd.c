@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 16:45:28 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/09/12 12:07:57 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/12 12:25:33 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,7 +121,6 @@ int	ft_exec_lst_cmd(t_ast *root, t_exec_utils *e_utils)
 	e_utils->len_cmd = ft_cmdsize(cmd);
 	ft_get_signal_cmd();
 	reset_fd(&cmd->exec);
-	e_utils->current = root;
 	while (++i < e_utils->len_cmd)
 	{
 		if ((cmd->cmd && cmd->args) || (!cmd->cmd && *cmd->args))
