@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 17:02:14 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/09/12 18:00:19 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/13 17:09:32 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ void	ft_execution(t_ast *root, t_exec_utils *e_utils, t_cmd *cmd,
 		else if (!exec->error_ex)
 		{
 			reset_fd(exec);
-			ft_exec_builtins(root, cmd, e_utils);
+			ft_exec_builtins(cmd, e_utils);
 			if (!ft_is_builtin(cmd->cmd) && ft_strcmp(cmd->cmd, "exit"))
 				exec->status = ft_exec_single_cmd(e_utils, cmd, exec, last);
 		}
@@ -98,6 +98,7 @@ void	ft_check_builtin(t_cmd *cmd, t_exec_utils *e_utils, t_mini *last)
 		handle_builtin(cmd, last, cmd->redir, &cmd->exec);
 		status = cmd->exec.status;
 		close_fd(cmd->exec.pipe_fd, -1);
+		reset_fd(&cmd->exec);
 		ft_exec_cmd_error(e_utils, e_utils->envp);
 		exit(status);
 	}
@@ -107,7 +108,6 @@ void	ft_check_builtin(t_cmd *cmd, t_exec_utils *e_utils, t_mini *last)
 		handle_exit(e_utils, cmd);
 		exit(EXIT_FAILURE);
 	}
-	
 }
 
 void	ft_expand_redir_gestion(t_cmd *cmd, t_exec_utils *e_utils, t_mini *last)

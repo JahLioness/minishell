@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 16:45:28 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/09/12 18:00:06 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/13 17:20:02 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ int	ft_exec_multi_lst_cmd(t_exec_utils *e_utils, t_cmd *cmd, int i, int len_cmd)
 			handle_redir_dup(&cmd->exec, cmd, last);
 		ft_free_envp(e_utils);
 		process_child(cmd, i, len_cmd);
+		reset_fd(&cmd->exec);
 		exec_command(cmd, e_utils);
 		exit(EXIT_FAILURE);
 	}
@@ -58,15 +59,15 @@ int	ft_exec_multi_lst_cmd(t_exec_utils *e_utils, t_cmd *cmd, int i, int len_cmd)
 	}
 }
 
-void	ft_exec_builtins(t_ast *root, t_cmd *cmd, t_exec_utils *e_utils)
+void	ft_exec_builtins(t_cmd *cmd, t_exec_utils *e_utils)
 {
 	t_mini	*last;
 
-	(void)root;
 	last = ft_minilast(*e_utils->mini);
 	if (ft_is_builtin(cmd->cmd) && ft_strcmp(cmd->cmd, "exit"))
 	{
 		handle_builtin(cmd, last, cmd->redir, &cmd->exec);
+		unlink_files(cmd);
 		ft_close_pipe(cmd);
 	}
 	else if (!ft_strcmp(cmd->cmd, "exit"))
@@ -74,6 +75,12 @@ void	ft_exec_builtins(t_ast *root, t_cmd *cmd, t_exec_utils *e_utils)
 		ft_free_envp(e_utils);
 		handle_exit(e_utils, cmd);
 	}
+}
+
+static void	ft_erreur_exec(t_cmd *cmd)
+{
+	ft_close_pipe(cmd);
+	unlink_files(cmd);
 }
 
 int	ft_exec_lst_cmd(t_ast *root, t_exec_utils *e_utils)
@@ -95,10 +102,7 @@ int	ft_exec_lst_cmd(t_ast *root, t_exec_utils *e_utils)
 		if (pipe(cmd->exec.pipe_fd) < 0)
 			return (ft_putendl_fd("minishell: pipe failed", 2), 1);
 		if (cmd->exec.error_ex)
-		{
-			ft_close_pipe(cmd);
-			unlink_files(cmd);
-		}
+			ft_erreur_exec(cmd);
 		else if (!cmd->exec.error_ex)
 			ft_exec_multi_lst_cmd(e_utils, cmd, i, e_utils->len_cmd);
 		if (cmd->next)

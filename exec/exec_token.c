@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 10:41:30 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/09/11 16:15:18 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/13 17:22:08 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,6 +108,5 @@ void	ft_exec_token(t_mini **mini, char *prompt)
 	exec_utils.mini = mini;
 	exec_utils.prompt = prompt;
 	ft_exec_multiple_cmd(&exec_utils, exec_utils.granny);
-	// print_ast(exec_utils.granny, 0, ' ');
 	ft_clear_ast(exec_utils.granny);
 }

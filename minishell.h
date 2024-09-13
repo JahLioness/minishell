@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 10:44:59 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/09/12 15:07:53 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/13 17:22:43 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -273,8 +273,7 @@ char				*ft_get_cmd_path_env(char *cmd, char **env);
 void				ft_exec_token(t_mini **mini, char *prompt);
 void				ft_set_var_underscore(char **args, t_env **env,
 						char **envp);
-void				ft_exec_builtins(t_ast *root, t_cmd *cmd,
-						t_exec_utils *e_utils);
+void				ft_exec_builtins(t_cmd *cmd, t_exec_utils *e_utils);
 
 /*			EXEC BUILTINS	*/
 int					ft_exec_builtin(t_cmd *cmd, t_env **env, int fd);
@@ -326,7 +325,8 @@ void				ft_expand_redir_gestion(t_cmd *cmd, t_exec_utils *e_utils,
 void				handle_redir(t_cmd *cmd, t_mini **mini);
 void				ft_handle_redir_file(t_cmd *cmd, t_mini *last);
 void				cat_wt_symbole(t_cmd *cmd, t_exec *exec);
-void				builtin_w_redir(t_redir *tmp_redir, t_exec *exec, t_cmd *cmd);
+void				builtin_w_redir(t_redir *tmp_redir, t_exec *exec,
+						t_cmd *cmd);
 void				handle_redir_dup(t_exec *exec, t_cmd *cmd, t_mini *last);
 void				set_redir(t_redir *current, t_exec *exec, t_cmd *cmd);
 void				ft_handle_redir_file_loop(t_redir *redir, t_exec *exec,

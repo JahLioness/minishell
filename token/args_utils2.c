@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 16:22:24 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/09/12 13:30:14 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/13 17:13:17 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,17 +62,14 @@ int	ft_check_len(char *str, int i, char *key)
 		return (1);
 	else if (!ft_strncmp(str + i, key, ft_strlen(key)))
 	{
-		if (str[i + 1] && (ft_is_whitespaces(str[i + 1]) || ft_is_upper(str[i
-						+ 1])))
+		if ((str[i] && str[i] == '?') || (str[i + ft_strlen(key)]
+				&& ft_is_whitespaces(str[i + ft_strlen(key)])))
 			return (1);
 		else
 			return (0);
 	}
 	else
 	{
-		while (str[len] && (ft_is_whitespaces(str[len])
-				|| ft_is_upper(str[len])))
-			len++;
 		if (str[len] == '\0' || ((str[len] == '"' || str[len] == '\'')
 				&& str[len + 1] == '\0'))
 			return (1);
