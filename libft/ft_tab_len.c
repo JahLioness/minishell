@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_tab_len.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
+/*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 17:49:05 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/09/10 16:28:10 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/16 16:10:31 by andjenna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,10 @@ size_t	ft_tab_len(char **tab)
 	i = 0;
 	if (!tab || !tab[0])
 		return (0);
-	while (tab[i])
+	while (tab[i] && tab[i][0])
+	{
+		printf("tab[%zu] = %s\n",i ,tab[i]);
 		i++;
+	}
 	return (i);
 }

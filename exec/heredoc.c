@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
+/*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 12:59:24 by andjenna          #+#    #+#             */
-/*   Updated: 2024/09/16 13:08:08 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/16 16:39:29 by andjenna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ int	process_parent_heredoc(t_cmd *cmd, t_mini *last,
 		e_status = ft_get_exit_status(&last->env);
 		if (g_sig == SIGINT)
 		{
-			unlink(cmd->redir->file_heredoc);
+			// unlink(cmd->redir->file_heredoc);
 			kill(cmd->exec.pid, SIGKILL);
 			cmd->exec.error_ex = 1;
 			ft_putendl_fd("^C", 1);

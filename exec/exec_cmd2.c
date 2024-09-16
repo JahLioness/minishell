@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_cmd2.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
+/*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 17:02:14 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/09/13 17:09:32 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/16 16:55:24 by andjenna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ void	ft_execution(t_ast *root, t_exec_utils *e_utils, t_cmd *cmd,
 		ft_set_var_underscore(cmd->args, &last->env, e_utils->envp);
 		if (exec->error_ex)
 			unlink_files(cmd);
-		else if (!exec->error_ex)
+		if (!exec->error_ex)
 		{
 			reset_fd(exec);
 			ft_exec_builtins(cmd, e_utils);

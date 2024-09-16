@@ -5,6 +5,7 @@ CFLAGS = -Wall -Wextra -Werror -g3
 NAME = minishell
 
 SRC = main.c \
+		debug_utils.c \
 		all_utils.c \
 		all_utils2.c \
 		all_utils3.c \

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_cmd.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
+/*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 16:45:28 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/09/13 17:20:02 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/16 17:01:15 by andjenna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,8 @@ int	ft_exec_multi_lst_cmd(t_exec_utils *e_utils, t_cmd *cmd, int i, int len_cmd)
 		ft_free_envp(e_utils);
 		process_child(cmd, i, len_cmd);
 		reset_fd(&cmd->exec);
+		close_fd(cmd->exec.pipe_fd, cmd->exec.prev_fd);
+		unlink_files(cmd);
 		exec_command(cmd, e_utils);
 		exit(EXIT_FAILURE);
 	}
@@ -79,6 +81,7 @@ void	ft_exec_builtins(t_cmd *cmd, t_exec_utils *e_utils)
 
 static void	ft_erreur_exec(t_cmd *cmd)
 {
+	printf("here\n\n");
 	ft_close_pipe(cmd);
 	unlink_files(cmd);
 }

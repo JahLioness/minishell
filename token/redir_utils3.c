@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir_utils3.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
+/*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/30 18:14:04 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/08/30 18:16:00 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/16 16:21:39 by andjenna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ void	ft_check_redir_arg(t_cmd *new, char *cell, int *i)
 	j = 0;
 	if (!new || !new->args)
 		return ;
+	printf("tab_len = %zu\n", ft_tab_len(new->args));
 	new_args = ft_calloc(ft_tab_len(new->args) + 2, sizeof(char *));
 	while (new->args && new->args[j])
 	{

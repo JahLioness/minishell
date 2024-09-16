@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_redir_utils.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
+/*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 13:01:09 by andjenna          #+#    #+#             */
-/*   Updated: 2024/09/13 16:16:02 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/16 16:56:32 by andjenna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,25 +26,31 @@ void	reset_fd(t_exec *exec)
 	}
 }
 
-void	unlink_files(t_cmd *cmd)
+// void	unlink_files(t_cmd *cmd)
+// {
+// 	t_redir	*tmp;
+// 	t_cmd	*tmp_cmd;
+
+// 	tmp_cmd = cmd;
+// 	while (tmp_cmd)
+// 	{
+// 		tmp = tmp_cmd->redir;
+// 		while (tmp)
+// 		{
+// 			if (tmp->file_heredoc && access(tmp->file_heredoc, F_OK) == 0)
+// 				unlink(tmp->file_heredoc);
+// 			tmp = tmp->next;
+// 		}
+// 		tmp_cmd = tmp_cmd->next;
+// 	}
+// }
+
+void	unlink_files(t_cmd * cmd)
 {
-	t_redir	*tmp;
-	t_cmd	*tmp_cmd;
-
-	tmp_cmd = cmd;
-	while (tmp_cmd)
-	{
-		tmp = tmp_cmd->redir;
-		while (tmp)
-		{
-			if (tmp->file_heredoc && access(tmp->file_heredoc, F_OK) == 0)
-				unlink(tmp->file_heredoc);
-			tmp = tmp->next;
-		}
-		tmp_cmd = tmp_cmd->next;
-	}
+	if (cmd->redir && cmd->redir->file_heredoc
+		&& access(cmd->redir->file_heredoc, F_OK) == 0)
+		unlink(cmd->redir->file_heredoc);
 }
-
 void	handle_redir(t_cmd *cmd, t_mini **mini)
 {
 	t_exec	*exec;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
+/*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/24 18:35:55 by andjenna          #+#    #+#             */
-/*   Updated: 2024/09/16 13:00:03 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/16 16:29:40 by andjenna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ void	handle_expand(t_cmd *cmd, t_mini *last)
 	if (cmd->args && cmd->args[0] && !*cmd->args[0] && cmd->args[1])
 		ft_handle_empty_first_arg(cmd);
 }
+
 
 int	ft_cmdsize(t_cmd *cmd)
 {
