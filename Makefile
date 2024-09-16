@@ -8,7 +8,6 @@ SRC = main.c \
 		all_utils.c \
 		all_utils2.c \
 		all_utils3.c \
-		debug_utils.c \
 		prompt.c \
 		prompt_utils.c \
 		signaux.c \

@@ -6,11 +6,13 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 10:41:30 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/09/13 17:22:08 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/16 13:30:18 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+// cmd : (echo -n b && echo -n r || echo -n c && (echo -n a || ( echo -n e || (echo -n f && (echo -n g))) || echo -n h ) && echo -n v || (echo -n j && (echo -n k || echo -n l)) && echo o)
 
 int	ft_check_heredoc(t_ast *current)
 {

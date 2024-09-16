@@ -6,11 +6,14 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 11:33:20 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/09/12 13:17:27 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/16 11:44:02 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+//exit accepte jusqu'au long long max a modifier
+// exit with too many args exit code = 127
 
 int	ft_exit_one_ok(t_exec_utils *e_utils, t_cmd *cmd)
 {

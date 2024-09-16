@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/24 18:35:55 by andjenna          #+#    #+#             */
-/*   Updated: 2024/09/10 16:50:55 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/16 13:00:03 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,9 @@ void	ft_handle_empty_first_arg(t_cmd *cmd)
 	free(cmd->args[i]);
 	cmd->args[i] = NULL;
 }
+
+//expand var + caractere spe ok sauf _ 
+// " jesuis$USERla" -> "jesuis"
 
 void	handle_expand(t_cmd *cmd, t_mini *last)
 {

@@ -6,11 +6,20 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 12:59:24 by andjenna          #+#    #+#             */
-/*   Updated: 2024/08/29 17:58:17 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/16 13:08:08 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+// ctrl + C sur heredoc = minishell: xwkuvrvtik : No such file or directory
+
+// cat << max Makefile Makefile  > t :
+// free(): invalid pointer
+// [1]    199437 IOT instruction (core dumped)  ./minishell
+
+// cat > t Makefile Makefile :
+// [1]    200872 segmentation fault (core dumped)  ./minishell
 
 void	process_child_heredoc(t_cmd *cmd, t_mini *last, t_mini **mini,
 		char *prompt)

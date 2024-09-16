@@ -6,11 +6,14 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 16:00:19 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/08/30 14:07:36 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/16 13:24:15 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+//reset PWD et OLDPWD si les var sont unset
+// reset var env -i pcq $_ se reset
 
 static void	ft_cd_utils(t_env **env, char *old_dir)
 {
