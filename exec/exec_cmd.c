@@ -6,7 +6,7 @@
 /*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 16:45:28 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/09/16 17:01:15 by andjenna         ###   ########.fr       */
+/*   Updated: 2024/09/17 15:20:05 by andjenna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,6 @@ void	ft_exec_builtins(t_cmd *cmd, t_exec_utils *e_utils)
 
 static void	ft_erreur_exec(t_cmd *cmd)
 {
-	printf("here\n\n");
 	ft_close_pipe(cmd);
 	unlink_files(cmd);
 }

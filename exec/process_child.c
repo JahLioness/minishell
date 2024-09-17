@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   process_child.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
+/*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/24 18:36:42 by andjenna          #+#    #+#             */
-/*   Updated: 2024/09/12 17:29:59 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/17 15:24:21 by andjenna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,11 @@ int	first_child(t_cmd *cmd)
 	{
 		dup2(cmd->exec.redir_in, STDIN_FILENO);
 		close(cmd->exec.redir_in);
+	}
+	if (cmd->exec.redir_out != STDOUT_FILENO && cmd->exec.redir_out != -1)
+	{
+		dup2(cmd->exec.redir_out, STDOUT_FILENO);
+		close(cmd->exec.redir_out);
 	}
 	return (0);
 }

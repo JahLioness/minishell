@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_token2.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
+/*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 16:58:47 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/08/29 17:43:38 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/17 15:15:14 by andjenna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	ft_get_heredoc_loop(t_token *token, t_mini **mini, char *prompt)
 			cmd = tmp->cmd;
 			if (cmd->next)
 				ft_check_cmd_node_hd(cmd, mini, prompt);
-			else
+			else if (cmd->redir && cmd->redir->type == REDIR_HEREDOC)
 			{
 				heredoc = get_heredoc_node(cmd);
 				handle_heredoc(heredoc, mini, prompt);

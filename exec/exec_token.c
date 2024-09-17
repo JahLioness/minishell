@@ -6,7 +6,7 @@
 /*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 10:41:30 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/09/17 14:52:10 by andjenna         ###   ########.fr       */
+/*   Updated: 2024/09/17 15:15:54 by andjenna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,22 +54,22 @@ int	ft_exec_multiple_cmd(t_exec_utils *e_utils, t_ast *current)
 	return (exit_status);
 }
 
-t_cmd	*ft_return_heredoc(t_cmd *cmd, t_redir *redir)
-{
-	t_cmd	*heredoc;
+// t_cmd	*ft_return_heredoc(t_cmd *cmd, t_redir *redir)
+// {
+// 	t_cmd	*heredoc;
 
-	heredoc = NULL;
-	while (redir)
-	{
-		if (redir->type == REDIR_HEREDOC)
-		{
-			heredoc = cmd;
-			break ;
-		}
-		redir = redir->next;
-	}
-	return (heredoc);
-}
+// 	heredoc = NULL;
+// 	while (redir)
+// 	{
+// 		if (redir->type == REDIR_HEREDOC)
+// 		{
+// 			heredoc = cmd;
+// 			break ;
+// 		}
+// 		redir = redir->next;
+// 	}
+// 	return (heredoc);
+// }
 
 t_cmd	*get_heredoc_node(t_cmd *cmd)
 {
