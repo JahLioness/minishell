@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 13:40:27 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/06/26 13:47:12 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/17 14:46:28 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,4 +47,51 @@ void	ft_print_exit(char *str)
 	}
 	else
 		ft_putendl_fd("too many arguments", 2);
+}
+
+static int	ft_nbr_length_itoa(long long n)
+{
+	int	count;
+
+	count = 0;
+	if (n == 0)
+		return (1);
+	if (n < 0)
+	{
+		count++;
+		n = -n;
+	}
+	while (n != 0)
+	{
+		n = n / 10;
+		count++;
+	}
+	return (count);
+}
+
+char	*ft_ltoa(long long nb)
+{
+	char		*ret;
+	int			i;
+	int 		len;
+
+	len = ft_nbr_length_itoa(nb);
+	ret = malloc(sizeof(char) * (len + 1));
+	if (!ret)
+		return (NULL);
+	ret[len] = '\0';
+	if (nb < 0)
+	{
+		i = 1;
+		nb = -nb;
+		ret[0] = '-';
+	}
+	else
+		i = 0;
+	while (len-- > i)
+	{
+		ret[len] = '0' + (nb % 10);
+		nb /= 10;
+	}
+	return (ret);
 }

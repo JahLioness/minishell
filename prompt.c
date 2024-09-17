@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 11:03:48 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/09/17 10:25:18 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/17 12:13:10 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,10 @@ char	*ft_set_env_prompt(t_mini **mini_lst, char **envp)
 		(*mini_lst)->env = NULL;
 	prompt = ft_get_prompt((*mini_lst)->env);
 	if (!prompt)
+	{
+		ft_clear_lst(mini_lst);
 		exit(1);
+	}
 	return (prompt);
 }
 

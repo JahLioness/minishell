@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 10:44:59 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/09/13 17:22:43 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/17 14:45:23 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,6 +153,7 @@ int					ft_skip_spaces(char *str, int *i);
 int					ft_is_pipe_init(char *line, int *i);
 int					ft_is_pipe_alone(t_token *token);
 void				ft_free_envp(t_exec_utils *e_utils);
+char				*ft_ltoa(long long n);
 
 /*			PROMPT          */
 char				*ft_get_prompt(t_env *env);

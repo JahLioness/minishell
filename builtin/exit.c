@@ -6,14 +6,11 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 11:33:20 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/09/16 11:44:02 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/17 14:47:26 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-//exit accepte jusqu'au long long max a modifier
-// exit with too many args exit code = 127
 
 int	ft_exit_one_ok(t_exec_utils *e_utils, t_cmd *cmd)
 {
@@ -23,11 +20,11 @@ int	ft_exit_one_ok(t_exec_utils *e_utils, t_cmd *cmd)
 	t_mini	*last;
 
 	last = ft_minilast(*e_utils->mini);
-	compare = ft_itoa(ft_atol(cmd->args[1]));
+	compare = ft_itoa(ft_atoll(cmd->args[1]));
 	if (!e_utils->current->token->cmd->next)
 		ft_putendl_fd("exit", 1);
 	status = ft_get_exit_status(&last->env);
-	retour = ft_atol(cmd->args[1]);
+	retour = ft_atoll(cmd->args[1]);
 	if (status)
 		ft_change_exit_status(status, ft_itoa(retour % 256));
 	else
@@ -45,7 +42,7 @@ int	ft_exit_one_arg(t_exec_utils *e_utils, t_cmd *cmd)
 	char	*tmp;
 	char	*tmp2;
 
-	compare = ft_itoa(ft_atol(cmd->args[1]));
+	compare = ft_ltoa(ft_atoll(cmd->args[1]));
 	if (cmd->args[1][0] == '+')
 	{
 		tmp = ft_strndup(&cmd->args[1][0], 1);
@@ -82,6 +79,8 @@ int	ft_exit(t_exec_utils *e_utils, t_cmd *cmd)
 				e_utils->prompt);
 			exit(2);
 		}
+		else if (!ft_is_num(cmd->args[2]))
+			return (ft_print_exit(NULL), 127);
 		else
 			return (ft_print_exit(NULL), 1);
 	}
