@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   args_utils2.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 16:22:24 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/09/16 16:37:36 by andjenna         ###   ########.fr       */
+/*   Updated: 2024/09/17 12:05:58 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,14 @@ char	*ft_get_value_from_varu(t_env *env, char *str, int i, char *ret)
 	return (ret);
 }
 
+static int	ft_check_spe_char(char c)
+{
+	if ((c >= 33 && c <= 47) || (c >= 58 && c <= 64) || (c >= 91 && c <= 94)
+		|| c == 96 || (c >= 123 && c <= 126))
+		return (1);
+	return (0);
+}
+
 int	ft_check_len(char *str, int i, char *key)
 {
 	int	len;
@@ -62,8 +70,9 @@ int	ft_check_len(char *str, int i, char *key)
 		return (1);
 	else if (!ft_strncmp(str + i, key, ft_strlen(key)))
 	{
-		if ((str[i] && str[i] == '?') || (str[i + ft_strlen(key)]
-				&& ft_is_whitespaces(str[i + ft_strlen(key)])))
+		if ((str[i] && (str[i] == '?')) || (str[i + ft_strlen(key)]
+				&& (ft_is_whitespaces(str[i + ft_strlen(key)])
+					|| ft_check_spe_char(str[i + ft_strlen(key)]))))
 			return (1);
 		else
 			return (0);
@@ -71,7 +80,7 @@ int	ft_check_len(char *str, int i, char *key)
 	else
 	{
 		if (str[len] == '\0' || ((str[len] == '"' || str[len] == '\'')
-				&& str[len + 1] == '\0'))
+					&& str[len + 1] == '\0'))
 			return (1);
 	}
 	return (0);
