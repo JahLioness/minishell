@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 15:33:02 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/09/10 16:41:43 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/17 10:45:42 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ void	ft_putendl_fd(char *s, int fd);
 void	ft_putnbr_fd(int n, int fd);
 char	*ft_strndup(char *s, size_t n);
 size_t	ft_tab_len(char **tab);
+char	**ft_tab_copy(char **tab);
 int		ft_strcmp(const char *s1, const char *s2);
 char	*ft_strtok(char *str, char *sep);
 char	*ft_strncpy(char *dest, const char *src, size_t n);

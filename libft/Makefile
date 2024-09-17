@@ -1,6 +1,6 @@
 CC = cc
 
-CFLAGS = -Wall -Werror -Wextra
+CFLAGS = -Wall -Werror -Wextra -g3
 
 SRCS = ft_atoi.c \
 	ft_atol.c \
@@ -46,6 +46,7 @@ SRCS = ft_atoi.c \
 	get_next_line.c \
 	get_next_line_utils.c \
 	ft_tab_len.c \
+	ft_tab_copy.c \
 	ft_free_tab.c \
 	ft_strcmp.c \
 	ft_strtok.c \

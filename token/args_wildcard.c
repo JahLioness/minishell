@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 15:01:54 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/08/26 14:04:23 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/17 10:38:14 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,7 @@ char	**ft_wildcard_check(char **args, int j)
 		w.i++;
 		j++;
 	}
+	wildcard[w.i] = NULL;
 	ft_free_tab(args);
 	return (wildcard);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   prompt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 11:03:48 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/09/16 15:54:18 by andjenna         ###   ########.fr       */
+/*   Updated: 2024/09/17 10:25:18 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ void	ft_prompt(t_mini **mini_lst, char **envp)
 	}
 	free(prompt);
 	rl_clear_history();
-	ft_clear_lst(mini_lst);
 	ft_print_lst(*mini_lst);
+	ft_clear_lst(mini_lst);
 	exit(0);
 }

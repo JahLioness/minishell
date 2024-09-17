@@ -1,25 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_tab_len.c                                       :+:      :+:    :+:   */
+/*   ft_tab_copy.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/01 17:49:05 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/09/17 10:58:12 by ede-cola         ###   ########.fr       */
+/*   Created: 2024/09/17 10:45:01 by ede-cola          #+#    #+#             */
+/*   Updated: 2024/09/17 10:53:18 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-size_t	ft_tab_len(char **tab)
+char	**ft_tab_copy(char **tab)
 {
+	char	**new;
 	size_t	i;
 
 	i = 0;
-	if (!tab || !tab[0])
-		return (0);
-	while (tab[i])
+	new = ft_calloc(ft_tab_len(tab) + 1, sizeof(char *));
+	if (!new)
+		return (NULL);
+	while (tab && tab[i])
+	{
+		new[i] = ft_strdup(tab[i]);
 		i++;
-	return (i);
+	}
+	new[i] = NULL;
+	return (new);
 }
