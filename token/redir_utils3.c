@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir_utils3.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
+/*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/30 18:14:04 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/09/17 11:22:59 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/17 11:57:54 by andjenna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@
 // 	}
 // 	new->args[j] = NULL;
 // }
+
+
 
 void	ft_check_redir_arg(t_cmd *new, char *cell, int *i)
 {

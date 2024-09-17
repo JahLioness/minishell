@@ -6,7 +6,7 @@
 /*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 13:01:09 by andjenna          #+#    #+#             */
-/*   Updated: 2024/09/16 16:56:32 by andjenna         ###   ########.fr       */
+/*   Updated: 2024/09/17 11:56:18 by andjenna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,30 +26,18 @@ void	reset_fd(t_exec *exec)
 	}
 }
 
-// void	unlink_files(t_cmd *cmd)
-// {
-// 	t_redir	*tmp;
-// 	t_cmd	*tmp_cmd;
-
-// 	tmp_cmd = cmd;
-// 	while (tmp_cmd)
-// 	{
-// 		tmp = tmp_cmd->redir;
-// 		while (tmp)
-// 		{
-// 			if (tmp->file_heredoc && access(tmp->file_heredoc, F_OK) == 0)
-// 				unlink(tmp->file_heredoc);
-// 			tmp = tmp->next;
-// 		}
-// 		tmp_cmd = tmp_cmd->next;
-// 	}
-// }
-
 void	unlink_files(t_cmd * cmd)
 {
-	if (cmd->redir && cmd->redir->file_heredoc
-		&& access(cmd->redir->file_heredoc, F_OK) == 0)
-		unlink(cmd->redir->file_heredoc);
+	t_redir *tmp;
+
+	tmp = cmd->redir;
+	while (tmp)
+	{
+		if (cmd->redir && cmd->redir->file_heredoc
+			&& access(cmd->redir->file_heredoc, F_OK) == 0)
+			unlink(cmd->redir->file_heredoc);
+		tmp = tmp->next;
+	}
 }
 void	handle_redir(t_cmd *cmd, t_mini **mini)
 {
