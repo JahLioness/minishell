@@ -6,7 +6,7 @@
 /*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 14:31:02 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/09/17 11:32:18 by andjenna         ###   ########.fr       */
+/*   Updated: 2024/09/17 11:57:06 by andjenna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,25 +43,6 @@ void	ft_clear_redir(t_redir *redir)
 	}
 }
 
-// void	ft_clear_token_redir(t_redir *redir)
-// {
-// 	t_redir	*tmp;
-
-// 	while (redir)
-// 	{
-// 		tmp = redir;
-// 		redir = redir->next;
-// 		if (tmp->file_heredoc)
-// 		{
-// 			if (access(tmp->file_heredoc, F_OK) == 0)
-// 				unlink(tmp->file_heredoc);
-// 			free(tmp->file_heredoc);
-// 		}
-// 		free(tmp->file);
-// 		free(tmp);
-// 	}
-// }
-
 void	ft_clear_cmd(t_cmd **cmd)
 {
 	t_cmd	*tmp;
@@ -74,8 +55,6 @@ void	ft_clear_cmd(t_cmd **cmd)
 			ft_free_tab(tmp->args);
 		if (tmp->redir)
 			ft_clear_redir(tmp->redir);
-		// else if (tmp && tmp->redir && !tmp->cmd)
-		// 	ft_clear_token_redir(tmp->redir);
 		if (tmp->cmd)
 			free(tmp->cmd);
 		free(tmp);
