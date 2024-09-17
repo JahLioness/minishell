@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 12:20:45 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/08/26 17:57:26 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/17 12:33:38 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@ int	ft_check_bracket(t_token *token)
 		return (0);
 	tmp_prev = token->prev;
 	i = 0;
-	if (token->type == T_OR)
-		i++;
+	// if (token->type == T_OR)
+	// 	i++;
 	while (tmp_prev)
 	{
 		if (tmp_prev->type == O_BRACKET)

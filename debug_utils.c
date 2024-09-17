@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 12:18:04 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/08/29 12:12:05 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/17 12:18:10 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,11 +163,12 @@ void print_ast(t_ast *node, int depth, char c)
 			while (tmp_cmd)
 			{
 				printf("CMD: %s   ", tmp_cmd->cmd);
-				printf(" %s", node->token->cmd->args[1]);
+				printf(" %s", tmp_cmd->args[1]);
 				tmp_cmd = tmp_cmd->next;
 			}
 		}
         printf("CMD: %s", node->token->cmd->cmd);
+		printf(" %s", node->token->cmd->args[2]);
 		if (node->token->cmd->redir)
 		{
 			switch (node->token->cmd->redir->type)
