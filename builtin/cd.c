@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 16:00:19 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/09/16 13:24:15 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/17 17:48:35 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,10 @@ static void	ft_cd_utils(t_env **env, char *old_dir)
 		ft_envadd_back(env, ft_envnew(ft_strdup("PWD"), ft_strdup(pwd)));
 		ft_envadd_back(env, ft_envnew(ft_strdup("OLDPWD"), ft_strdup(old_dir)));
 	}
+	else if (!ft_is_var_in_env(env, "PWD"))
+		ft_envadd_back(env, ft_envnew(ft_strdup("PWD"), ft_strdup(pwd)));
+	if (!ft_is_var_in_env(env, "OLDPWD"))
+		ft_envadd_back(env, ft_envnew(ft_strdup("OLDPWD"), ft_strdup(old_dir)));
 	else
 		ft_change_env(env, pwd, old_dir);
 	free(pwd);
@@ -59,7 +63,7 @@ static char	*ft_get_new_dir(char *old_dir, char *new_dir, t_env **env)
 	return (new_dir);
 }
 
-static int	ft_no_oldir(t_env **env, char *new_dir)
+static int	ft_no_oldir(t_env **env)
 {
 	t_env	*status;
 
@@ -71,7 +75,6 @@ static int	ft_no_oldir(t_env **env, char *new_dir)
 	ft_putstr_fd("minishell: cd: error retrieving current directory:", 2);
 	ft_putstr_fd("getcwd: cannot access parent directories:", 2);
 	ft_putendl_fd("No such file or directory", 2);
-	free(new_dir);
 	return (0);
 }
 
@@ -82,11 +85,11 @@ int	ft_cd_util(char **path, t_env **env)
 	t_env	*status;
 
 	new_dir = ft_strdup(path[1]);
-	old_dir = getcwd(NULL, 0);
+	old_dir = ft_get_old_pwd(env);
 	new_dir = ft_get_new_dir(old_dir, new_dir, env);
 	if (!old_dir && (ft_strncmp(new_dir, ft_get_old_pwd(env), ft_strlen(new_dir)
 				- 1) && ft_strcmp(new_dir, ft_get_home(env))))
-		return (ft_no_oldir(env, new_dir));
+		ft_no_oldir(env);
 	if (chdir(new_dir) == 0)
 		ft_cd_utils(env, old_dir);
 	else

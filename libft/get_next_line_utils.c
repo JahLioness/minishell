@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/01 14:49:37 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/06/18 15:18:01 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/17 17:26:38 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ char	*ft_strjoin_gnl(char *s1, char *s2)
 		return (NULL);
 	ret = malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2)) + 1);
 	if (!ret)
-		return (NULL);
+		return (free(s1), NULL);
 	while (s1[i])
 	{
 		ret[i] = s1[i];

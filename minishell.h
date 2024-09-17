@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 10:44:59 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/09/17 14:45:23 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/17 17:36:18 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,6 +171,7 @@ t_env				*ft_env_copy(t_env *env);
 t_env				*ft_envnew(char *key, char *value);
 t_env				*ft_envlast(t_env *env);
 t_env				*ft_get_exit_status(t_env **env);
+int					ft_is_var_in_env(t_env **env, char *var);
 
 /*			CLEAR			*/
 void				ft_clearenv(t_env **env);

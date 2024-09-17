@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/30 13:53:55 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/08/30 14:02:13 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/17 17:48:02 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ char	*ft_get_old_pwd(t_env **env)
 	{
 		if (!ft_strcmp(tmp->key, "OLDPWD"))
 		{
-			old_pwd = tmp->value;
+			old_pwd = ft_strdup(tmp->value);
 			break ;
 		}
 		tmp = tmp->next;

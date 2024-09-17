@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 14:10:03 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/06/18 14:44:22 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/17 18:01:55 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,11 +57,17 @@ static char	*ft_get_ret(char *ret, char *user, char *post)
 
 	ret = ft_strjoin(user, "@");
 	ret = ft_strjoin_free(ret, post);
-	ret = ft_strjoin_free(ret, ":~");
+	ret = ft_strjoin_free(ret, ":");
 	cwd = getcwd(NULL, 0);
-	if (cwd)
+	if (cwd && user && !ft_strncmp(cwd, "/home/", ft_strlen("/home/")))
 	{
+		ret = ft_strjoin_free(ret, "~");
 		ret = ft_strjoin_free(ret, ft_strchr(cwd, '/') + 6 + ft_strlen(user));
+		free(cwd);
+	}
+	else 
+	{
+		ret = ft_strjoin_free(ret, cwd);
 		free(cwd);
 	}
 	return (ret);
