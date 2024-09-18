@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 14:10:03 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/09/18 11:49:53 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/18 17:21:05 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,8 @@ static char	*ft_get_ret(char *ret, char *user, char *post)
 	}
 	else
 	{
-		ret = ft_strjoin_free(ret, cwd);
+		if (cwd)
+			ret = ft_strjoin_free(ret, cwd);
 		free(cwd);
 	}
 	return (ret);

@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 10:44:59 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/09/18 15:39:54 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/18 17:26:51 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -267,6 +267,8 @@ void				ft_print_exit(char *str);
 char				*ft_get_old_pwd(t_env **env);
 char				*ft_get_home(t_env **env);
 char				*ft_gestion_tilde(t_env **env, char *new_dir);
+void				ft_old_inexistent(t_env **env);
+int					ft_no_oldir(t_env **env);
 
 /*			EXEC			*/
 int					exec_command(t_cmd *cmd, t_exec_utils *e_utils);
@@ -307,7 +309,8 @@ void				ft_get_heredoc_loop(t_token *token, t_mini **mini,
 						char *prompt);
 char				*ft_verif_arg_heredoc(char **str, t_env **env, t_cmd *cmd,
 						int j);
-char				*ft_get_ret_heredoc(t_env *env, char *ret, char *str, int i);
+char				*ft_get_ret_heredoc(t_env *env, char *ret, char *str,
+						int i);
 
 /*			EXEC_UTILS		*/
 int					set_e_status(int status, t_mini *last);

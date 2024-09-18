@@ -6,14 +6,11 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 16:00:19 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/09/17 17:48:35 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/18 17:26:40 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-//reset PWD et OLDPWD si les var sont unset
-// reset var env -i pcq $_ se reset
 
 static void	ft_cd_utils(t_env **env, char *old_dir)
 {
@@ -63,7 +60,7 @@ static char	*ft_get_new_dir(char *old_dir, char *new_dir, t_env **env)
 	return (new_dir);
 }
 
-static int	ft_no_oldir(t_env **env)
+int	ft_no_oldir(t_env **env)
 {
 	t_env	*status;
 
@@ -87,9 +84,7 @@ int	ft_cd_util(char **path, t_env **env)
 	new_dir = ft_strdup(path[1]);
 	old_dir = ft_get_old_pwd(env);
 	new_dir = ft_get_new_dir(old_dir, new_dir, env);
-	if (!old_dir && (ft_strncmp(new_dir, ft_get_old_pwd(env), ft_strlen(new_dir)
-				- 1) && ft_strcmp(new_dir, ft_get_home(env))))
-		ft_no_oldir(env);
+	ft_old_inexistent(env);
 	if (chdir(new_dir) == 0)
 		ft_cd_utils(env, old_dir);
 	else

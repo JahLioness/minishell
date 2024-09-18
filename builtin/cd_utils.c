@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/30 13:53:55 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/09/17 17:48:02 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/18 17:25:52 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,4 +77,14 @@ char	*ft_gestion_tilde(t_env **env, char *new_dir)
 		tmp = tmp->next;
 	}
 	return (new_dir);
+}
+
+void	ft_old_inexistent(t_env **env)
+{
+	char	*tmp_old;
+
+	tmp_old = getcwd(NULL, 0);
+	if (!tmp_old)
+		ft_no_oldir(env);
+	free(tmp_old);
 }
