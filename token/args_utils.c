@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 14:31:22 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/09/17 17:23:21 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/18 11:48:45 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,8 +110,6 @@ char	*ft_check_acc_expand(char *str, t_env **env, t_cmd *cmd, int j)
 	{
 		key = ft_substr(str, 2, i - 2);
 		value = ft_check_value_from_env(key, value, env);
-		// if (!value)
-		// 	free(key);
 	}
 	return (value);
 }

@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 14:35:49 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/08/22 19:24:49 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/18 11:58:21 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,9 +69,10 @@ t_redir	*ft_init_redir(void)
 	redir = ft_calloc(sizeof(t_redir), 1);
 	if (!redir)
 		return (NULL);
-	redir->type = 0;
+	redir->type = 4;
 	redir->fd_redir = -1;
 	redir->file = NULL;
+	redir->file_heredoc = NULL;
 	return (redir);
 }
 

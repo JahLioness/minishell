@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 13:12:04 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/09/10 16:32:50 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/18 13:34:11 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,8 @@ int	ft_set_quote(char *str, int *i)
 	if (str[*i] == '"' || str[*i] == '\'')
 	{
 		quote = str[*i];
-		(*i)++;
+		if (quote == '"')
+			(*i)++;
 	}
 	return (quote);
 }

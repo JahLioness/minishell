@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 13:03:22 by andjenna          #+#    #+#             */
-/*   Updated: 2024/09/12 13:18:25 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/18 15:39:38 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,4 +62,16 @@ void	ft_get_heredoc(t_cmd *cmd, t_mini *last, t_redir *current_redir)
 	if (urandom_fd < 0)
 		return ;
 	launch_prompt_heredoc(cmd, current_redir, last, urandom_fd);
+}
+
+char	*ft_get_ret_heredoc(t_env *env, char *ret, char *str, int i)
+{
+	if (!ft_strcmp(env->key, "_"))
+	{
+		ret = ft_get_value_from_varu(env, str, i, ret);
+		return (ret);
+	}
+	ret = ft_strjoin_free(ret, env->value);
+	ret = ft_strjoin_free(ret, str + i + ft_strlen(env->key));
+	return (ret);
 }

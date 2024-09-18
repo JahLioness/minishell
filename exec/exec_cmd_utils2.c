@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_cmd_utils2.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 17:05:12 by andjenna          #+#    #+#             */
-/*   Updated: 2024/09/16 16:54:20 by andjenna         ###   ########.fr       */
+/*   Updated: 2024/09/18 11:41:18 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,8 +83,6 @@ int	ft_waitpid(t_cmd *cmd, t_mini *last, int len_cmd)
 	{
 		close_fd(cmd->exec.pipe_fd, cmd->exec.prev_fd);
 		waitpid(cmd->exec.pid, &cmd->exec.status, 0);
-		// if (cmd->redir)
-		// 	unlink_files(cmd);
 		if (cmd->next)
 			cmd = cmd->next;
 		i++;

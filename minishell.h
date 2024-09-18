@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 10:44:59 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/09/17 17:36:18 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/18 15:39:54 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,6 +154,7 @@ int					ft_is_pipe_init(char *line, int *i);
 int					ft_is_pipe_alone(t_token *token);
 void				ft_free_envp(t_exec_utils *e_utils);
 char				*ft_ltoa(long long n);
+char				*ft_get_quotes(char *str, char *ret, int i);
 
 /*			PROMPT          */
 char				*ft_get_prompt(t_env *env);
@@ -233,6 +234,8 @@ char				*ft_get_value_from_varu(t_env *env, char *str, int i,
 						char *ret);
 int					ft_is_expandable(char *str);
 int					ft_check_len(char *str, int i, char *key);
+char				*ft_search_value(char *ret, t_env **env, int i, char *str);
+int					ft_get_index_ba_var(char *str, int i);
 
 /*			REDIR			*/
 int					ft_is_redir(char *str, int *i);
@@ -302,6 +305,9 @@ t_cmd				*get_heredoc_node(t_cmd *cmd);
 int					ft_count_heredoc(t_cmd *cmd);
 void				ft_get_heredoc_loop(t_token *token, t_mini **mini,
 						char *prompt);
+char				*ft_verif_arg_heredoc(char **str, t_env **env, t_cmd *cmd,
+						int j);
+char				*ft_get_ret_heredoc(t_env *env, char *ret, char *str, int i);
 
 /*			EXEC_UTILS		*/
 int					set_e_status(int status, t_mini *last);

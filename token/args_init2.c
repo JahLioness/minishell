@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 14:31:53 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/09/10 16:50:42 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/18 14:00:55 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,11 +46,7 @@ char	*ft_set_expand(char **str, int j, t_env **env)
 	char	*tmp;
 
 	if (ft_is_expandable(str[j]))
-	{
-		tmp = ft_trim_quote(str[j], 0, 0);
-		ret = ft_check_expand(tmp, env, j);
-		free(tmp);
-	}
+		ret = ft_check_expand(str[j], env, j);
 	else
 		ret = ft_strdup(str[j]);
 	tmp = ret;

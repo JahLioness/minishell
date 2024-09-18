@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_redir_utils.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 13:01:09 by andjenna          #+#    #+#             */
-/*   Updated: 2024/09/17 15:20:48 by andjenna         ###   ########.fr       */
+/*   Updated: 2024/09/18 11:46:07 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,9 @@ void	reset_fd(t_exec *exec)
 	}
 }
 
-void	unlink_files(t_cmd * cmd)
+void	unlink_files(t_cmd *cmd)
 {
-	t_redir *tmp;
+	t_redir	*tmp;
 
 	tmp = cmd->redir;
 	while (tmp)
@@ -39,6 +39,7 @@ void	unlink_files(t_cmd * cmd)
 		tmp = tmp->next;
 	}
 }
+
 void	handle_redir(t_cmd *cmd, t_mini **mini)
 {
 	t_exec	*exec;

@@ -3,14 +3,33 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc_expand.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 12:57:37 by andjenna          #+#    #+#             */
-/*   Updated: 2024/07/19 12:57:40 by andjenna         ###   ########.fr       */
+/*   Updated: 2024/09/18 15:37:57 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+char	*ft_get_quotes(char *str, char *ret, int i)
+{
+	while (str[i])
+	{
+		if (str[i] == '"')
+		{
+			ret = ft_strjoin_free(ret, "\"");
+			break ;
+		}
+		else if (str[i] == '\'')
+		{
+			ret = ft_strjoin_free(ret, "'");
+			break ;
+		}
+		i++;
+	}
+	return (ret);
+}
 
 static int	expand_heredoc_utils(char *str, int *i)
 {
@@ -112,7 +131,8 @@ char	*handle_expand_heredoc(t_cmd *cmd, t_mini *last, char *line)
 		return (NULL);
 	while (args_heredoc[i])
 	{
-		args_heredoc[i] = ft_verif_arg(args_heredoc, &last->env, cmd, i);
+		args_heredoc[i] = ft_verif_arg_heredoc(args_heredoc, &last->env, cmd,
+				i);
 		i++;
 	}
 	if (line)

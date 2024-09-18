@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 11:33:20 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/09/17 14:47:26 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/18 13:59:17 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,25 +64,27 @@ int	ft_exit_one_arg(t_exec_utils *e_utils, t_cmd *cmd)
 
 int	ft_exit(t_exec_utils *e_utils, t_cmd *cmd)
 {
+	static int	exit_status = 0;
+
 	if (ft_tab_len(cmd->args) < 2)
 	{
-		ft_free_exit(e_utils->current, e_utils->mini, e_utils->envp,
-			e_utils->prompt);
-		exit(0);
+		ft_putendl_fd("exit", 1);
+		return (ft_free_exit(e_utils->current, e_utils->mini, e_utils->envp,
+				e_utils->prompt), exit(1), 0);
 	}
 	else if (ft_tab_len(cmd->args) > 2)
 	{
 		if (!ft_is_num(cmd->args[1]))
-		{
-			ft_print_exit(cmd->args[1]);
-			ft_free_exit(e_utils->current, e_utils->mini, e_utils->envp,
-				e_utils->prompt);
-			exit(2);
-		}
-		else if (!ft_is_num(cmd->args[2]))
-			return (ft_print_exit(NULL), 127);
+			return (ft_print_exit(cmd->args[1]), ft_free_exit(e_utils->current,
+					e_utils->mini, e_utils->envp, e_utils->prompt), exit(2), 2);
 		else
-			return (ft_print_exit(NULL), 1);
+		{
+			exit_status += 1;
+			if (exit_status >= 1)
+				return (ft_print_exit(NULL), 127);
+			else
+				return (ft_print_exit(NULL), 1);
+		}
 	}
 	else
 		exit(ft_exit_one_arg(e_utils, cmd));

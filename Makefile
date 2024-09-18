@@ -5,7 +5,6 @@ CFLAGS = -Wall -Wextra -Werror -g3
 NAME = minishell
 
 SRC = main.c \
-		debug_utils.c \
 		all_utils.c \
 		all_utils2.c \
 		all_utils3.c \
@@ -68,6 +67,7 @@ SRC = main.c \
 		exec/heredoc.c \
 		exec/heredoc_prompt.c \
 		exec/heredoc_expand.c \
+		exec/heredoc_expand_utils.c \
 		exec/heredoc_file.c \
 		ast/ast_init.c \
 		ast/ast_utils.c \

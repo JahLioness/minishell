@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/01 14:08:01 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/05/03 17:48:56 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/18 12:13:10 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,11 +81,23 @@ char	*ft_set_line(char *next_line, char *line)
 	return (line);
 }
 
+static void	ft_get_line(char **line, char **next_line)
+{
+	char	*temp;
+
+	*line = ft_set_line(*next_line, *line);
+	if (*line)
+		temp = *next_line;
+	*next_line = ft_strndup(*next_line + ft_strlen_gnl(*line),
+			ft_strlen_gnl(*next_line + ft_strlen_gnl(*line)));
+	if (*line)
+		free(temp);
+}
+
 char	*get_next_line(int fd, int error)
 {
 	char		*buffer;
 	char		*line;
-	char		*temp;
 	static char	*next_line;
 	ssize_t		bytes_read;
 
@@ -100,39 +112,6 @@ char	*get_next_line(int fd, int error)
 	bytes_read = read(fd, buffer, BUFFER_SIZE);
 	next_line = ft_read(fd, buffer, next_line, bytes_read);
 	if (next_line && next_line[0] != '\0')
-	{
-		line = ft_set_line(next_line, line);
-		temp = next_line;
-		next_line = ft_strndup(next_line + ft_strlen_gnl(line),
-				ft_strlen_gnl(next_line + ft_strlen_gnl(line)));
-		free(temp);
-	}
+		ft_get_line(&line, &next_line);
 	return (line);
 }
-
-// int	main(void)
-// {
-// 	int		fd;
-// 	char	*str;
-
-// 	fd = open("test.txt", O_RDWR);
-// 	if (fd == -1)
-// 		return (-1);
-// 	str = get_next_line(fd);
-// 	printf("Contenu de str : |%s|\n", str);
-// 	free(str);
-// 	str = get_next_line(fd);
-// 	printf("Contenu de str : |%s|\n", str);
-// 	free (str);
-// 	str = get_next_line(fd);
-// 	printf("Contenu de str : |%s|\n", str);
-// 	free(str);
-// 	str = get_next_line(fd);
-// 	printf("Contenu de str : |%s|\n", str);
-// 	free(str);
-// 	str = get_next_line(fd);
-// 	printf("Contenu de str : |%s|\n", str);
-// 	free(str);
-// 	close(fd);
-// 	return (0);
-// }

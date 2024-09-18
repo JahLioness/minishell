@@ -6,13 +6,11 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 11:03:48 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/09/17 12:13:10 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/18 15:39:02 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-// voir si on fait passer les cmd avec env -i // recupe vr PATH et hide dans la struct (utiliser pour env -i mais desactiver sur unset PATH)
 
 void	ft_check_signal(t_mini **mini_lst)
 {
@@ -87,7 +85,6 @@ void	ft_prompt(t_mini **mini_lst, char **envp)
 	}
 	free(prompt);
 	rl_clear_history();
-	ft_print_lst(*mini_lst);
 	ft_clear_lst(mini_lst);
 	exit(0);
 }

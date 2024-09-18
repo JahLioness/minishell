@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 14:10:24 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/09/17 17:22:00 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/18 11:59:26 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,6 @@ static void	ft_set_redir_type(t_redir *redir, char *redir_type)
 			redir->type = REDIR_HEREDOC;
 		free(redir_type);
 	}
-	else
-	{
-		free(redir);
-		redir = NULL;
-	}
 }
 
 void	ft_init_cmd_redir(t_cmd *new, char *cell, int *i)
@@ -46,24 +41,18 @@ void	ft_init_cmd_redir(t_cmd *new, char *cell, int *i)
 	}
 	redir_type = ft_get_redir_type(cell, i);
 	ft_set_redir_type(redir, redir_type);
-	if (redir != NULL)
+	if (redir->type == 4)
+	{
+		free(redir);
+		return ;
+	}
+	else
 	{
 		redir->file = ft_get_redir_file(cell, i, NULL);
 		ft_check_redir_arg(new, cell, i);
 		ft_redir_addback(&new->redir, redir);
 	}
-	if (redir)
-		redir->file_heredoc = NULL;
 }
-
-// void	ft_get_wildcard(t_token *new, int j)
-// {
-// 	printf("new->cmd->args[j]: %s\n", new->cmd->args[j]);
-// 	if (ft_check_star(new->cmd->args[j]))
-// 		new->cmd->args = ft_wildcard_check(new->cmd->args, j);
-// 	if (!ft_strncmp(new->cmd->args[j], "minishell:", 10))
-// 		new->cmd->error = 1;
-// }
 
 void	ft_get_wildcard(t_cmd *cmd, int j)
 {

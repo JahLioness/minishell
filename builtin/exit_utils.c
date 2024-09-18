@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 13:40:27 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/09/17 14:46:28 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/18 11:40:51 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,9 +71,9 @@ static int	ft_nbr_length_itoa(long long n)
 
 char	*ft_ltoa(long long nb)
 {
-	char		*ret;
-	int			i;
-	int 		len;
+	char	*ret;
+	int		i;
+	int		len;
 
 	len = ft_nbr_length_itoa(nb);
 	ret = malloc(sizeof(char) * (len + 1));

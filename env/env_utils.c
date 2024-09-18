@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 11:58:57 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/09/17 17:48:39 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/18 12:12:51 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,32 +51,18 @@ int	ft_print_env(t_env **env, int fd)
 	return (0);
 }
 
-void	ft_env_delone(t_env *env)
+static void	ft_init_env_copy(t_env **copy, t_env **new_env, t_env **tmp)
 {
-	if (!env)
-		return ;
-	free(env->key);
-	if (env->value)
-		free(env->value);
-	env->next = NULL;
-	free(env);
-}
-
-void	ft_clearenv(t_env **env)
-{
-	t_env	*tmp;
-	t_env	*next;
-
-	if (!env)
-		return ;
-	tmp = *env;
-	while (tmp)
+	*new_env = (t_env *)malloc(sizeof(t_env));
+	if (!*new_env)
 	{
-		next = tmp->next;
-		ft_env_delone(tmp);
-		tmp = next;
+		if (*copy)
+			ft_clearenv(copy);
+		return ;
 	}
-	*env = NULL;
+	(*new_env)->key = ft_strdup((*tmp)->key);
+	(*new_env)->value = ft_strdup((*tmp)->value);
+	(*new_env)->next = NULL;
 }
 
 t_env	*ft_env_copy(t_env *env)
@@ -89,12 +75,9 @@ t_env	*ft_env_copy(t_env *env)
 	tmp = env;
 	while (tmp)
 	{
-		new_env = (t_env *)malloc(sizeof(t_env));
+		ft_init_env_copy(&copy, &new_env, &tmp);
 		if (!new_env)
 			return (NULL);
-		new_env->key = ft_strdup(tmp->key);
-		new_env->value = ft_strdup(tmp->value);
-		new_env->next = NULL;
 		if (copy == NULL)
 			copy = new_env;
 		else

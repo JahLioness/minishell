@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 13:07:14 by andjenna          #+#    #+#             */
-/*   Updated: 2024/08/27 16:04:11 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/18 11:38:45 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	msg_error(char *msg, char *cmd, char *strerror)
 {
 	ft_putstr_fd(msg, 2);
 	ft_putstr_fd(cmd, 2);
-	ft_putstr_fd(" : ", 2);
+	ft_putstr_fd(": ", 2);
 	ft_putendl_fd(strerror, 2);
 }
 

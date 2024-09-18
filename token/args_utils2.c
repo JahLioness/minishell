@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 16:22:24 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/09/17 12:05:58 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/18 11:49:01 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ int	ft_check_len(char *str, int i, char *key)
 	else
 	{
 		if (str[len] == '\0' || ((str[len] == '"' || str[len] == '\'')
-					&& str[len + 1] == '\0'))
+				&& str[len + 1] == '\0'))
 			return (1);
 	}
 	return (0);

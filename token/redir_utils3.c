@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir_utils3.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/30 18:14:04 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/09/17 12:00:05 by andjenna         ###   ########.fr       */
+/*   Updated: 2024/09/18 11:49:10 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 static int	ft_check_char(char c)
 {
-	if (c != '$' && c != 123 && c != '"' && c != '\''
-		&& !ft_isalnum(c) && ft_is_not_stop(c))
+	if (c != '$' && c != 123 && c != '"' && c != '\'' && !ft_isalnum(c)
+		&& ft_is_not_stop(c))
 		return (1);
 	return (0);
 }
@@ -40,7 +40,7 @@ static int	ft_check_char(char c)
 // 	new->args[j] = NULL;
 // }
 
-static void ft_copy_args(t_cmd *new, char **new_args, int *j)
+static void	ft_copy_args(t_cmd *new, char **new_args, int *j)
 {
 	while (new_args && new_args[*j])
 	{
@@ -58,7 +58,7 @@ static void	ft_realloc_args(t_cmd *new, char **new_args)
 void	ft_check_redir_arg(t_cmd *new, char *cell, int *i)
 {
 	int		j;
-	int 	k;
+	int		k;
 	char	**new_args;
 
 	if (!new || !new->args)

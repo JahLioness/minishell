@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 13:32:25 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/09/17 17:35:39 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/18 12:09:52 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,4 +45,32 @@ int	ft_is_var_in_env(t_env **env, char *var)
 		tmp = tmp->next;
 	}
 	return (0);
+}
+
+void	ft_env_delone(t_env *env)
+{
+	if (!env)
+		return ;
+	free(env->key);
+	if (env->value)
+		free(env->value);
+	env->next = NULL;
+	free(env);
+}
+
+void	ft_clearenv(t_env **env)
+{
+	t_env	*tmp;
+	t_env	*next;
+
+	if (!env)
+		return ;
+	tmp = *env;
+	while (tmp)
+	{
+		next = tmp->next;
+		ft_env_delone(tmp);
+		tmp = next;
+	}
+	*env = NULL;
 }

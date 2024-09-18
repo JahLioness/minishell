@@ -3,16 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   exec_token.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 10:41:30 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/09/17 15:15:54 by andjenna         ###   ########.fr       */
+/*   Updated: 2024/09/18 15:39:12 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-// cmd : (echo -n b && echo -n r || echo -n c && (echo -n a || ( echo -n e || (echo -n f && (echo -n g))) || echo -n h ) && echo -n v || (echo -n j && (echo -n k || echo -n l)) && echo o)
 
 int	ft_check_heredoc(t_ast *current)
 {
@@ -54,23 +52,6 @@ int	ft_exec_multiple_cmd(t_exec_utils *e_utils, t_ast *current)
 	return (exit_status);
 }
 
-// t_cmd	*ft_return_heredoc(t_cmd *cmd, t_redir *redir)
-// {
-// 	t_cmd	*heredoc;
-
-// 	heredoc = NULL;
-// 	while (redir)
-// 	{
-// 		if (redir->type == REDIR_HEREDOC)
-// 		{
-// 			heredoc = cmd;
-// 			break ;
-// 		}
-// 		redir = redir->next;
-// 	}
-// 	return (heredoc);
-// }
-
 t_cmd	*get_heredoc_node(t_cmd *cmd)
 {
 	t_redir	*tmp_redir;
@@ -110,6 +91,5 @@ void	ft_exec_token(t_mini **mini, char *prompt)
 	exec_utils.mini = mini;
 	exec_utils.prompt = prompt;
 	ft_exec_multiple_cmd(&exec_utils, exec_utils.granny);
-	// print_ast(exec_utils.granny, 0, 'P');
 	ft_clear_ast(exec_utils.granny);
 }

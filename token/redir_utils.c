@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 12:54:14 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/08/30 18:21:06 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/18 11:32:17 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ char	*ft_get_redir_file(char *str, int *i, char *tofree)
 
 	quote = ft_set_quote(str, i);
 	j = ft_skip_spaces(str, i);
-	if (quote && !ft_is_whitespaces(str[*i]))
+	if (quote && quote != '\'' && !ft_is_whitespaces(str[*i]))
 	{
 		ft_skip_betwen_quote(str, i, quote);
 		if (!ft_is_whitespaces(str[*i]))
