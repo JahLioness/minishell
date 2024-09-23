@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/30 13:53:55 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/09/18 17:25:52 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/23 12:18:42 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,20 @@ char	*ft_get_old_pwd(t_env **env)
 		tmp = tmp->next;
 	}
 	return (old_pwd);
+}
+
+char	*ft_get_pwd(t_env **env)
+{
+	t_env	*tmp;
+
+	tmp = *env;
+	while (tmp)
+	{
+		if (!ft_strcmp(tmp->key, "PWD"))
+			return (tmp->value);
+		tmp = tmp->next;
+	}
+	return (NULL);
 }
 
 char	*ft_get_home(t_env **env)
@@ -82,9 +96,12 @@ char	*ft_gestion_tilde(t_env **env, char *new_dir)
 void	ft_old_inexistent(t_env **env)
 {
 	char	*tmp_old;
+	char	*pwd;
 
+	pwd = ft_get_pwd(env);
 	tmp_old = getcwd(NULL, 0);
-	if (!tmp_old)
+	if (!tmp_old && ((pwd && ft_strncmp(pwd + 1, "sgoinfre",
+					ft_strlen("sgoinfre"))) || !pwd))
 		ft_no_oldir(env);
 	free(tmp_old);
 }
