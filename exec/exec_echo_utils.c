@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 18:59:46 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/09/10 16:33:17 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/23 17:26:58 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,21 +40,13 @@ char	**ft_trim_quote_echo(char **args)
 
 int	ft_count_flag(char **args)
 {
-	int		i;
 	int		count;
 	char	**flags;
 
-	i = 1;
-	count = 0;
 	if (!args || !*args)
 		return (0);
 	flags = ft_trim_quote_echo(args);
-	while (flags && flags[i])
-	{
-		if (*flags[i] && flags[i][0] == '-')
-			count++;
-		i++;
-	}
+	count = ft_flags_len(flags);
 	ft_free_tab(flags);
 	return (count);
 }
@@ -63,6 +55,7 @@ static char	**ft_get_flag(char **args, char **flag)
 {
 	int		i;
 	int		j;
+	int		len;
 
 	i = 0;
 	j = 0;
@@ -70,10 +63,16 @@ static char	**ft_get_flag(char **args, char **flag)
 	{
 		if (args[i][0] == '-')
 		{
-			flag[j] = ft_strdup(args[i]);
-			if (!flag[j])
-				return (ft_free_split(j, flag), NULL);
-			j++;
+			len = 1;
+			while (args[i][len] == 'n')
+				len++;
+			if (len == (int)ft_strlen(args[i]))
+			{
+				flag[j] = ft_strdup(args[i]);
+				if (!flag[j])
+					return (ft_free_split(j, flag), NULL);
+				j++;
+			}
 		}
 	}
 	flag[j] = NULL;
@@ -116,13 +115,11 @@ char	**ft_get_args_echo(char **args, t_env **env)
 	j = 0;
 	while (args[++i])
 	{
-		if (args[i][0] != '-')
-		{
-			arg[j] = ft_strdup(args[i]);
-			if (!arg[j])
-				return (ft_free_split(j - 1, arg), NULL);
+		arg[j] = ft_get_arg_echo_loop(args[i]);
+		if (!arg[j])
+			return (ft_free_split(j, arg), NULL);
+		else if (*arg[j])
 			j++;
-		}
 	}
 	arg[j] = NULL;
 	return (arg);

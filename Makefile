@@ -35,6 +35,7 @@ SRC = main.c \
 		token/redir_utils3.c \
 		builtin/cd.c \
 		builtin/cd_utils.c \
+		builtin/cd_utils2.c \
 		builtin/echo.c \
 		builtin/echo_utils.c \
 		builtin/export.c \
@@ -51,6 +52,7 @@ SRC = main.c \
 		exec/exec_cmd2.c \
 		exec/exec_command.c \
 		exec/exec_echo_utils.c \
+		exec/exec_echo_utils2.c \
 		exec/exec_unset_utils.c \
 		exec/exec_export_utils.c \
 		exec/exec_export_utils2.c \

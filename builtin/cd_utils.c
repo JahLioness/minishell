@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/30 13:53:55 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/09/23 12:18:42 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/23 17:03:04 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,8 +66,6 @@ char	*ft_get_home(t_env **env)
 
 char	*ft_gestion_tilde(t_env **env, char *new_dir)
 {
-	char	*tmp_dir;
-	char	*tmp_new;
 	t_env	*tmp;
 
 	tmp = *env;
@@ -76,16 +74,12 @@ char	*ft_gestion_tilde(t_env **env, char *new_dir)
 		if (!ft_strcmp(tmp->key, "HOME"))
 		{
 			if (ft_strlen(new_dir) == 1)
-				new_dir = ft_strdup(tmp->value);
-			else
 			{
-				tmp_dir = ft_strdup_free(new_dir);
-				new_dir = ft_strchr(tmp_dir, '/');
-				tmp_new = ft_strdup(new_dir);
-				free(tmp_dir);
-				new_dir = ft_strjoin(tmp->value, tmp_new);
-				free(tmp_new);
+				free(new_dir);
+				new_dir = ft_strdup(tmp->value);
 			}
+			else
+				new_dir = ft_get_dir(new_dir, tmp->value);
 			break ;
 		}
 		tmp = tmp->next;

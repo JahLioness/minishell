@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 10:44:59 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/09/23 12:04:33 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/23 17:25:09 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -269,6 +269,9 @@ char				*ft_get_home(t_env **env);
 char				*ft_gestion_tilde(t_env **env, char *new_dir);
 void				ft_old_inexistent(t_env **env);
 int					ft_no_oldir(t_env **env);
+char				*ft_get_dir(char *new_dir, char *value);
+int					ft_flags_len(char **flags);
+char				*ft_get_arg_echo_loop(char *arg);
 
 /*			EXEC			*/
 int					exec_command(t_cmd *cmd, t_exec_utils *e_utils);
