@@ -6,21 +6,24 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 13:07:14 by andjenna          #+#    #+#             */
-/*   Updated: 2024/09/18 11:38:45 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/23 14:40:29 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-// char	*underscore;
-// underscore = ft_tabchr(envp, "_", '=');
-// ft_putstr_fd("minishell: ", 2);
-// if (!ft_strcmp(last->tokens->cmd->cmd, "$_"))
-// 	ft_putstr_fd(underscore, 2);
-// else
-// 	ft_putstr_fd(last->tokens->cmd->cmd, 2);
-// ft_putstr_fd(": command not found\n", 2);
-// free(underscore);
+static char	*ft_get_msg_error(char *msg, char *cmd, char *strerror)
+{
+	char	buffer[1024];
+
+	ft_bzero(buffer, 1024);
+	ft_strlcat(buffer, msg, 1024);
+	ft_strlcat(buffer, cmd, 1024);
+	ft_strlcat(buffer, ": ", 1024);
+	ft_strlcat(buffer, strerror, 1024);
+	ft_strlcat(buffer, "\n", 1024);
+	return (ft_strdup(buffer));
+}
 
 void	ft_exec_cmd_error(t_exec_utils *e_utils, char **envp)
 {
@@ -34,10 +37,11 @@ void	ft_exec_cmd_error(t_exec_utils *e_utils, char **envp)
 
 void	msg_error(char *msg, char *cmd, char *strerror)
 {
-	ft_putstr_fd(msg, 2);
-	ft_putstr_fd(cmd, 2);
-	ft_putstr_fd(": ", 2);
-	ft_putendl_fd(strerror, 2);
+	char	*error;
+
+	error = ft_get_msg_error(msg, cmd, strerror);
+	write(2, error, ft_strlen(error));
+	free(error);
 }
 
 int	exit_free(t_ast *granny, t_mini **mini, char **envp, char *prompt)
