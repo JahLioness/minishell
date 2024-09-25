@@ -6,7 +6,7 @@
 /*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 15:43:26 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/09/12 13:18:58 by ede-cola         ###   ########.fr       */
+/*   Updated: 2024/09/25 12:14:40 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,4 +105,14 @@ int	ft_export(t_export_utils *utils, t_env **env, int fd)
 	}
 	free(utils->value);
 	return (0);
+}
+
+void	ft_value_len(char *value, char *key, t_env **env)
+{
+	if (ft_strlen(value) == 0)
+		ft_envadd_back(env, ft_envnew(ft_strndup(key, ft_strlen(key)),
+				ft_strdup(value)));
+	else
+		ft_envadd_back(env, ft_envnew(ft_strndup(key, ft_strlen(key)),
+				ft_strndup(value, ft_strlen(value))));
 }

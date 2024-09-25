@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: andjenna <andjenna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ede-cola <ede-cola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 15:51:28 by ede-cola          #+#    #+#             */
-/*   Updated: 2024/06/27 18:51:55 by andjenna         ###   ########.fr       */
+/*   Updated: 2024/09/25 12:15:40 by ede-cola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,7 @@ static void	ft_op_egal(char *key, char *value, t_env **env)
 		tmp = tmp->next;
 	}
 	if (value)
-		ft_envadd_back(env, ft_envnew(ft_strndup(key, ft_strlen(key)),
-				ft_strndup(value, ft_strlen(value))));
+		ft_value_len(value, key, env);
 	else
 		ft_envadd_back(env, ft_envnew(ft_strndup(key, ft_strlen(key)), value));
 }
